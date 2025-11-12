@@ -1,0 +1,1 @@
+//this file is for validation/error checking functions which can be used for all other files
