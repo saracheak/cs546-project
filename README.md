@@ -1,7 +1,7 @@
 # pupmap
 ### cs546 project
 
-### Authors
+### authors
 - Aeslyn Vlahos
 - Bonnie Wang
 - Ravisara Cheakdkaipejchara
