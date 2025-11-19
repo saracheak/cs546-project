@@ -24,3 +24,43 @@ start the application:
 ```
 npm start
 ```
+
+## architecture
+cs546-project/
+├── config/
+│   ├── mongoCollection.js    # define mongodb collections
+│   ├── mongoConnection.js    # connect to mongodb
+│   └── settings.js           # define server url and db name
+├── data/
+│   ├── biscuits.js           # biscuits functionalities
+│   ├── parks.js              # parks functionalities
+│   ├── ratings.js            # ratings functionalities
+│   └── users.js              # users functionalities
+├── public/
+│   └── css             
+│       └── styles.css        # stylesheet
+├── routes/
+│   ├── biscuits.js           # biscuits routes
+│   ├── index.js              # main routes
+│   ├── parks.js              # parks routes
+│   ├── ratings.js            # ratings routes
+│   └── users.js              # users routes
+├── tasks/
+│   ├── biscuits.js           # define biscuits data
+│   ├── index.js              # seed all data
+│   ├── parks.js              # define parks data
+│   ├── ratings.js            # define ratings data
+│   └── users.js              # define users data
+├── views/
+│   └── layouts             
+│       └── main.handlebars   # default layout for all handlebars
+│   ├── error.handlebars      # error page layout
+│   ├── home.handlebars       # home page layout
+│   ├── login.handlebars      # login page layout
+│   ├── parks.handlebars      # parks page layout
+│   └── profile.handlebars    # profile page layout
+├── .gitignore
+├── app.js
+├── package.json
+├── README.md
+└── validation.js
