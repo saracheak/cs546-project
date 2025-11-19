@@ -1,4 +1,4 @@
-import {parks} from "../config/mongoCollections.js"
+import { parks } from "../config/mongoCollections.js"
 import { ObjectId } from "mongodb";
 
 const parksCollection = await parks();

@@ -3,16 +3,24 @@
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
-  "contributors": ["Aeslyn Vlahos", "Bonnie Wang", "Ravisara Cheakdkaipejchara", "Shasha Alvares"],
+  "contributors": [
+    "Aeslyn Vlahos",
+    "Bonnie Wang",
+    "Ravisara Cheakdkaipejchara",
+    "Shasha Alvares"
+  ],
   "type": "module",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "seed": "node tasks/seed.js"
+    "seed": "node tasks/seed_parks.js"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
     "express": "^5.1.0",
+    "express-session": "^1.18.2",
     "mongodb": "^7.0.0"
   }
 }

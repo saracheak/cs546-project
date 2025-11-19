@@ -1,0 +1,1353 @@
+import { parks } from "../config/mongoCollections.js";
+import { parksFunctions } from "../data/parks.js";
+import { ObjectId } from "mongodb";
+
+let parksData = [
+  {
+    park_name: "Asser Levy Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Sea Breeze Avenue",
+      street_2: "West 5th Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11224
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Breukelen Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Glenwood Road",
+      street_2: "Williams Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11207
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Brooklyn Bridge Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Adams Street",
+      street_2: "Plymouth Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11201
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Brooklyn War Memorial",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Cadman Plaza W",
+      street_2: "Fulton Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11201
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Canarsie Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Seaview Ave",
+      street_2: "Remsen Ave",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11236
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Cooper Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Olive Street",
+      street_2: "Maspeth Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11211
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "DiMattina Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Hicks Street",
+      street_2: "Woodhull Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11231
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+    {
+    park_name: "Dyker Beach Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "7th Avenue",
+      street_2: "86th Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11228
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Dyker Beach Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Cropsey Avenue",
+      street_2: "Bay 8th Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11228
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Fort Greene Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Dekalb Avenue",
+      street_2: "S Portland Ave",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11201
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Friends Field Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "East 4th Street",
+      street_2: "McDonald Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11230
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Fulton Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Chauncey Street",
+      street_2: "Lewis Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11213
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Grand Ferry Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Grand Street",
+      street_2: "River Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11211
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Herbert Von King Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Marcy Avenue",
+      street_2: "Lafayette Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11216
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Herbert Von King Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Marcy Avenue",
+      street_2: "Lafayette Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11216
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Hillside Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Columbia Heights",
+      street_2: "Middagh Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11201
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "J.J. Byrne Memorial Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "4th Street",
+      street_2: "4th Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11215
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+    {
+    park_name: "John Paul Jones Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "4th Avenue",
+      street_2: "101st Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11209
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Kaiser Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Neptune Avenue",
+      street_2: "Bayview Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11224
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Leif Ericson Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "67th Street",
+      street_2: "7th Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11219
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Lincoln Terrace Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Eastern Parkway",
+      street_2: "Rochester Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11212
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Macri Square Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Union Turnpike",
+      street_2: "Metropolitan Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11211
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Manhattan Beach",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Oriental Boulevard",
+      street_2: "Ocean Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11235
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Marine Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Fillmore Ave",
+      street_2: "Flatbush Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11234
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "McCarren Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "North 12th Street",
+      street_2: "Union Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11222
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "McGolrick Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "North Henry Street",
+      street_2: "Driggs Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11222
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "McKinley Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "7th Avenue",
+      street_2: "75th Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11209
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Mount Prospect Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Eastern Parkway",
+      street_2: "Underhill Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11238
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Owls Head Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "68th Street",
+      street_2: "Shore Road",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11220
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Adam Yauch Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Columbia Place",
+      street_2: "State Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11201
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Prospect Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Prospect Park West",
+      street_2: "Flatbush Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11215
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Shore Road Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Shore Road",
+      street_2: "69th Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11209
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Sunset Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "44th Street",
+      street_2: "6th Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11232
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Carl Schurz Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "East End Avenue",
+      street_2: "89th Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10028
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Central Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "59th Street",
+      street_2: "5th Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10023
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Chelsea Waterside Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "11th Avenue",
+      street_2: "22nd Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10011
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Coleman Oval Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Pike Street",
+      street_2: "Monroe Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10002
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "De Witt Clinton Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "West 52nd Street",
+      street_2: "11th Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10019
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+    {
+    park_name: "Fish Bridge Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Dover Street",
+      street_2: "Water Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10038
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Fort Tryon Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Margaret Corbin Drive",
+      street_2: "Riverside Drive",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10040
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Ft. Washington Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "165th Street",
+      street_2: "Riverside Drive",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10032
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Highbridge Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Amsterdam Avenue",
+      street_2: "Fort George Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10040
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Hudson River Park (Greenwich Village)",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Leroy Street",
+      street_2: "Pier 40",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10014
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Hudson River Park (North Chelsea)",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Pier 84",
+      street_2: "West 44th Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10036
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Inwood Hill Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Seaman Avenue",
+      street_2: "Isham Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10034
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "J. Hood Wright Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Haven Avenue",
+      street_2: "West 173rd Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10033
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Madison Square Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Madison Avenue",
+      street_2: "East 26th Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10010
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Marcus Garvey Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Madison Avenue",
+      street_2: "East 120th Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10027
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Morningside Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Morningside Avenue",
+      street_2: "119th Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10025
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Peter Detmold Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "West of FDR Drive",
+      street_2: "East 51st Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10022
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Randalls Island Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Hell Gate Circle",
+      street_2: "Central Road",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10035
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Riverside Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "West 72nd Street",
+      street_2: "West 105th Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10023
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Robert Moses Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "42nd Street",
+      street_2: "1st Avenue",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10017
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "St. Nicholas Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "St Nicholas Avenue",
+      street_2: "West 128th Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10032
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Theodore Roosevelt Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Central Park West",
+      street_2: "West 81st Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10024
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Thomas Jefferson Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "East 112th Street",
+      street_2: "FDR Drive",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10029
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Tompkins Square Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "1st Avenue",
+      street_2: "East 7th Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10009
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Union Square Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "15th Street",
+      street_2: "Union Square West",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10003
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Washington Square Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "5th Avenue",
+      street_2: "Thompson Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10012
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Corlears Hook Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Cherry Street",
+      street_2: "Jackson Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10002
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Brower Park",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "St. Mark's Ave",
+      street_2: "Kingston Ave",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11213
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Cooper Park",
+    park_type: "Run",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Morgan Avenue",
+      street_2: "Sharon Street",
+      city: "New York City",
+      state: "New York",
+      zip_code: 11211
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  },
+  {
+    park_name: "Dyckman Fields",
+    park_type: "Off-Leash",
+    approved: true,
+    comments: [],
+    address: {
+      street_1: "Dyckman Street",
+      street_2: "Hudson River",
+      city: "New York City",
+      state: "New York",
+      zip_code: 10034
+    },
+    average_cleanliness: 0,
+    average_dog_friendliness: 0,
+    average_busyness: 0,
+    average_water_availability: 0,
+    average_wastebag_availability: 0,
+    average_trash_availability: 0,
+    average_surface: 0,
+    average_amenities: 0
+  }
+];
+
+const main = async () => {
+    const parksCollection = await parks();
+    await parksCollection.deleteMany({});
+    for (const park of parksData) {
+        try {
+            const { park_id, park_name, park_type, approved, comments, address, average_cleanliness, average_dog_friendliness, average_busyness, average_water_availability, average_wastebag_availability, average_trash_availability, average_surface, average_amenities} = park;
+            const newPark = await parksFunctions.createPark(park_name, park_type, approved, comments, address, average_cleanliness, average_dog_friendliness, average_busyness, average_water_availability, average_wastebag_availability, average_trash_availability, average_surface, average_amenities);
+        } catch (e) {
+            throw e;
+        }
+    }
+    const allParks = await parksCollection.find({}).toArray();
+    console.log(allParks);
+};
+
+main().then(() => {
+    console.log('Done seeding database');
+}).catch((e) => {
+    console.error(e);
+}).finally(() => {
+    console.log('Closing connection to database');
+    process.exit(0);
+});
