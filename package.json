@@ -14,7 +14,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "seed": "node tasks/seed_parks.js"
+    "seed": "node tasks/index.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
