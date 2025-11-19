@@ -1,0 +1,67 @@
+h1 {
+  color: black;
+}
+
+h2 {
+  color: rgb(53, 16, 110);
+}
+
+h3 {
+  color: rgb(25, 8, 50);
+}
+
+h4 {
+  color: rgb(15, 5, 30);
+}
+
+p {
+  color: black;
+  font-family: "Arial", sans-serif;
+  font-weight: bold;
+}
+
+body {
+  background-color: rgb(215, 230, 234);
+}
+
+.posterImage{
+  width: 75px;
+  height: 117px;
+}
+
+a {
+  color: rgb(58, 56, 141);
+  text-decoration: none;
+  font-size: 12pt;
+}
+
+a:hover {
+  color: gold;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: rgb(198, 79, 25);
+}
+
+
+li {
+  color: black;
+}
+
+input[type="text"] {
+  font-family: "Arial", sans-serif;
+  padding: 5px;
+  width: 250px;
+  border: 3px solid black;
+  border-radius: 12px;
+}
+
+input[type="submit"]:hover {
+  background-color: rgb(71, 14, 101);
+  color: black;
+}
+
+label {
+  font-weight: bold;
+}
