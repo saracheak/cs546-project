@@ -26,6 +26,7 @@ npm start
 ```
 
 ## architecture
+```
 cs546-project/
 ├── config/
 │   ├── mongoCollection.js    # define mongodb collections
@@ -64,3 +65,4 @@ cs546-project/
 ├── package.json
 ├── README.md
 └── validation.js
+```
