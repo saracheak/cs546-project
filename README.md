@@ -15,6 +15,11 @@ Users are able to create a “Pupfile” (a Dog Profile), where they can describ
 ## installation
 navigate to the root folder and open the terminal
 
+download the packages to your local device from package.json first:
+```
+npm install
+```
+
 seed the database:
 ```
 npm run seed
