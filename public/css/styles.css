@@ -1,67 +1,122 @@
-h1 {
-  color: black;
+.login-body {
+    font-family: "Poppins", sans-serif;
+    background: #fff5e6 url("../images/pawprint.png") repeat;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
 
-h2 {
-  color: rgb(53, 16, 110);
+.login-container {
+    background: white;
+    backdrop-filter: blur(6px);
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+    text-align: center;
+    width: 340px;
 }
 
-h3 {
-  color: rgb(25, 8, 50);
+.signup-body {
+    font-family: "Poppins", sans-serif;
+    background: #fff5e6 url("../images/pawprint.png") repeat;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
 
-h4 {
-  color: rgb(15, 5, 30);
+.signup-container {
+    background: white;
+    backdrop-filter: blur(6px);
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+    text-align: center;
+    width: 340px;
 }
 
-p {
-  color: black;
-  font-family: "Arial", sans-serif;
-  font-weight: bold;
+.title {
+    margin: 0;
+    font-size: 32px;
+    color: #704214;
+}
+.h3 {
+    margin-top: 5px;
+    margin-bottom: 25px;
+    color: #a2764b;
+    font-size: 15px;
 }
 
-body {
-  background-color: rgb(215, 230, 234);
+.login-form {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
 }
 
-.posterImage{
-  width: 75px;
-  height: 117px;
+.login-form label {
+    color: #704214;
+    font-weight: 600;
+    margin-bottom: 6px;
 }
 
-a {
-  color: rgb(58, 56, 141);
-  text-decoration: none;
-  font-size: 12pt;
+.login-form input {
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid #e6c8a1;
+    margin-bottom: 20px;
+    font-size: 15px;
+    outline: none;
 }
 
-a:hover {
-  color: gold;
-  text-decoration: underline;
+.login-form input:focus {
+    border-color: #d2a46c;
 }
 
-a:visited {
-  color: rgb(198, 79, 25);
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
 }
 
-
-li {
-  color: black;
+.signup-form label {
+    color: #704214;
+    font-weight: 600;
+    margin-bottom: 6px;
 }
 
-input[type="text"] {
-  font-family: "Arial", sans-serif;
-  padding: 5px;
-  width: 250px;
-  border: 3px solid black;
-  border-radius: 12px;
+.signup-form input {
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid #e6c8a1;
+    margin-bottom: 20px;
+    font-size: 15px;
+    outline: none;
 }
 
-input[type="submit"]:hover {
-  background-color: rgb(71, 14, 101);
-  color: black;
+.signup-form input:focus {
+    border-color: #d2a46c;
 }
 
-label {
-  font-weight: bold;
+button {
+    padding: 12px;
+    background: #d29b5f;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s, transform 0.2s;
+}
+
+button:hover {
+    background: #c4874c;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0px);
 }

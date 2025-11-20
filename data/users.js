@@ -27,6 +27,7 @@ export const usersFunctions = {
             if (!insertInfo.acknowledged || !insertInfo.insertedId){
                 throw new Error("Could not add user");
             }
+            return insertInfo.insertedId;
         } catch(e){
             throw new Error(e);
         }
