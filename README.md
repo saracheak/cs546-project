@@ -50,7 +50,8 @@ cs546-project/
 │   ├── index.js              # main routes
 │   ├── parks.js              # parks routes
 │   ├── ratings.js            # ratings routes
-│   └── users.js              # users routes
+│   ├── users.js              # users routes
+│   └── admin.js              # admin routes
 ├── tasks/
 │   ├── biscuits.js           # define biscuits data
 │   ├── index.js              # seed all data
