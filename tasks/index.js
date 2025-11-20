@@ -1,15 +1,19 @@
-import { parks, biscuits } from "../config/mongoCollections.js";
+import { parks, biscuits, users } from "../config/mongoCollections.js";
 import { parksData } from './parks.js'
 import { biscuitsData } from './biscuits.js';
+import { usersData } from './users.js'
 import { parksFunctions } from "../data/parks.js";
 import { biscuitsFunctions } from "../data/biscuits.js"
+import { usersFunctions } from "../data/users.js"
 
 const parksCollection = await parks();
 const biscuitsCollection = await biscuits();
+const usersCollection = await users();
 
 const main = async () => {
     await parksCollection.deleteMany({});
     await biscuitsCollection.deleteMany({});
+    await usersCollection.deleteMany({});
 
     for (const park of parksData) {
         try {
@@ -31,11 +35,24 @@ const main = async () => {
         }   
     }
 
+    for (const user of usersData) {
+        try {
+            const {user_id, dog_name, human_first_name, human_last_name, dog_gender, human_gender, email, hash_password, favorite_parks, times, ratings, pet_friends, biscuits, parks_visited} = user;
+            const newUser = await usersFunctions.createUser(dog_name, human_first_name, human_last_name, dog_gender, human_gender, email, hash_password, favorite_parks, times, ratings, pet_friends, biscuits, parks_visited);
+            //console.log(newUser);
+        } catch (e) {
+            throw e;
+        }   
+    }
+
     const allParks = await parksCollection.find({}).toArray();
     console.log(allParks);
 
     const allBiscuits = await biscuitsCollection.find({}).toArray();
     console.log(allBiscuits);
+
+    const allUsers = await usersCollection.find({}).toArray();
+    console.log(allUsers);
 };
 
 main().then(() => {
