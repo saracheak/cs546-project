@@ -11,7 +11,7 @@ router.post("/", (req, res) => {
 
     //TODO: check username and password matches in db, for now accepts any
     if(username && password){
-        console.log("username and password passed");
+        console.log(`user ${username} successfully logged in`);
         res.redirect(`/profile?username=${username}`);
     } else{
         res.status(404).render('error', {message: "User not found in db"});

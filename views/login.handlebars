@@ -2,15 +2,17 @@
 <html>
     <head>
         <title>Login Page</title>
-        <link rel="stylesheet" href="public/css/styles.css">
+        <link rel="stylesheet" href="/css/styles.css">
     </head>
     
-    <body>
+    <body class="login-body">
+        <div class="login-container">
         <header>
-            <h1>Login</h1>
+            <h1>Login Page</h1>
         </header>
         <main>
-            <p>Log in here</p>
+            <h2>🐾 Welcome Back! 🐶</p>
+            <h3>Log in to see your pet's profile:</h3>
             <form action="/login" method="POST" id="login-form">
                 <label for="username">Username</label><br>
                 <input type="text" name="username" id="username"><br><br>
@@ -21,5 +23,6 @@
                 <button type="submit">Login</button>
             </form>
         </main>
+        </div>
     </body>
 </html>
