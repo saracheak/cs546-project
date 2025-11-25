@@ -1,0 +1,41 @@
+<h1>{{title}}</h1>
+
+{{# if parks}}
+    <ul>
+        {{#each parks}}
+            <li>
+                <h2>
+                    <a href="/parks/{{this._id}}">
+                    {{this.park_name}}
+                    </a>
+                </h2>
+
+                <p>
+                    <strong>Type:</strong> {{this.park_type}}
+                </p>
+
+                {{#if this.address}}
+                    <p>
+                        <strong>Address:</strong>
+                        {{this.address.street_1}}
+                        {{#if this.address.street_2}}, {{this.address.street_2}}{{/if}},
+                        {{this.address.city}}, {{this.address.state}} {{this.address.zip_code}}
+                    </p>
+                {{/if}}
+
+                <h3>Rating Summary</h3>
+                {{#if this.overall_rating}}
+                    <p>
+                        <strong>Overall Rating:</strong> {{this.overall_rating}}/5
+                    </p>
+                {{else}}
+                    <p><em>No ratings yet</em></p>
+                {{/if}}
+
+                <hr />
+            </li>
+            {{/each}}
+    </ul>
+{{else}}
+    <p>No parks to display.</p>
+{{/if}}
