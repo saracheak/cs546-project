@@ -184,6 +184,33 @@ header h1 {
     margin: 0;
 }
 
+
+.edit-pupfile-body {
+    font-family: "Poppins", sans-serif;
+    background: #fff5e6 url("../images/pawprint.png") repeat;
+    display: flex; 
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    height: 100vh;
+    margin: 0;
+}
+
+.edit-pupfile-container {
+    background: white;
+    backdrop-filter: blur(6px);
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+    text-align: center;
+    width: 430px;
+    min-height: 800px;
+    height: auto;
+    overflow-y: auto;
+    margin-bottom: 50px;
+}
+
 .biscuits-container {
     background: white;
     backdrop-filter: blur(6px);
