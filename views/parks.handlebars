@@ -17,8 +17,7 @@
                 {{#if this.address}}
                     <p>
                         <strong>Address:</strong>
-                        {{this.address.street_1}}
-                        {{#if this.address.street_2}}, {{this.address.street_2}}{{/if}},
+                        {{this.address.street_1}}{{#if this.address.street_2}}, {{this.address.street_2}}{{/if}},
                         {{this.address.city}}, {{this.address.state}} {{this.address.zip_code}}
                     </p>
                 {{/if}}
