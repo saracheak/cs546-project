@@ -30,7 +30,7 @@ router.get("/:parkId", async (req, res)=> {
         const{parkId} = req.params;
 
         const park = await parksFunctions.getParkById(parkId);
-        return res.status(200).render("parkDetails", {
+        return res.status(200).render("parkDetail", {
             title: park.park_name,
             park:park,
         });
