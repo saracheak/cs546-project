@@ -109,7 +109,7 @@ export const parksFunctions = {
         try{
             park_name= checkString(park_name, "park_name");
             park_type = checkParkType(park_type);
-            approved = checkBoolean(approved, "approved");
+            approved = checkBool(approved, "approved");
             comments = checkComments(comments);
             address = checkAddress(address);
 
