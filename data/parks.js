@@ -41,7 +41,7 @@ const checkRating = (value, name) =>{
 };
 
 const validateId = (value)=> {
-    id = checkString(value, "id");
+    const id = checkString(value, "id");
 
     if(!checkId(id)){
         throw new Error("id must be a valid ObjectId");
@@ -100,7 +100,7 @@ const prepPark =(park_Doc)=> {
     if(!park_Doc){
         return park_Doc;
     }
-    park_Doc._ID = park_Doc._id.toString();
+    park_Doc._id = park_Doc._id.toString();
     return park_Doc;
 };
 
@@ -213,7 +213,7 @@ export const parksFunctions = {
             }
 
             const setUpdate = await parksCollection.findOneAndUpdate(
-                {_id: new ObjectId(park_id)},
+                {_id: new ObjectId(park_Id)},
                 {$set: update_fields},
                 {returnDocument: "after"}
             );
@@ -230,7 +230,7 @@ export const parksFunctions = {
 
     async setParkApproved(park_Id, approvedBool){
         try{
-            park_Id = validateId(park_id);
+            park_Id = validateId(park_Id);
             approvedBool = checkBool(approvedBool, "approvedBool");
 
             const setUpdate = await parksCollection.findOneAndUpdate(
