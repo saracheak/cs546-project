@@ -1,5 +1,5 @@
 //this file is for collating all routes for our data files
-import parksRoutes from "./routes/parks.js";
+import parksRoutes from "./parks.js";
 import profileRoutes from './profile.js'
 import loginRoutes from './login.js'
 import signupRoutes from './signup.js'
