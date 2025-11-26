@@ -2,8 +2,6 @@ import { ObjectId } from "mongodb";
 import { ratings} from "../config/mongoCollections.js";
 import { checkId } from "../validation.js";
 
-
-
 export const ratingsFunctions ={
     async createRating(user_id, park_id, scores, dog_size){
         user_id = checkId(user_id);
@@ -27,8 +25,6 @@ export const ratingsFunctions ={
             throw new Error(e);
         }
     },
-
-
 
     async getRatingsForPark(park_id){
         const ratingCollection = await ratings();

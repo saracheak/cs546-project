@@ -2,16 +2,17 @@
 import profileRoutes from './profile.js'
 import loginRoutes from './login.js'
 import signupRoutes from './signup.js'
+import ratingRoutes from './ratings.js'
 
-
+console.log('>>> constructorMethod called');
 const constructorMethod = (app) => {
   app.use('/profile', profileRoutes);
   app.use('/login', loginRoutes);
   app.use('/signup', signupRoutes);
+  app.use('/parks', ratingRoutes); 
 //   app.use('/parks', parksRoutes);
 //   app.use('/users', userRoutes);
 //   app.use('/biscuits', biscuitsRoutes);
-//   app.use('/ratings', ratingsRoutes);
 
   app.use(/(.*)/, (req, res) => {
     res.status(404).json({ error: 'Not found' });

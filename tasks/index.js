@@ -18,6 +18,7 @@ const main = async () => {
     await parksCollection.deleteMany({});
     await biscuitsCollection.deleteMany({});
     await usersCollection.deleteMany({});
+    await ratingsCollection.deleteMany({});
 
     for (const park of parksData) {
         try {

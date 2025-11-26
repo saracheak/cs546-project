@@ -1,19 +1,22 @@
 import {Router} from 'express';
 
 import { checkId } from '../validation.js';
-import { createRating, getRatingsForPark } from '../data/ratings.js';
+import { ratingsFunctions } from '../data/ratings.js';
 
 const router = Router();
+console.log('>> routes/ratings.js loaded');
 
 router.get('/:id/ratings', async (req, res) => {
   let parkId;
+  console.log("routes/ratings.js has been loaded");
+
   try {
-    parkId = checkId(req.params.id, 'Park ID');
+    parkId = checkId(req.params.id, 'park_id');
   } catch (e) {
     return res.status(400).json({ error: e });
   }
   try {
-    const ratings = await getRatingsForPark(parkId);
+    const ratings = await ratingsFunctions.getRatingsForPark(parkId);
      return res.json(ratings);
   } catch (e) {
     console.error(e);
