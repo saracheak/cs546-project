@@ -120,3 +120,158 @@ button:hover {
 button:active {
     transform: translateY(0px);
 }
+
+.profile-body {
+    font-family: "Poppins", sans-serif;
+    background: #fff5e6 url("../images/grass.jpg") repeat;
+    margin: 0;
+}
+
+.topnav {
+    background-color: white;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-around;
+    padding: 14px 0;
+    font-size: 18px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+
+.topnav a {
+    text-decoration: none;
+    color: #5a3e1b;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+
+
+.topnav a:hover {
+    background-color: #ffe0b2;
+}
+
+
+.topnav .active {
+    background-color: #ffb74d;
+    color: white;
+}
+
+
+header h1 {
+    text-align: center;
+    margin-top: 20px;
+    padding: 5px;
+    border-radius: 20px;
+    font-size: 40px;
+    color: #534d46;
+}
+
+
+.profile-header-container {
+    background: #fff5e6;
+    padding: 40px 50px;
+    border-radius: 20px;
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+}
+
+.home-body {
+    font-family: "Poppins", sans-serif;
+    background: #fff5e6 url("../images/grass.jpg") repeat;
+    margin: 0;
+}
+
+
+.edit-pupfile-body {
+    font-family: "Poppins", sans-serif;
+    background: #fff5e6 url("../images/pawprint.png") repeat;
+    display: flex; 
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    height: 100vh;
+    margin: 0;
+}
+
+.edit-pupfile-container {
+    background: white;
+    backdrop-filter: blur(6px);
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+    text-align: center;
+    width: 430px;
+    min-height: 800px;
+    height: auto;
+    overflow-y: auto;
+    margin-bottom: 50px;
+}
+
+.biscuits-container {
+    background: white;
+    backdrop-filter: blur(6px);
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+    text-align: center;
+    height: 100px;
+    width: 600px;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.dog-info-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    background: white;
+    backdrop-filter: blur(6px);
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+    width: 1200px;
+    margin: auto;
+}
+
+.dog-info-box {
+    background-color: #fff5e6;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.dog-info-box h2{
+    margin: 0 0 10px 0;
+    font-size: 1.3rem;
+}
+
+.info-box {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #ccc;
+    min-height: 40px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.profile-ratings-container {
+    background: white;
+    backdrop-filter: blur(6px);
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+    text-align: center;
+    height: 100px;
+    width: 600px;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -1,0 +1,59 @@
+{{!-- for filling out a form to edit my profile details --}}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Edit PupFile</title>
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    
+    <body class="edit-pupfile-body">
+        <div class="edit-pupfile-container">
+        <header>
+            <h1>🐾 Edit My PupFile 🐶</h1>
+        </header>
+        <main>
+            <p>Update fields</p>
+            <form action="/editPupfile" method="POST" id="edit-pupfile-form">
+                <label for="dog_name">Dog Name</label><br>
+                <input type="text" name="dogName" id="dog_name" value="{{user.dog_name}}"><br><br>
+
+                <label for="human_first_name">Human's First Name</label><br>
+                <input type="text" name="humanFirstName" id="human_first_name" value="{{user.human_first_name}}"><br><br>
+
+                <label for="human_last_name">Human's Last Name</label><br>
+                <input type="text" name="humanLastName" id="human_last_name" value="{{user.human_last_name}}"><br><br>
+
+                <label for="dog_gender">Dog Gender</label><br>
+                <input type="text" name="dogGender" id="dog_gender" value="{{user.dog_gender}}"><br><br>
+
+                <label for="human_gender">Human Gender</label><br>
+                <input type="text" name="humanGender" id="human_gender" value="{{user.human_gender}}"><br><br>
+                
+                <label for="email">Email</label><br>
+                <input type="text" name="email" id="email" value="{{user.email}}"><br><br>
+                
+                <label for="password">Password</label><br>
+                <input type="password" name="password" id="password"><br><br>
+
+                <p>separate the following using a comma: </p><br>
+
+                <label for="favorite_parks">Favorite Parks</label><br>
+                <input type="text" name="favoriteParks" id="favorite_parks" value="{{user.favorite_parks}}"><br><br>
+
+                <label for="times">Times</label><br>
+                <input type="text" name="times" id="times" value="{{user.times}}"><br><br>
+
+                <label for="pet_friends">Pet Friends</label><br>
+                <input type="text" name="petFriends" id="pet_friends" value="{{user.pet_friends}}"><br><br>
+
+                <label for="parks_visited">Parks Visited</label><br>
+                <input type="text" name="parksVisited" id="parks_visited" value="{{user.parks_visited}}"><br><br>
+
+                <button type="submit">Save Changes</button>
+                <br><br>
+            </form>
+        </main>
+        </div>
+    </body>
+</html>

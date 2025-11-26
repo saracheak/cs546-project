@@ -1,15 +1,31 @@
 import express from 'express';
 import exphbs from 'express-handlebars'
 const app = express();
+import session from 'express-session';
 import configRoutes from './routes/index.js';
+import 'dotenv/config';
 
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(
+  session({
+    name: 'PupMap',
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: false,
+    resave: false,
+    cookie: {maxAge: 3600000}
+  })
+);
 
 app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 app.set('views', './views');
+
+app.use(async (req, res, next) => {
+  res.locals.userId = req.session.userId;
+  next();
+});
 
 configRoutes(app);
 
