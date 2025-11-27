@@ -4,8 +4,7 @@ import { checkId } from "../validation.js";
 
 export const ratingsFunctions ={
     async createRating(user_id, park_id, scores, dog_size){
-        user_id = checkId(user_id);
-        park_id = checkId(park_id);
+        
 
         const ratingCollection = await ratings();
         try{
