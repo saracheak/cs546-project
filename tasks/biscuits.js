@@ -1,4 +1,5 @@
 export const biscuitsData = [
+
     {
         biscuit_name : "First Park Visit",
         description : "User visited their first park!",
@@ -37,11 +38,6 @@ export const biscuitsData = [
     {
         biscuit_name : "Ulti-mutt dog lover!",
         description : "User's made more than 5 friends!",
-        earned: false
-    },
-    {
-        biscuit_name : "Park playtime added to profile",
-        description : "User updated their profile to show times they're at the park!",
         earned: false
     },
     {
