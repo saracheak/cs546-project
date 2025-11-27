@@ -1,3 +1,77 @@
-<h1>Welcome {{username}} to your PupFile!</h1>
-<p>You are now logged in!</p>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Profile Page</title>
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    
+    <body class="profile-body">
+        <header>
+            <div class="profile-header-container">
+                <h1>Welcome {{humanFirstName}} to your PupFile!</h1>
+                <div class="topnav">
+                    <a href="/home">Home</a>
+                    <a href="/parks">All Parks</a>
+                    <a href="/editPupfile">Edit My PupFile</a>
+                </div>
+            </div>
+        </header>
+        <br><br>
+        <div class="biscuits-container">
+            <h2>Biscuits</h2>
+            <p>Add user's biscuits here</p>
+        </div>
+        <br><br>
+        <div class="dog-info-container">
+            <div class="dog-info-box">
+                <h2>Pet Friends:</h2>
+                <div class="info-box">
+                    <ul>
+                        {{#each petFriends}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+            <div class="dog-info-box">
+                <h2>Fav Parks:</h2>
+                <div class="info-box">
+                    <ul>
+                        {{#each favParks}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
 
+            <div class="dog-info-box">
+                <h2>Times:</h2>
+                <div class="info-box">
+                    <ul>
+                        {{#each times}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="dog-info-box">
+                <h2>Parks Visited:</h2>
+                <div class="info-box">
+                    <ul>
+                        {{#each parksVisited}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <br><br>
+        <div class="profile-ratings-container">
+            <h2>All My Ratings</h2>
+            <p>Add user's ratings here</p>
+        </div>
+        <br><br>
+        </div>
+    </body>
+</html>
