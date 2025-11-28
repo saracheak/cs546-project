@@ -296,7 +296,7 @@ export const parksFunctions = {
         }
     },
 
-    async deletePark(park_Id){
+    async deletePark(park_Id){ /// TO DO: This should be an admin only feature 
         try{
             park_Id = validateId(park_Id);
 
