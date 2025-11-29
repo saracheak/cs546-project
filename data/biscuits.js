@@ -3,15 +3,38 @@ import { ObjectId } from "mongodb";
 import { checkId } from "../validation.js";
 const biscuitsCollection = await biscuits();
 
+const checkString = (value, name) => {
+    if(value === undefined || value=== null){
+        throw new Error(`${name} is required`);
+    }
+    if(typeof value !== "string"){
+        throw new Error(`${name} must be a string`);
+    }
+    value = value.trim();
+    if(value.length === 0){
+        throw new Error(`${name} cannot be an empty string or just spaces`);
+    }
+
+    return value;
+};
+
+const validateId = (value)=> {
+    const id = checkString(value, "id");
+
+    if(!checkId(id)){
+        throw new Error("id must be a valid ObjectId");
+    }
+    return id;
+};
+
 export const biscuitsFunctions = {
-    async createBiscuit(biscuit_name, description, earned){
+    async createBiscuit(biscuit_name, description){
         //TODO: validations for each field
         try{
             let biscuitObj = { 
                 _id: new ObjectId(),
                 biscuit_name: biscuit_name,
                 description: description,
-                earned: !!earned //if "earned: false" is used then the DB always sets to false despite seed data. !!earned forces JS to look at this value as a boolean 
             };
         
             const insertInfo = await biscuitsCollection.insertOne(biscuitObj);
@@ -35,14 +58,11 @@ export const biscuitsFunctions = {
     },
     async updateBiscuit(biscuitId, updateInfo){
             try {
-                if(!checkId(biscuitId)){
-                    throw new Error("biscuitId is not a valid ObjectId");
-                }
+                biscuitId = validateId(biscuitId) //validates string is entered and not empty
                 let updatedBiscuit = await biscuitsCollection.findOneAndUpdate({_id: new ObjectId(biscuitId)},
                 {$set: {
                     biscuit_name: updateInfo.biscuit_name,
                     description: updateInfo.description,
-                    earned: updateInfo.earned
                 }},
                 {returnNewDocument : true});
     
@@ -53,10 +73,7 @@ export const biscuitsFunctions = {
         },
     async deleteBiscuitById(biscuitId){
         try{
-            if(!checkId(biscuitId)){
-                throw new Error ('Invalid biscuit id entered');
-            };
-
+            biscuitId = validateId(biscuitId) //validates string is entered and not empty
             const deletionInfo = await biscuitsCollection.findOneAndDelete({
                 _id: new ObjectId(biscuitId)
               });

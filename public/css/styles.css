@@ -217,7 +217,7 @@ header h1 {
 .homepage-top-ten-park-list{
     text-align: left;
     background: #fff5e6;
-    padding: 40px 50px;
+    padding: 35px 25px;
     border-radius: 20px;
     width: 200px;
     height: 400px;
@@ -388,7 +388,6 @@ header h1 {
     margin-right: auto;
     box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
 }
-
 
 .return-home a {
     text-decoration: none;

@@ -27,8 +27,8 @@ const main = async () => {
 
     for (const biscuit of biscuitsData) {
         try {
-            const {biscuit_id, biscuit_name, description, earned} = biscuit;
-            const newBiscuit = await biscuitsFunctions.createBiscuit(biscuit_name, description, earned);
+            const {biscuit_id, biscuit_name, description} = biscuit;
+            const newBiscuit = await biscuitsFunctions.createBiscuit(biscuit_name, description);
             console.log("Biscuits seeded successfully");
         } catch (e) {
             throw e;
