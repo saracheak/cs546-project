@@ -142,7 +142,7 @@ export const commentsFunctions = {
                 throw new Error(`No comment found of id ${comment_id}`);
             }
 
-            const isCommenter = checkExisting.use_id === requestingUserId.toString();
+            const isCommenter = checkExisting.user_id === requestingUserId.toString();
 
             if(!isAdmin && !isCommenter){
                 throw new Error("Not authorized to delete this comment");
