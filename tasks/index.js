@@ -50,9 +50,6 @@ const main = async () => {
         }   
     }
 
-    
-
-
     const allParks = await parksCollection.find({}).toArray();
     console.log(allParks);
 

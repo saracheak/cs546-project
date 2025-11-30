@@ -21,14 +21,14 @@ export const ratingsData = [
     userEmail: "ezra.kaplan@example.com",
     parkName: "Asser Levy Park",
     scores: {
-      cleanliness: 4,
+      cleanliness: 5,
       dog_friendliness: 5,
-      busyness: 3,
+      busyness: 5,
       water_availability: 4,
-      wastebag_availability: 5,
-      trash_availability: 4,
-      surface: 3,
-      amenities: 4
+      wastebag_availability: 4,
+      trash_availability: 3,
+      surface: 4,
+      amenities: 5
     },
     dog_size: "medium"
   },
@@ -41,9 +41,9 @@ export const ratingsData = [
       dog_friendliness: 4,
       busyness: 2,
       water_availability: 5,
-      wastebag_availability: 4,
+      wastebag_availability: 3,
       trash_availability: 4,
-      surface: 4,
+      surface: 5,
       amenities: 3
     },
     dog_size: "small"

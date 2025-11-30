@@ -97,7 +97,6 @@ export const ratingsFunctions ={
 
         if (list.length === 0) {
             return {
-                overall: 0,
                 cleanliness: 0,
                 dog_friendliness: 0,
                 busyness: 0,
@@ -105,29 +104,36 @@ export const ratingsFunctions ={
                 wastebag_availability: 0,
                 trash_availability: 0,
                 surface: 0,
-                amenities: 0
+                amenities: 0,
+                overall: 0
+                
             };
         }
 
         const avg = (field) => list.reduce((sum, r) => sum + r[field], 0) / list.length
 
         const summary = {
-            cleanliness: avg("cleanliness"),
-            dog_friendliness: avg("dog_friendliness"),
-            busyness: avg("busyness"),
-            water_availability: avg("water_availability"),
-            wastebag_availability: avg("wastebag_availability"),
-            trash_availability: avg("trash_availability"),
-            surface: avg("surface"),
-            amenities: avg("amenities")
+            average_cleanliness: avg("cleanliness"),
+            average_dog_friendliness: avg("dog_friendliness"),
+            average_busyness: avg("busyness"),
+            average_water_availability: avg("water_availability"),
+            average_wastebag_availability: avg("wastebag_availability"),
+            average_trash_availability: avg("trash_availability"),
+            average_surface: avg("surface"),
+            average_amenities: avg("amenities")
         };
     
-        summary.overall =
+        summary.average_overall =
             Object.values(summary).reduce((sum, x) => sum + x, 0) /
             Object.values(summary).length;
 
+        for (const key in summary) {
+            summary[key] = Number(summary[key].toFixed(2));
+        }
+
         return summary;
     },
+
     async getTopParksByOverallScore(limit = 10) {
         const ratingCollection = await ratings();
 
