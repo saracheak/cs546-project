@@ -50,16 +50,7 @@ const main = async () => {
         }   
     }
 
-    for (const rating of ratingsData) {
-        try {
-            const newRating = await ratingsFunctions.createRating(rating.user_id, rating.park_id, rating.scores, rating.dog_size);
     
-        }  
-        catch (e) {
-            throw e;
-        }   
-
-    }
 
 
     const allParks = await parksCollection.find({}).toArray();
@@ -71,8 +62,21 @@ const main = async () => {
     const allUsers = await usersCollection.find({}).toArray();
     console.log(allUsers);
 
-    const allRatings = await ratingsCollection.find({}).toArray();
-    console.log(allRatings);
+    for (const rating of ratingsData) {
+        const user = allUsers.find(u => u.email === rating.userEmail);
+        const park = allParks.find(p => p.park_name === rating.parkName);
+        if (!user || !park) {
+            continue
+        }
+
+        //create Rating
+       await ratingsFunctions.createRating({
+            user_id: user._id.toString(),
+            park_id: park._id.toString(),
+            ...rating.scores,         
+            dog_size: rating.dog_size,
+  });
+    }
 };
 
 main().then(() => {

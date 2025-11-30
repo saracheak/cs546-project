@@ -1,48 +1,173 @@
 import { ObjectId } from "mongodb";
 import { ratings} from "../config/mongoCollections.js";
-import { checkId } from "../validation.js";
+import { checkId,checkIdInRatings,checkString } from "../validation.js";
+
 
 export const ratingsFunctions ={
-    async createRating(user_id, park_id, scores, dog_size){
+    async createRating(ratingData){
         
 
         const ratingCollection = await ratings();
-        try{
-            let ratingObj = {
-                user_id: user_id,
-                park_id: park_id,
-                scores: scores,
-                dog_size: dog_size
-            };
 
-            const insertInfo = await ratingCollection.insertOne(ratingObj);
-            if (!insertInfo.acknowledged || !insertInfo.insertedId){
-                throw new Error("Could not add rating");
-            }
+        const {
+            user_id,
+            park_id,
+            cleanliness,
+            dog_friendliness,
+            busyness,
+            water_availability,
+            wastebag_availability,
+            trash_availability,
+            surface,
+            amenities,
+            dog_size
+        } = ratingData;
+
+        
+        const uid = checkIdInRatings(user_id, "user id");
+        const pid = checkIdInRatings(park_id, "park id");
             
-        }catch(e){
-            throw new Error(e);
+            
+        
+
+        const fields = [
+            cleanliness,
+            dog_friendliness,
+            busyness,
+            water_availability,
+            wastebag_availability,
+            trash_availability,
+            surface,
+            amenities
+        ];
+
+        for (const f of fields) {
+            if (typeof f !== "number" || f < 0 || f > 5) {
+                throw "Each rating field must be a number between 0 and 5";
+            }
         }
+
+            
+         const dogSizeStr = checkId(dog_size);
+
+         const ratingObj = {
+            user_id: new ObjectId(uid),
+            park_id: new ObjectId(pid),
+            cleanliness,
+            dog_friendliness,
+            busyness,
+            water_availability,
+            wastebag_availability,
+            trash_availability,
+            surface,
+            amenities,
+            dog_size: dogSizeStr
+        };
+
+        const insertInfo = await ratingCollection.insertOne(ratingObj);
+        if (!insertInfo.acknowledged) throw "Could not add rating";
+
+        return await ratingCollection.findOne({ _id: insertInfo.insertedId });
     },
 
     async getRatingsForPark(park_id){
         const ratingCollection = await ratings();
+        let pid = park_id;
+        if (typeof pid !== "string") {
+            pid = pid.toString();
+        }
 
-        park_id = checkId(park_id);
+        const ratingsList = await ratingCollection.find({ park_id: new ObjectId(pid) }).toArray();
 
-        const ratingslist = await ratingCollection.find({ park_id: new ObjectId(park_id) }).toArray();
+          return ratingsList;
+
         
-        return ratingslist;
-    }
-    
+    },
 
+    async getAverageRatingsForPark(park_id) {
+        const ratingCollection = await ratings();
+         const pid = checkString(park_id, "park id");
+            if (!checkId(pid)) {
+                throw "Error: park id is not a valid ObjectId";
+            }
+
+        const list = await ratingCollection
+            .find({ park_id: new ObjectId(pid) })
+            .toArray();
+
+        if (list.length === 0) {
+            return {
+                overall: 0,
+                cleanliness: 0,
+                dog_friendliness: 0,
+                busyness: 0,
+                water_availability: 0,
+                wastebag_availability: 0,
+                trash_availability: 0,
+                surface: 0,
+                amenities: 0
+            };
+        }
+
+        const avg = (field) => list.reduce((sum, r) => sum + r[field], 0) / list.length
+
+        const summary = {
+            cleanliness: avg("cleanliness"),
+            dog_friendliness: avg("dog_friendliness"),
+            busyness: avg("busyness"),
+            water_availability: avg("water_availability"),
+            wastebag_availability: avg("wastebag_availability"),
+            trash_availability: avg("trash_availability"),
+            surface: avg("surface"),
+            amenities: avg("amenities")
+        };
+    
+        summary.overall =
+            Object.values(summary).reduce((sum, x) => sum + x, 0) /
+            Object.values(summary).length;
+
+        return summary;
+    },
+    async getTopParksByOverallScore(limit = 10) {
+        const ratingCollection = await ratings();
+
+        const agg = await ratingCollection
+            .aggregate([
+                {
+                    $group: {
+                        _id: "$park_id",
+                        cleanliness: { $avg: "$cleanliness" },
+                        dog_friendliness: { $avg: "$dog_friendliness" },
+                        busyness: { $avg: "$busyness" },
+                        water_availability: { $avg: "$water_availability" },
+                        wastebag_availability: { $avg: "$wastebag_availability" },
+                        trash_availability: { $avg: "$trash_availability" },
+                        surface: { $avg: "$surface" },
+                        amenities: { $avg: "$amenities" }
+                    }
+                },
+                {
+                    $addFields: {
+                        overall: {
+                            $avg: [
+                                "$cleanliness",
+                                "$dog_friendliness",
+                                "$busyness",
+                                "$water_availability",
+                                "$wastebag_availability",
+                                "$trash_availability",
+                                "$surface",
+                                "$amenities"
+                            ]
+                        }
+                    }
+                },
+                { $sort: { overall: -1 } },
+                { $limit: limit }
+            ])
+            .toArray();
+
+        return agg;
+    }
 
 }
-
-// export const getAverageRatingsForPark =(park_id) =>{
-
-// }
-
-// export const getTopParksByOverallScore = (limit) =>{
-
-// }

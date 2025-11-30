@@ -1,6 +1,6 @@
 import {Router} from 'express';
 
-import { checkId } from '../validation.js';
+import { checkIdInRatings } from '../validation.js';
 import { ratingsFunctions } from '../data/ratings.js';
 
 const router = Router();
@@ -11,7 +11,8 @@ router.get('/:id/ratings', async (req, res) => {
   console.log("routes/ratings.js has been loaded");
 
   try {
-    parkId = checkId(req.params.id, 'park_id');
+    parkId = checkIdInRatings(req.params.id, 'park_id');
+    //console.log('route parkId =', parkId, 'typeof =', typeof parkId);
   } catch (e) {
     return res.status(400).json({ error: e });
   }
