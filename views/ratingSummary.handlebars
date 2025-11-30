@@ -1,0 +1,17 @@
+<h1>{{title}}</h1>
+
+{{#if ratingSummary}}
+  <ul>
+    <li>Cleanliness: {{ratingSummary.average_cleanliness}}</li>
+    <li>Dog Friendliness: {{ratingSummary.average_dog_friendliness}}</li>
+    <li>Busyness: {{ratingSummary.average_busyness}}</li>
+    <li>Water Availability: {{ratingSummary.average_water_availability}}</li>
+    <li>Wastebag Availability: {{ratingSummary.average_wastebag_availability}}</li>
+    <li>Trash Availability: {{ratingSummary.average_trash_availability}}</li>
+    <li>Surface: {{ratingSummary.average_surface}}</li>
+    <li>Amenities: {{ratingSummary.average_amenities}}</li>
+    <li><strong>Overall:</strong> {{ratingSummary.average_overall}} / 5</li>
+  </ul>
+{{else}}
+  <p>No ratings yet.</p>
+{{/if}}
