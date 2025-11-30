@@ -126,7 +126,16 @@ button:active {
     background: #fff5e6 url("../images/grass.jpg") repeat;
     margin: 0;
 }
-
+.home-nav {
+    background-color: white;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-around;
+    padding: 14px 0;
+    font-size: 18px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    background: #fff5e6;
+}
 .topnav {
     background-color: white;
     overflow: hidden;
@@ -181,10 +190,42 @@ header h1 {
 .home-body {
     font-family: "Poppins", sans-serif;
     background: #fff5e6 url("../images/grass.jpg") repeat;
+    font-size: 20px;
     margin: 0;
 }
-
-
+.home-paragraph {
+    text-align: center;
+    background: #fff5e6;
+    padding: 40px 50px;
+    border-radius: 20px;
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+}
+.home-header {
+    background: #fff5e6;
+    padding: 10px 12.5px;
+    border-radius: 20px;
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+}
+.homepage-top-ten-park-list{
+    text-align: left;
+    background: #fff5e6;
+    padding: 35px 25px;
+    border-radius: 20px;
+    width: 200px;
+    height: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+}
 .edit-pupfile-body {
     font-family: "Poppins", sans-serif;
     background: #fff5e6 url("../images/pawprint.png") repeat;
@@ -274,4 +315,86 @@ header h1 {
     align-items: center;
     margin-left: auto;
     margin-right: auto;
+}
+
+.biscuit-body {
+    font-family: "Poppins", sans-serif;
+    background: #fff5e6 url("../images/grass.jpg") repeat;
+}
+.biscuit-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    justify-content: center;
+}
+
+.biscuit-card { /* Basic biscuit style */
+    width: 260px;
+    padding: 1rem 1.25rem;
+    border-radius: 999px;
+    text-align: center;
+
+    font-family: inherit;
+    transition: transform .2s ease;
+    position: relative;
+}
+
+.biscuit-card.unearned { /*light colored biscuit*/
+    background: #ecd1aa; 
+    border: 2px dashed #b8946f;
+    color: #6b4b26;
+    opacity: 0.95;
+}
+
+.biscuit-card.earned {
+    background: #c68b3b; /* darker colored biscuit */
+    border: 3px solid #8a5d28;
+    color: #fff;
+    font-weight: bold;
+    transform: scale(1.05);
+}
+
+.biscuit-card.earned:hover {
+    transform: scale(1.08);
+}
+
+.biscuit-card strong{
+    font-size: 18px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.biscuit-card span{
+    font-size: 15px;
+    opacity: .95;
+}
+
+.biscuit-paragraph{
+    text-align: center;
+    background: #fff5e6;
+    padding: 10px 12.5px;
+    border-radius: 20px;
+    width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+}
+.biscuit-header{
+    background: #fff5e6;
+    padding: 40px 50px;
+    border-radius: 20px;
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+}
+
+.return-home a {
+    text-decoration: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 2px solid #5a3e1b;
+    transition: background 0.3s;
+    background-color: #c68b3b;
 }
