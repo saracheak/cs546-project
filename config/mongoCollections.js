@@ -17,3 +17,4 @@ export const users = getCollectionFn('users');
 export const ratings = getCollectionFn('ratings');
 export const parks = getCollectionFn('parks');
 export const biscuits = getCollectionFn('biscuits');
+export const comments = getCollectionFn('comments');
