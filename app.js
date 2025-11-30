@@ -18,7 +18,14 @@ app.use(
   })
 );
 
-app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
+app.engine('handlebars', exphbs.engine({
+  defaultLayout: 'main',
+  helpers: { 
+    includes: (arr, value) => { //helper function used in biscuits.handlebars to verify if biscuits user has earned
+      if (!Array.isArray(arr)) return false;
+      return arr.includes(value);
+    }
+  }}));
 app.set('view engine', 'handlebars');
 app.set('views', './views');
 

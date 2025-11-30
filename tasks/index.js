@@ -34,7 +34,7 @@ const main = async () => {
         try {
             const {biscuit_id, biscuit_name, description} = biscuit;
             const newBiscuit = await biscuitsFunctions.createBiscuit(biscuit_name, description);
-            //console.log(newBiscuit);
+            console.log("Biscuits seeded successfully");
         } catch (e) {
             throw e;
         }   
