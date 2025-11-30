@@ -48,6 +48,8 @@ const checkNumber = (value, name) =>{
     if(value < 0){
         throw new Error(`${name} cannot be a negative number`);
     }
+
+    return value;
 };
 
 const parseTime =(value)=>{
@@ -108,7 +110,7 @@ export const commentsFunctions = {
 
             const commentObject = {
                 _id: new ObjectId(),
-                park_Id: new ObjectId(park_id),
+                park_Id: new ObjectId(park_Id),
                 user_id: new ObjectId(user_id),
                 comment: comment,
                 timestamp: timeS,
