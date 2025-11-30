@@ -6,7 +6,6 @@ import signupRoutes from './signup.js'
 import ratingRoutes from './ratings.js'
 import editPupfileRoutes from "./editPupfile.js";
 
-console.log('>>> constructorMethod called');
 const constructorMethod = (app) => {
   app.use('/profile', profileRoutes);
   app.use('/login', loginRoutes);

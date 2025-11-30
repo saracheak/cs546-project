@@ -4,6 +4,12 @@ import { checkIdInRatings } from '../validation.js';
 import { ratingsFunctions } from '../data/ratings.js';
 import { parksFunctions } from '../data/parks.js';
 
+console.log(
+  'Ratings routes loaded. Testing hint: In MongoDB, find the park with park_name "Asser Levy Park" and copy its _id. ' +
+  'Visit /parks/<that-parkId>/ratings and /parks/<that-parkId>/ratings/summary to verify that ratings and averages render correctly.'
+);
+
+
 const router = Router();
 //console.log('>> routes/ratings.js loaded');
 
