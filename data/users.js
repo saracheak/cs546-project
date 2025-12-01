@@ -169,19 +169,6 @@ export const usersFunctions = {
         } catch (e) {
             throw new Error(e);
         }
-    },
-
-    async addParkToFavoriteParks(userId, parkId){
-        try {
-            if(!ObjectId.isValid(parkId)) throw new Error("A favorite park is not a valid ObjectId");
-
-            //see if that park ObjectId is in database
-            if(!parksFunctions.getParkById(parkId)) throw new Error("A favorite park is not in the database");
-
-            //TODO: add it to favoriteParks
-        } catch (e) {
-            
-        }
     }
 }
 
