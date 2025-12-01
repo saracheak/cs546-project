@@ -19,7 +19,7 @@ const main = async () => {
         try {
             const { park_id, park_name, park_type, approved, comments, address, average_cleanliness, average_dog_friendliness, average_busyness, average_water_availability, average_wastebag_availability, average_trash_availability, average_surface, average_amenities} = park;
             const newPark = await parksFunctions.createPark(park_name, park_type, approved, comments, address, average_cleanliness, average_dog_friendliness, average_busyness, average_water_availability, average_wastebag_availability, average_trash_availability, average_surface, average_amenities);
-            //console.log(newPark);
+            console.log("Parks seeded successfully");
         } catch (e) {
             throw e;
         }
@@ -37,9 +37,9 @@ const main = async () => {
 
     for (const user of usersData) {
         try {
-            const {user_id, dog_name, human_first_name, human_last_name, dog_gender, human_gender, email, hash_password, favorite_parks, times, ratings, pet_friends, biscuits, parks_visited} = user;
-            const newUser = await usersFunctions.createUser(dog_name, human_first_name, human_last_name, dog_gender, human_gender, email, hash_password, favorite_parks, times, ratings, pet_friends, biscuits, parks_visited);
-            //console.log(newUser);
+            const {user_id, dog_name, human_first_name, human_last_name, dog_gender, human_gender, email, password, role, favorite_parks, times, ratings, pet_friends, biscuits, parks_visited} = user;
+            const newUser = await usersFunctions.createUser(dog_name, human_first_name, human_last_name, dog_gender, human_gender, email, password, role, favorite_parks, times, ratings, pet_friends, biscuits, parks_visited);
+            console.log("Users seeded successfully");
         } catch (e) {
             throw e;
         }   

@@ -6,6 +6,7 @@ import signupRoutes from './signup.js'
 import editPupfileRoutes from "./editPupfile.js";
 import homeRoute from "./home.js";
 import biscuitsRoutes from "./biscuits.js";
+import logoutRoutes from "./logout.js"
 
 const constructorMethod = (app) => {
   app.use('/profile', profileRoutes);
@@ -13,9 +14,7 @@ const constructorMethod = (app) => {
   app.use('/signup', signupRoutes);
   app.use("/editPupfile", editPupfileRoutes);
   app.use('/biscuits', biscuitsRoutes);
-//   app.use('/users', userRoutes);
-//   app.use('/ratings', ratingsRoutes);
-
+  app.use('/logout', logoutRoutes);
   app.use("/parks", parksRoutes);
   app.use('/home', homeRoute);
 
