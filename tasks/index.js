@@ -1,19 +1,24 @@
-import { parks, biscuits, users } from "../config/mongoCollections.js";
+import { parks, biscuits, users, ratings } from "../config/mongoCollections.js";
 import { parksData } from './parks.js'
 import { biscuitsData } from './biscuits.js';
 import { usersData } from './users.js'
 import { parksFunctions } from "../data/parks.js";
 import { biscuitsFunctions } from "../data/biscuits.js"
 import { usersFunctions } from "../data/users.js"
+import { ratingsData } from './ratings.js';
+import { ratingsFunctions } from '../data/ratings.js';
+
 
 const parksCollection = await parks();
 const biscuitsCollection = await biscuits();
 const usersCollection = await users();
+const ratingsCollection = await ratings();
 
 const main = async () => {
     await parksCollection.deleteMany({});
     await biscuitsCollection.deleteMany({});
     await usersCollection.deleteMany({});
+    await ratingsCollection.deleteMany({});
 
     for (const park of parksData) {
         try {
@@ -53,6 +58,22 @@ const main = async () => {
 
     const allUsers = await usersCollection.find({}).toArray();
     console.log(allUsers);
+
+    for (const rating of ratingsData) {
+        const user = allUsers.find(u => u.email === rating.userEmail);
+        const park = allParks.find(p => p.park_name === rating.parkName);
+        if (!user || !park) {
+            continue
+        }
+
+        //create Rating
+       await ratingsFunctions.createRating({
+            user_id: user._id.toString(),
+            park_id: park._id.toString(),
+            ...rating.scores,         
+            dog_size: rating.dog_size,
+  });
+    }
 };
 
 main().then(() => {
