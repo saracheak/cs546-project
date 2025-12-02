@@ -49,16 +49,16 @@ export const biscuitsFunctions = {
         }
     },
     async getBiscuitById(id){
-        if (!ObjectId.isValid(id)) throw `invalid object ID`;
+        if (!ObjectId.isValid(id)) throw new Error(`invalid object ID`);
         const specificBiscuit = await biscuitsCollection.findOne({_id: new ObjectId(id)});
-        if (specificBiscuit === null) throw `No biscuit with that id`;
+        if (specificBiscuit === null) throw new Error(`No biscuit with that id`);
         return specificBiscuit.biscuit_name;
     },
     async getBiscuitsForUser(userId){
         if (!ObjectId.isValid(userId)) throw `invalid object ID`;
         const userCollection = await users();
         const user = await userCollection.findOne({_id: new ObjectId(userId)});
-        if (user === null) throw `No user with that id`;
+        if (user === null) throw new Error(`No user with that id`);
         const userBiscuits = user.biscuits;
         return userBiscuits;
     },
