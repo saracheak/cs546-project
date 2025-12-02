@@ -10,14 +10,14 @@ import biscuitsRoutes from "./biscuits.js";
 import logoutRoutes from "./logout.js"
 
 const constructorMethod = (app) => {
+  app.use('/parks', parksRoutes);
   app.use('/profile', profileRoutes);
   app.use('/login', loginRoutes);
   app.use('/signup', signupRoutes);
   app.use('/parks', ratingRoutes); 
-  app.use("/editPupfile", editPupfileRoutes);
+  app.use('/editPupfile', editPupfileRoutes);
   app.use('/biscuits', biscuitsRoutes);
   app.use('/logout', logoutRoutes);
-  app.use("/parks", parksRoutes);
 
   app.use(/(.*)/, (req, res) => {
     res.status(404).json({ error: 'Not found' });
