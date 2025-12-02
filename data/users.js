@@ -95,6 +95,7 @@ export const usersFunctions = {
                 favorite_parks: updateInfo.favoriteParks ? updateInfo.favoriteParks.split(",").map(s => s.trim()) : [],
                 times: updateInfo.times ? updateInfo.times.split(",").map(s => s.trim()) : [],
                 pet_friends: updateInfo.petFriends ? updateInfo.petFriends.split(",").map(s => s.trim()) : [],
+                biscuits: updateInfo.biscuits ? updateInfo.biscuits.split(",").map(s => s.trim()) : [],
                 parks_visited: updateInfo.parksVisited ? updateInfo.parksVisited.split(",").map(s => s.trim()) : []
             }},
             {returnNewDocument : true});
@@ -188,7 +189,9 @@ const checkGender = (gender) => {
 }
 
 const checkEmail = (email) => {
-    return validator.isEmail(email);
+    let isValidEmail = validator.isEmail(email);
+    if(!isValidEmail) throw new Error("The email entered is not valid.");
+    return true;
 }
 
 const checkPassword = (password) => {
