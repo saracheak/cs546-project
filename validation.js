@@ -21,11 +21,17 @@ export const checkString = (str, varName) => {
   return str;
 };
 
-export const checkIdInRatings = (id, varName) => {
-  id = checkString(id, varName);
+ export const checkIdInRatings = (id, varName = "id") => {
+  if (!id) throw `${varName} is required`;
+
+ if (typeof id !== "string") {
+    id = id.toString();
+  }
+
+  id = id.trim();
+ 
   if (!ObjectId.isValid(id)) {
     throw `${varName} is not a valid ObjectId`;
   }
-
-  return id;
+  return id;  
 };
