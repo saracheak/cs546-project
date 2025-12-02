@@ -19,7 +19,7 @@ const constructorMethod = (app) => {
   app.use('/biscuits', biscuitsRoutes);
   
   app.use(/(.*)/, (req, res) => {
-    res.status(404).json({ error: 'Not found' });
+    res.redirect('/home');
   });
 };
 
