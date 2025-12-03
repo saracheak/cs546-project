@@ -14,10 +14,10 @@ router.post("/", async(req, res) => {
         const {email, password} = req.body;
 
         const user = await usersCollection.findOne({ email });
-        if (!user) return res.render("/login", {error: "No user found with that email"});
+        if (!user) return res.render("login", {error: "No user found with that email"});
 
         const match = await bcrypt.compare(password, user.hashed_password);
-        if (!match) return res.render("/login", {error: "Incorrect password"});
+        if (!match) return res.render("login", {error: "Incorrect password"});
 
         req.session.userId = user._id;
         req.session.humanFirstName = user.human_first_name;
