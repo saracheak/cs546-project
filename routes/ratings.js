@@ -1,14 +1,8 @@
 import {Router} from 'express';
 
-import { checkIdInRatings } from '../validation.js';
+import { checkId, checkIdInRatings } from '../validation.js';
 import { ratingsFunctions } from '../data/ratings.js';
 import { parksFunctions } from '../data/parks.js';
-
-console.log(
-  'Ratings routes loaded. Testing hint: In MongoDB, find the park with park_name "Asser Levy Park" and copy its _id. ' +
-  'Visit /parks/<that-parkId>/ratings and /parks/<that-parkId>/ratings/summary to verify that ratings and averages render correctly.'
-);
-
 
 const router = Router();
 //console.log('>> routes/ratings.js loaded');
@@ -35,12 +29,13 @@ router.get('/:parkId/ratings', async (req, res) => {
 router.get('/:parkId/ratings/summary', async (req, res) => {
   let parkId;
   try {
-    parkId = checkIdInRatings(req.params.parkId, 'park_id');
+    parkId =checkIdInRatings(req.params.parkId, 'park_id');
   } catch (e) {
     return res.status(400).json({ error: e });
   }
 
   try {
+    //const ratingList = await ratingsFunctions.getRatingsForPark(parkId);
     const ratingSummary = await ratingsFunctions.getAverageRatingsForPark(parkId);
     return res.render('ratingSummary', {
       title: 'Rating Summary',

@@ -20,16 +20,15 @@ export const ratingsFunctions ={
             trash_availability,
             surface,
             amenities,
-            dog_size
+            comment,
+            dog_size,
         } = ratingData;
 
         
         const uid = checkIdInRatings(user_id, "user id");
         const pid = checkIdInRatings(park_id, "park id");
             
-            
         
-
         const fields = [
             cleanliness,
             dog_friendliness,
@@ -48,7 +47,8 @@ export const ratingsFunctions ={
         }
 
             
-         const dogSizeStr = checkId(dog_size);
+         const dogSizeStr = checkString(dog_size);
+         const commentStr = checkString(comment);
 
          const ratingObj = {
             user_id: new ObjectId(uid),
@@ -61,7 +61,9 @@ export const ratingsFunctions ={
             trash_availability,
             surface,
             amenities,
-            dog_size: dogSizeStr
+            commentStr,
+            dog_size: dogSizeStr,
+           
         };
 
         const insertInfo = await ratingCollection.insertOne(ratingObj);
@@ -72,12 +74,15 @@ export const ratingsFunctions ={
 
     async getRatingsForPark(park_id){
         const ratingCollection = await ratings();
-        let pid = park_id;
-        if (typeof pid !== "string") {
-            pid = pid.toString();
-        }
 
-        const ratingsList = await ratingCollection.find({ park_id: new ObjectId(pid) }).toArray();
+        
+        const pid = checkIdInRatings(park_id, "park id");
+        //console.log(typeof(pid))
+        const parkObjId = new ObjectId(pid);
+
+        const ratingsList = await ratingCollection
+            .find({ parkId: parkObjId })  
+            .toArray();
 
           return ratingsList;
 
@@ -86,10 +91,7 @@ export const ratingsFunctions ={
 
     async getAverageRatingsForPark(park_id) {
         const ratingCollection = await ratings();
-         const pid = checkString(park_id, "park id");
-            if (!checkId(pid)) {
-                throw "Error: park id is not a valid ObjectId";
-            }
+        const pid = checkIdInRatings(park_id, "park id");
 
         const list = await ratingCollection
             .find({ park_id: new ObjectId(pid) })
@@ -106,7 +108,6 @@ export const ratingsFunctions ={
                 surface: 0,
                 amenities: 0,
                 overall: 0
-                
             };
         }
 
