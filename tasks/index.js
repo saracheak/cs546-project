@@ -60,20 +60,32 @@ const main = async () => {
     console.log(allUsers);
 
     for (const rating of ratingsData) {
-        const user = allUsers.find(u => u.email === rating.userEmail);
-        const park = allParks.find(p => p.park_name === rating.parkName);
-        if (!user || !park) {
-            continue
+        const user = await usersCollection.findOne({ email: rating.userEmail });
+        //onst park = allParks.find(p => p.park_name === rating.parkName);
+        if (!user ) {
+            console.log(`User not found: ${rating.userEmail}`);
+            continue;
         }
-
+        const park = await parksCollection.findOne({ park_name: rating.parkName });
+        if (!park) {
+            console.log(`Park not found: ${rating.parkName}`);
+        continue;
+        }
         //create Rating
-       await ratingsFunctions.createRating({
-            user_id: user._id.toString(),
-            park_id: park._id.toString(),
-            ...rating.scores,         
+        const ratingDoc = {
+            userId: user._id,
+            parkId: park._id,
+            scores: rating.scores,
+            comment: rating.comment,
             dog_size: rating.dog_size,
-  });
+            createdAt: new Date()
+         };
+
+        await ratingsCollection.insertOne(ratingDoc);
+        console.log(`Inserted rating for ${rating.userEmail} at ${rating.parkName}`);
     }
+
+    console.log("Ratings seeded successfully!");
 };
 
 main().then(() => {
