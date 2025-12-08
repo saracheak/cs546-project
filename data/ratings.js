@@ -61,7 +61,7 @@ export const ratingsFunctions ={
             trash_availability,
             surface,
             amenities,
-            commentStr,
+            comment: commentStr,
             dog_size: dogSizeStr,
            
         };
@@ -78,10 +78,10 @@ export const ratingsFunctions ={
         
         const pid = checkIdInRatings(park_id, "park id");
         //console.log(typeof(pid))
-        const parkObjId = new ObjectId(pid);
+        //const parkObjId = new ObjectId(pid);
 
         const ratingsList = await ratingCollection
-            .find({ parkId: parkObjId })  
+            .find({ park_id: pid })  
             .toArray();
 
           return ratingsList;
@@ -94,20 +94,20 @@ export const ratingsFunctions ={
         const pid = checkIdInRatings(park_id, "park id");
 
         const list = await ratingCollection
-            .find({ park_id: new ObjectId(pid) })
+            .find({ park_id: pid  })
             .toArray();
 
         if (list.length === 0) {
             return {
-                cleanliness: 0,
-                dog_friendliness: 0,
-                busyness: 0,
-                water_availability: 0,
-                wastebag_availability: 0,
-                trash_availability: 0,
-                surface: 0,
-                amenities: 0,
-                overall: 0
+                average_cleanliness: 0,
+                average_dog_friendliness: 0,
+                average_busyness: 0,
+                average_water_availability: 0,
+                average_wastebag_availability: 0,
+                average_trash_availability: 0,
+                average_surface: 0,
+                average_amenities: 0,
+                average_overall: 0
             };
         }
 
