@@ -23,6 +23,7 @@
     "express": "^5.1.0",
     "express-handlebars": "^8.0.3",
     "express-session": "^1.18.2",
-    "mongodb": "^7.0.0"
+    "mongodb": "^7.0.0",
+    "seed": "^0.4.4"
   }
 }
