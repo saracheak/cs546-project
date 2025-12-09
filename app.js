@@ -11,7 +11,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(
   session({
     name: 'PupMap',
-    secret: process.env.SESSION_SECRET || "dev-secret" ,
+    secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
     resave: false,
     cookie: {maxAge: 3600000}
