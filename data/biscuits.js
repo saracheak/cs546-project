@@ -64,7 +64,7 @@ export const biscuitsFunctions = {
                 throw new Error("Could not add biscuit");
             }
         } catch(e){
-            throw new Error(e);
+            throw e;
         }
     },
     async getBiscuitById(id){
@@ -89,7 +89,7 @@ export const biscuitsFunctions = {
         if (!biscuitList) throw new Error('Could not find all biscuits');
         return biscuitList;
         }catch(e){
-            throw new Error(e);
+            throw e;
         }
     },
     async updateBiscuit(biscuitId, updateInfo){
@@ -124,7 +124,7 @@ export const biscuitsFunctions = {
     
                 return updatedBiscuit;
             } catch (e) {
-                throw new Error(e.toString());
+                throw e;
             }
         },
     async deleteBiscuitById(biscuitId){
@@ -139,7 +139,7 @@ export const biscuitsFunctions = {
             }
             return true;
         }catch(e){
-            throw new Error(e);
+            throw e;
         }
     },
 
