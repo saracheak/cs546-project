@@ -1,30 +1,42 @@
-<h1>{{title}}</h1>
+<section class="park-details-page">
+    <div class="park-details-card">
+        <h1>{{title}}</h1>
+        <link rel="stylesheet" href="/css/styles.css">
 
-{{#if park.address}}
-    <p>
-        <strong>Address:</strong>
-        {{park.address.street_1}}
-        {{#if park.address.street_2}}, {{park.address.street_2}}{{/if}},
-        {{park.address.city}}, {{park.address.state}} {{park.address.zip_code }}
-    </p>
-{{/if}}
-<p><strong>Type: </strong> {{park.park_type}}</p>
+        {{#if park.address}}
+            <p class="park-address">
+                <strong>Address:</strong> 
+                {{park.address.street_1}},
+                {{#if park.address.street_2}} 
+                    {{park.address.street_2}},
+                {{/if}}
+                {{park.address.city}}, {{park.address.state}} {{park.address.zip_code}}
+            </p>
+        {{/if}}
 
-<hr />
+        <p class="park-type">
+            <strong>Type:</strong> {{park.park_type}}
+        </p>
 
-<h2>Ratings</h2>
+        <hr />
 
-<p><strong>Cleanliness: </strong> {{park.average_cleanliness}}</p>
-<p><strong>Dog Friendliness: </strong> {{park.average_dog_friendliness}}</p>
-<p><strong>Busyness: </strong> {{park.average_busyness}}</p>
-<p><strong>Water Availability: </strong> {{park.average_water_availability}}</p>
-<p><strong>Wastebag Availability: </strong> {{park.average_wastebag_availability}}</p>
-<p><strong>Trash Availability: </strong> {{park.average_trash_availability}}</p>
-<p><strong>Surface: </strong> {{park.average_surface}}</p>
-<p><strong>Amenities: </strong> {{park.average_amenities}}</p>
+        <h2>Ratings</h2>
 
-<hr />
+        <div class="park-ratings-grid">
+            <p><strong>Cleanliness: </strong> {{park.average_cleanliness}}</p>
+            <p><strong>Dog Friendliness: </strong> {{park.average_dog_friendliness}}</p>
+            <p><strong>Busyness: </strong> {{park.average_busyness}}</p>
+            <p><strong>Water Availability: </strong> {{park.average_water_availability}}</p>
+            <p><strong>Wastebag Availability: </strong> {{park.average_wastebag_availability}}</p>
+            <p><strong>Trash Availability: </strong> {{park.average_trash_availability}}</p>
+            <p><strong>Surface: </strong> {{park.average_surface}}</p>
+            <p><strong>Amenities: </strong> {{park.average_amenities}}</p>
+        </div>
 
-<p>
-    <a href="/parks">Back to all parks</a>
-</p>
+        <hr />
+
+        <p class="back-link">
+            <a href="/parks">Back to all parks</a>
+        </p>
+    </div>
+</section>
