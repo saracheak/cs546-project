@@ -4,6 +4,7 @@ import { requireAdmin } from "../middleware.js";
 import { parksFunctions } from "../data/parks.js";
 import { biscuitsFunctions } from "../data/biscuits.js";
 import { checkString } from "../validation.js";
+import { ObjectId } from "mongodb";
 
 const router = Router();
 
@@ -100,6 +101,14 @@ router.route('/biscuits/update').post(async(req, res)=>{
 
         // Input validation
         biscuitId = checkString(biscuitId, 'biscuitId');
+        // Throw error if the biscuit ID does not exist
+        try {
+          await biscuitsFunctions.getBiscuitById(biscuitId);
+        } catch (err) {
+          // data function throws if not found
+          return res.status(400).render('admin', {updateError: 'That biscuit ID does not exist.'});
+        }
+
         biscuit_name = checkString(biscuit_name, 'biscuit_name');
         biscuit_name = biscuit_name.trim().toLowerCase();
     
@@ -149,8 +158,18 @@ router.route('/biscuits/delete').post(async (req, res) => {
   
       //input validation
       biscuitId = checkString(biscuitId, 'biscuitId');
-  
+      // // Throw error if the biscuit ID does not exist
+      // try {
+      //   await biscuitsFunctions.getBiscuitById(biscuitId);
+      // } catch (err) {
+      //   // data function throws if not found
+      //   return res.status(400).render('admin', {
+      //     updateError: 'That biscuit ID does not exist.'
+      //   });
+      // }
+
       // will throw if ID is invalid or biscuit not found
+      await biscuitsFunctions.getBiscuitById(biscuitId); //delete if not working
       await biscuitsFunctions.deleteBiscuitById(biscuitId);
   
       console.log('Successfully deleted biscuit!');

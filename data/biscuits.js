@@ -34,6 +34,25 @@ export const biscuitsFunctions = {
     async createBiscuit(biscuit_name, description){
         //TODO: validations for each field
         try{
+
+            //biscuit_name input parameters: biscuit_name is between 4 to 36 characters and only contain a-zA-Z and punctuation
+            if(biscuit_name.length <4 || biscuit_name.length>36){
+                throw new Error("Biscuit name should be between 4 to 36 characters inclusive");
+            }
+            const validNameRegex = /^[\p{L}\p{P}\s\p{Extended_Pictographic}]+$/u; //allows any letter, punctuation, spaces, and emojis
+            if(!validNameRegex.test(biscuit_name)){
+                throw new Error("Biscuit name can only contain letters, punctuation, spaces, and emoji characters.");
+            }
+
+            //description input parameters: description is between 15 to 80 characters and only contain a-zA-Z and punctuation
+            if(description.length <15 || description.length>80){
+                throw new Error("Description should be between 15 to 80 characters inclusive");
+            }
+            const validDescriptionRegex = /^[\p{L}0-9\p{P}\s\p{Extended_Pictographic}]+$/u; //allows any letter, punctuation, spaces, and emojis
+            if(!validDescriptionRegex.test(description)){
+                throw new Error("Description name can only contain letters, punctuation, spaces, and emoji characters.");
+            }
+
             let biscuitObj = { 
                 _id: new ObjectId(),
                 biscuit_name: biscuit_name,
@@ -51,7 +70,7 @@ export const biscuitsFunctions = {
     async getBiscuitById(id){
         if (!ObjectId.isValid(id)) throw new Error(`invalid object ID`);
         const specificBiscuit = await biscuitsCollection.findOne({_id: new ObjectId(id)});
-        if (specificBiscuit === null) throw new Error(`No biscuit with that id`);
+        if (specificBiscuit === null) throw new Error(`No biscuit with that id exists`);
         return specificBiscuit.biscuit_name;
     },
     async getBiscuitsForUser(userId){
@@ -75,7 +94,27 @@ export const biscuitsFunctions = {
     },
     async updateBiscuit(biscuitId, updateInfo){
             try {
+
+                let {biscuit_name, description} = updateInfo;
                 biscuitId = validateId(biscuitId) //validates string is entered and not empty
+
+                //biscuit_name input parameters: biscuit_name is between 4 to 36 characters and only contain a-zA-Z and punctuation
+                if(biscuit_name.length <4 || biscuit_name.length>36){
+                    throw new Error("Biscuit name should be between 4 to 36 characters inclusive");
+                }
+                const validNameRegex = /^[\p{L}\p{P}\s\p{Extended_Pictographic}]+$/u; //allows any letter, punctuation, spaces, and emojis
+                if(!validNameRegex.test(biscuit_name)){
+                    throw new Error("Biscuit name can only contain letters, punctuation, spaces, and emoji characters.");
+                }
+                //description input parameters: description is between 15 to 80 characters and only contain a-zA-Z and punctuation
+                if(description.length <15 || description.length>80){
+                    throw new Error("Description should be between 15 to 80 characters inclusive");
+                }
+                const validDescriptionRegex = /^[\p{L}0-9\p{P}\s\p{Extended_Pictographic}]+$/u; //allows any letter, punctuation, spaces, and emojis
+                if(!validDescriptionRegex.test(description)){
+                    throw new Error("Description name can only contain letters, punctuation, spaces, and emoji characters.");
+                }
+
                 let updatedBiscuit = await biscuitsCollection.findOneAndUpdate({_id: new ObjectId(biscuitId)},
                 {$set: {
                     biscuit_name: updateInfo.biscuit_name,
@@ -85,7 +124,7 @@ export const biscuitsFunctions = {
     
                 return updatedBiscuit;
             } catch (e) {
-                throw new Error(e);
+                throw new Error(e.toString());
             }
         },
     async deleteBiscuitById(biscuitId){
