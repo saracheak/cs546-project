@@ -1,4 +1,5 @@
-import { parks, biscuits, users, ratings } from "../config/mongoCollections.js";
+import { parks, biscuits, users, ratings, comments } from "../config/mongoCollections.js";
+import { commentsData } from "./comments.js";
 import { parksData } from './parks.js'
 import { biscuitsData } from './biscuits.js';
 import { usersData } from './users.js'
@@ -13,12 +14,14 @@ const parksCollection = await parks();
 const biscuitsCollection = await biscuits();
 const usersCollection = await users();
 const ratingsCollection = await ratings();
+const commentsCollection = await comments();
 
 const main = async () => {
     await parksCollection.deleteMany({});
     await biscuitsCollection.deleteMany({});
     await usersCollection.deleteMany({});
     await ratingsCollection.deleteMany({});
+    await commentsCollection.deleteMany({});
 
     for (const park of parksData) {
         try {
@@ -86,6 +89,38 @@ const main = async () => {
     }
 
     console.log("Ratings seeded successfully!");
+
+
+    for (const c of commentsData){
+        try{
+            const {userEmail, parkName, comment: commentText, timestamp} = c;
+            const user = await usersCollection.findOne({email: userEmail});
+            if(!user){
+                console.log('User not found for given email');
+                continue;
+            }
+
+            const park = await parksCollection.findOne({park_name: parkName});
+            if(!park){
+                console.log('Park not found for comment.');
+                continue;
+            }
+
+            const newComment = {
+                park_id: park._id,
+                user_id: user._id,
+                comment: commentText,
+                timestamp: new Date(timestamp),
+                likes: 0
+            };
+
+            await commentsCollection.insertOne(newComment);
+            console.log('Comment seeded successfully.')
+        }catch (e){
+            throw e;
+        }
+    }
+
 };
 
 main().then(() => {
