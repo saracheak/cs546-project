@@ -7,3 +7,31 @@ export const checkId = (id) => {
     return false;
 }
 
+export const checkString = (str, varName) => {
+  if (str === undefined || str === null) {
+    throw `${varName} must be supplied`;
+  }
+  if (typeof str !== "string") {
+    throw `${varName} must be a string`;
+  }
+  str = str.trim();
+  if (str.length === 0) {
+    throw `${varName} cannot be an empty string or just spaces`;
+  }
+  return str;
+};
+
+ export const checkIdInRatings = (id, varName = "id") => {
+  if (!id) throw `${varName} is required`;
+
+ if (typeof id !== "string") {
+    id = id.toString();
+  }
+
+  id = id.trim();
+ 
+  if (!ObjectId.isValid(id)) {
+    throw `${varName} is not a valid ObjectId`;
+  }
+  return id;  
+};

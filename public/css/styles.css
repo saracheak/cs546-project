@@ -316,7 +316,6 @@ header h1 {
     margin-left: auto;
     margin-right: auto;
 }
-
 .biscuit-body {
     font-family: "Poppins", sans-serif;
     background: #fff5e6 url("../images/grass.jpg") repeat;
@@ -509,3 +508,22 @@ header h1 {
     text-decoration: underline;
     color: #c4874c;
 }
+.rating-summary-page {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1rem;
+  background-color: #f7f3e9;
+}
+
+.rating-summary-card {
+  max-width: 500px;
+  width: 100%;
+  background-color: #fffaf2;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem 2rem;
+}
+
+

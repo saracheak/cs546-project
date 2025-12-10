@@ -266,6 +266,7 @@ export const parksFunctions = {
                 "average_trash_availability",
                 "average_surface",
                 "average_amenities",
+                "average_overall"
             ];
 
             const updateFields = {};

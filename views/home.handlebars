@@ -9,15 +9,25 @@
     
     <body class="home-body">
         <header class="home-header"><h1>PupMap</h1></header>
-        <div>
+         <div>
+            {{#if isLoggedIn}}
+                <div class="home-nav">
+                    <a href="/home">Home</a>
+                    <a href="/parks">All Parks</a>
+                    <a href="/biscuits">All Biscuits</a>
+                    <a href="/editPupfile">Edit My PupFile</a>
+                </div>
+            {{else}}
                 <div class="home-nav">
                     <a href="/home">Home</a>
                     <a href="/parks">All Parks</a>
                     <a href="/biscuits">All Biscuits</a>
                     <a href="/login">Login</a>
-                    <a href="/editPupfile">Edit My PupFile</a>
+                    <a href="/signup">Sign Up</a>
                 </div>
-            </div>
+            {{/if}}
+                
+        </div>
         <p class="home-paragraph">
             Welcome to PupMap - we love your pup(s) just as much as you do! We want your pup(s) to be able to go out and enjoy, which we 
             know can be difficult given not everywhere is pet friendly. That's why we decided to come up with this website - to help
