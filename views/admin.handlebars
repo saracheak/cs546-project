@@ -1,1 +1,131 @@
-{{!-- TODO --}}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+  </head>
+  <body class="admin-body">
+    <header class="home-header">
+      <h1>PupMap – Admin Dashboard</h1>
+    </header>
+
+    <nav class="home-nav">
+      <a href="/home">Home</a>
+      <a href="/admin/parks/pending">Pending Parks</a>
+      <a href="/biscuits">All Biscuits</a>
+      <a href="/logout">Logout</a>
+    </nav>
+
+    <main>
+      <section>
+        <h2>Manage Biscuits</h2>
+        {{!-- CREATE biscuit: POST /admin/biscuits --}}
+        <section class="admin-section">
+          <h3>Create New Biscuit</h3>
+          
+        {{#if createMessage}}
+          <p class="success">{{createMessage}}</p>
+        {{/if}}
+        {{#if createError}}
+          <p class="error">{{createError}}</p>
+        {{/if}}
+
+          <p>Use this form to create a new biscuit.</p>
+
+          <form method="post" action="/admin/biscuits" class="admin-form">
+            <div>
+              <label for="biscuit_name">Biscuit Name:</label>
+              <input
+                type="text"
+                id="biscuit_name"
+                name="biscuit_name"
+                required
+              />
+            </div>
+
+            <div>
+              <label for="description">Description:</label>
+              <textarea
+                id="description"
+                name="description"
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit">Create Biscuit</button>
+          </form>
+        </section>
+
+        {{!-- UPDATE biscuit: POST /admin/biscuits/update --}}
+        <section class="admin-section">
+          <h3>Update Biscuit</h3>
+
+        {{#if updateMessage}}
+          <p class="success">{{updateMessage}}</p>
+        {{/if}}
+        {{#if updateError}}
+          <p class="error">{{updateError}}</p>
+        {{/if}}
+
+          <p>
+            Enter the <code>biscuitId</code> of the biscuit you want to update.
+            You can fill in one or both fields. If you leave a field blank, that
+            field will not be changed.
+          </p>
+
+          <form method="post" action="/admin/biscuits/update" class="admin-form">
+            <div>
+              <label for="biscuit_id">Biscuit ID:</label>
+              <input
+                type="text"
+                id="biscuit_id"
+                name="biscuitId"
+                required
+              />
+            </div>
+
+            <div>
+              <label for="new_name">New Name (optional):</label>
+              <input type="text" name="biscuit_name" id="new_name" />
+            </div>
+
+            <div>
+              <label for="new_desc">New Description (optional):</label>
+              <textarea name="description" id="new_desc"></textarea>
+            </div>
+
+            <button type="submit">Update Biscuit</button>
+          </form>
+        </section>
+
+        {{!-- DELETE biscuit via POST /admin/biscuits/delete --}}
+        <section class="admin-section">
+        <h3>Delete Biscuit</h3>
+
+        {{#if deleteMessage}}
+            <p class="success">{{deleteMessage}}</p>
+        {{/if}}
+
+        {{#if deleteError}}
+            <p class="error">{{deleteError}}</p>
+        {{/if}}
+
+        <p>Enter the biscuitId of the biscuit you want to delete.</p>
+
+        <form method="post" action="/admin/biscuits/delete" class="admin-form">
+            <div>
+            <label for="delete_biscuit_id">Biscuit ID:</label>
+            <input
+                type="text"
+                id="delete_biscuit_id"
+                name="biscuitId"
+                required
+            />
+            </div>
+            <button type="submit">Delete Biscuit</button>
+        </form>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

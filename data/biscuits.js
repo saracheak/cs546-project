@@ -55,7 +55,7 @@ export const biscuitsFunctions = {
         return specificBiscuit.biscuit_name;
     },
     async getBiscuitsForUser(userId){
-        if (!ObjectId.isValid(userId)) throw `invalid object ID`;
+        if (!ObjectId.isValid(userId)) throw new Error(`invalid object ID`);
         const userCollection = await users();
         const user = await userCollection.findOne({_id: new ObjectId(userId)});
         if (user === null) throw new Error(`No user with that id`);
