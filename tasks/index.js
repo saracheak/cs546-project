@@ -111,7 +111,7 @@ const main = async () => {
                 user_id: user._id,
                 comment: commentText,
                 timestamp: new Date(timestamp),
-                biscuits: 0
+                likes: 0
             };
 
             await commentsCollection.insertOne(newComment);
