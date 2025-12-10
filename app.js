@@ -9,6 +9,7 @@ import {dirname} from 'path';
 import { create } from 'express-handlebars';
 import cookieParser from 'cookie-parser';
 import { attachUserToLocals } from './middleware.js';
+import { usersFunctions } from './data/users.js';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -43,7 +44,6 @@ app.set('views', path.join(__dirname, 'views'));
 //Runs for every request and automatically passes isLoggedIn, isAdmin, currentUser, and userId to handlebars
 //For every request, automatically sets res.locals.userId = req.session.userId that was previously listed in app.js
 app.use(attachUserToLocals);
-
 configRoutes(app);
 
 app.listen(3000, () => {

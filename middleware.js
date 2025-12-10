@@ -26,6 +26,7 @@ export const attachUserToLocals = async (req, res, next) => {
         res.locals.isAdmin = user.role === 'admin'; //if user.role is admin, res.locals.isAdmin will become true
         res.locals.currentUser = user; //allows us to access specific parts of the object in the handlebars functions very easily(e.g currentUser.humanFirstName)
         res.locals.userId = req.session.userId; 
+        return next();
     }
     catch(e){
         console.log('attachUserLocals middleware error:', e);
@@ -41,14 +42,19 @@ export const attachUserToLocals = async (req, res, next) => {
 //this middleware will be used on every route in routes/admin.js 
 export const requireAdmin = (req, res, next) => {
     if (!res.locals.isLoggedIn || !res.locals.isAdmin) {
-      return res.status(400).render('error', { error: 'You must be an admin to view this page.' });
+      return res.status(400).render('error', {message: 'You must be an admin to view this page.' });
     }
-    next();
+    return next();
   };
 
 
-// // Created middleware for if login is required in case we need it, but not sure if we do rn
-// it will be needed to leave comments or ratings 
+// NEEDS TO BE TESTED BY THE DEVELOPERS WORKING ON COMMENTS AND RATINGS
+// // Created middleware for if login is required in case we need it.
+// //I think it will will be needed to leave comments or ratings but not sure
+// //To use in the route that require the user to be logged in:
+// //1. import { requireLogin } from "../middleware.js"; at the top of the file 
+// //2. at the top of the route function add router.use(requireLogin)
+// //Refer to the top of route/admin.js to see how I imported and used the middleware there. 
 // export const requireLogin = (req, res, next) => {
 //     if (!req.session.userId) {
 //         return res.status(401).render("error", {error: "You must be logged in to access this page."});

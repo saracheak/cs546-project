@@ -91,10 +91,14 @@ export const biscuitsFunctions = {
     async deleteBiscuitById(biscuitId){
         try{
             biscuitId = validateId(biscuitId) //validates string is entered and not empty
-            const deletionInfo = await biscuitsCollection.findOneAndDelete({
+            const deletionInfo = await biscuitsCollection.deleteOne({
                 _id: new ObjectId(biscuitId)
               });
-            if (!deletionInfo.value) throw new Error(`Could not delete biscuit with id of ${biscuitId}. The biscuit does not exist.`);
+            
+            if (deletionInfo.deletedCount === 0) {
+                throw new Error(`Could not delete biscuit with id of ${biscuitId}. The biscuit does not exist.`);
+            }
+            return true;
         }catch(e){
             throw new Error(e);
         }

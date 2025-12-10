@@ -416,4 +416,9 @@ header h1 {
   padding: 1.5rem 2rem;
 }
 
+.error-page {
+    font-family: "Poppins", sans-serif;
+    background: #fff5e6 url("../images/error.jpg") repeat;
+    background-position: center bottom;  
+}
 

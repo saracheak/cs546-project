@@ -11,6 +11,10 @@ const router = Router();
 //because all of the routes in this file require the user to be an admin 
 router.use(requireAdmin);
 
+/*------------ Admin Dashboard --> GET /admin ------------*/
+router.get('/', async (req, res) => {
+    return res.render('admin');
+  });
 
 //Everything commented out under here in relation to parks is for Aeslyn to change/update as needed
 
@@ -138,7 +142,6 @@ router.route('/biscuits/update').post(async(req, res)=>{
     }
 });
 
-//DELETE /admin/biscuits/:biscuitId --> delete a biscuit
 // POST /admin/biscuits/delete --> delete biscuit by ID from form
 router.route('/biscuits/delete').post(async (req, res) => {
     try {
@@ -148,7 +151,6 @@ router.route('/biscuits/delete').post(async (req, res) => {
       biscuitId = checkString(biscuitId, 'biscuitId');
   
       // will throw if ID is invalid or biscuit not found
-      await biscuitsFunctions.getBiscuitById(biscuitId);
       await biscuitsFunctions.deleteBiscuitById(biscuitId);
   
       console.log('Successfully deleted biscuit!');
@@ -156,8 +158,7 @@ router.route('/biscuits/delete').post(async (req, res) => {
       // Option 1: render admin page with a success message
       return res.status(200).render('admin', {deleteMessage: 'Biscuit deleted successfully!'});
     } catch (e) {
-      return res.status(400).render('admin', {deleteError: e.toString()
-      });
+      return res.status(400).render('admin', {deleteError: e.toString()});
     }
   });
 
