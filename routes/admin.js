@@ -11,15 +11,24 @@ const router = Router();
 //because all of the routes in this file require the user to be an admin 
 router.use(requireAdmin);
 
-/*------------ Admin Dashboard + loads pending parks --> GET /admin ------------*/
+// /*------------ Admin Dashboard + loads pending parks --> GET /admin ------------*/
 router.get('/', async (req, res) => {
   try {
-    const allParks = await parksFunctions.getAllParks(false); // get all parks
-    const pendingParks = allParks.filter(p => !p.approved);   // only unapproved
+    const allParks = await parksFunctions.getAllParks(false);
+    const pendingParks = allParks.filter(p => !p.approved);
 
-    return res.render('admin', {pendingParks});
+    // Pull messages out of session - needed bc otherwise when approve or deny is clicked the web page format gets messed up
+    const approveMessage = req.session.approveMessage;
+    const approveError = req.session.approveError;
+
+    // Clear them so they only show once
+    req.session.approveMessage = null;
+    req.session.approveError = null;
+
+    return res.status(200).render('admin', {pendingParks, approveMessage, approveError});
+
   } catch (e) {
-    return res.status(400).render('admin', { message: e});
+    return res.status(400).render('admin', {pendingParks: [], approveError: e.toString()});
   }
 });
 
@@ -42,47 +51,30 @@ router.get('/', async (req, res) => {
 router.post('/parks/:parkId/approve', async (req, res) => {
   try {
     const parkId = checkString(req.params.parkId, 'parkId');
-
-    // Set approved = true in the DB
     await parksFunctions.setParkApproved(parkId, true);
 
-    // Recompute pending parks
-    const allParks = await parksFunctions.getAllParks(false);
-    const pendingParks = allParks.filter((p) => !p.approved);
+    // store message
+    req.session.approveMessage = "Park approved successfully!";
 
-    return res.status(200).render('admin', {pendingParks, approveMessage: 'Park approved successfully!'});
+    return res.redirect('/admin');
+
   } catch (e) {
-    // Still show the pending list when errors occur
-    let pendingParks = [];
-    try {
-      const allParks = await parksFunctions.getAllParks(false);
-      pendingParks = allParks.filter((p) => !p.approved);
-    } catch {}
-
-    return res.status(400).render('admin', {pendingParks,approveError: e.toString()});
+    req.session.approveError = e.toString();
+    return res.redirect('/admin');
   }
 });
 
 router.post('/parks/:parkId/deny', async (req, res) => {
   try {
     const parkId = checkString(req.params.parkId, 'parkId');
-
-    // Delete the park completely
     await parksFunctions.deletePark(parkId);
 
-    // Recompute pending parks
-    const allParks = await parksFunctions.getAllParks(false);
-    const pendingParks = allParks.filter((p) => !p.approved);
+    req.session.approveMessage = "Park denied and removed successfully.";
+    return res.redirect('/admin');
 
-    return res.status(200).render('admin', {pendingParks, approveMessage: 'Park denied and removed successfully.'});
   } catch (e) {
-    let pendingParks = [];
-    try {
-      const allParks = await parksFunctions.getAllParks(false);
-      pendingParks = allParks.filter((p) => !p.approved);
-    } catch {}
-
-    return res.status(400).render('admin', {pendingParks, approveError: e});
+    req.session.approveError = e.toString();
+    return res.redirect('/admin');
   }
 });
 
