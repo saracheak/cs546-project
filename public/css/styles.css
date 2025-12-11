@@ -494,6 +494,115 @@ header h1 {
     margin: 0;
 }
 
+.park-comments-section {
+    margin-top: 1.5rem;
+}
+
+.comments-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0 0;
+}
+
+.comment-item {
+    background-color: #fff5e6;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 0.75rem;
+    border: 1px solid #e0ceaf;
+}
+
+.comment-text {
+    margin: 0 0 0.25rem 0;
+    color: #333;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.comment-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #7a6a55;
+}
+
+.comment-author {
+    font-weight: 600;
+}
+.comment-date{
+    font-style: italic;
+}
+
+.comment-interaction{
+    margin-top: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.comment-like-button, 
+.comment-delete-button{
+    padding: 6px 10px;
+    font-size: 0.85rem;
+}
+
+.comment-like-button{
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.comment-like-button .like-count {
+    font-weight: 600;
+}
+
+.comment-delete-button{
+    background-color: #b7654a;
+}
+
+.comment-delete-button:hover{
+    background-color: #9b4f38;
+}
+
+.park-add-comment-section {
+    margin-top: 1.5rem;
+}
+
+.comment-form{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.comment-form label{
+    font-weight: 600;
+    color: #704214
+}
+
+.comment-form textarea{
+    font-family: inherit;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    border: 2px solid #e6c8a1;
+    padding: 10px;
+    resize: vertical;
+    min-height: 200px;
+    outline: none;
+}
+
+.comment-form textarea:focus{
+    border-color: #d2a46c;
+}
+
+.comment-form button{
+    align-self: flex-start;
+    margin-top: 0.25rem
+}
+
+.form-error{
+    color: #b00020;
+    font-size: 0.85rem;
+    margin: 0;
+}
 .back-link{
     margin-top: 1.5rem;
 }

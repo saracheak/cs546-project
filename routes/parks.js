@@ -3,6 +3,7 @@ import { commentsFunctions } from "../data/comments.js";
 import {parksFunctions} from "../data/parks.js";
 import { requireLogin } from "../middleware.js";
 import { checkString } from "../validation.js";
+import { usersFunctions } from "../data/users.js";
 
 const router = Router();
 
@@ -41,7 +42,16 @@ router.post("/:parkId/comments", requireLogin, async (req, res) => {
             throw new Error("comment must be 500 characters or fewer");
         }
 
+        if(commentText.indexOf("<")!== -1 || commentText.indexOf(">") !== -1){
+            throw new Error("comment cannot contain < or >")
+        }
+
         const userId = req.session.userId;
+        if(!userId){
+            return res
+                .status(401)
+                .render("error", {error: "You must be logged in to comment"});
+        }
       
 
         await commentsFunctions.addCommentToPark(parkId, {
@@ -56,47 +66,46 @@ router.post("/:parkId/comments", requireLogin, async (req, res) => {
     }
 });
 
-
-router.delete("/comments/:commentId", requireLogin, async (req, res) => {
+router.post("/comments/:commentId/delete", requireLogin, async (req, res) =>{
     try{
-
         if(!req.session.userId){
             return res
                 .status(401)
-                .json({error: "You must be logged in to delete comments"})
+                .render("error", {"error": "You must be logged in to delete comments"});
         }
         let{commentId} = req.params;
         commentId = checkString(commentId, "commentId");
 
+        let {parkId} = req.body;
+        parkId= checkString(parkId, "parkId");
+
         const isAdmin = res.locals.isAdmin === true;
 
-        const deleted = await commentsFunctions.deleteCommentFromPark(commentId, req.session.userId, isAdmin);
-        return res.status(200).json({
-            deleted: true,
-            comment: deleted
-        });
+        await commentsFunctions.deleteCommentFromPark(commentId, req.session.userId, isAdmin);
+        return res.redirect(`/parks/${parkId}`);
     }catch (e){
-        return res.status(400).json({error: e.toString()});
+        return res.status(400).render("error", {error: e.toString()});
     }
 });
 
-
 router.post("/comments/:commentId/like", requireLogin, async (req, res) => {
     try{
-
         if(!req.session.userId){
             return res
                 .status(401)
-                .json({error: "You must be logged in to like comments"});
+                .render("error", {error: "You must be logged in to like comments"});
         }
         let {commentId} = req.params;
         commentId = checkString(commentId, "commentId");
+        
+        let {parkId} = req.body;
+        parkId = checkString(parkId, "parkId");
 
-        const updated = await commentsFunctions.likeUnlikeComment(commentId, req.session.userId);
+        await commentsFunctions.likeUnlikeComment(commentId, req.session.userId)
 
-        return res.status(200).json({likes: updated.likes});
+        return res.redirect(`/parks/${parkId}`);
     } catch(e){
-        return res.status(400).json({error: e.toString()});
+        return res.status(400).render("error", {error: e.toString()});
     }
 
 });
@@ -122,6 +131,37 @@ router.get("/:parkId", async (req, res)=> {
 
         const park = await parksFunctions.getParkById(parkId);
         const comments = await commentsFunctions.getCommentsForPark(parkId);
+
+        const currentUserId = req.session.userId;
+        const isAdmin = res.locals.isAdmin === true;
+
+        for(let i = 0; i<comments.length; i++){
+            let canDelete = false;
+
+            if(currentUserId){
+                if(isAdmin || comments[i].user_id === currentUserId){
+                    canDelete = true;
+                }
+            }
+            comments[i].canDelete = canDelete;
+
+            try{
+                const user = await usersFunctions.getUser(comments[i].user_id);
+
+                if(user && user.dog_name){
+                    comments[i].authorName = user.dog_name;
+                } else if(user && user.human_first_name){
+                    comments[i].authorName = user.human_first_name;
+                }else if(user && user.email){
+                    comments[i].authorName = user.email;
+                }else{
+                    comments[i].authorName = "Unknown pup";
+                }
+            }catch(e){
+                comments[i].authorName = "Unkown pup";
+            }
+        }
+         
         return res.status(200).render("parkDetail", {
             title: park.park_name,
             park:park,
