@@ -44,6 +44,8 @@ app.set('views', path.join(__dirname, 'views'));
 //Runs for every request and automatically passes isLoggedIn, isAdmin, currentUser, and userId to handlebars
 //For every request, automatically sets res.locals.userId = req.session.userId that was previously listed in app.js
 app.use(attachUserToLocals);
+const testAdminUser = await usersFunctions.createUser("doggie", "human", "smith", "male", "male", "dogman@gmail.com", "Test123$", "admin", [], [], [], [], [], []);
+console.log(testAdminUser); //returns userId
 configRoutes(app);
 
 app.listen(3000, () => {

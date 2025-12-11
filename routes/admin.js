@@ -5,6 +5,7 @@ import { parksFunctions } from "../data/parks.js";
 import { biscuitsFunctions } from "../data/biscuits.js";
 import { checkString } from "../validation.js";
 import { ObjectId } from "mongodb";
+import xss from "xss";
 
 const router = Router();
 
@@ -51,7 +52,8 @@ router.get('/', async (req, res) => {
 //POST /admin/biscuits/ --> Create new biscuit
 router.route('/biscuits').post(async (req,res) => {
     try{
-        let {biscuit_name, description} = req.body;
+        let biscuit_name = xss(req.body.biscuit_name);
+        let description = xss(req.body.description);
 
         //input validation check
         biscuit_name = checkString(biscuit_name, 'biscuit_name');
@@ -91,7 +93,9 @@ router.route('/biscuits').post(async (req,res) => {
 //extra checks for if a parameter exists
 router.route('/biscuits/update').post(async(req, res)=>{
     try{
-        let {biscuitId, biscuit_name, description} = req.body;
+        let biscuitId = xss(req.body.biscuitId);
+        let biscuit_name = xss(req.body.biscuit_name);
+        let description = xss(req.body.description);
 
         //input validation check
         // Both fields are required; if either is missing, show an error
@@ -154,22 +158,13 @@ router.route('/biscuits/update').post(async(req, res)=>{
 // POST /admin/biscuits/delete --> delete biscuit by ID from form
 router.route('/biscuits/delete').post(async (req, res) => {
     try {
-      let { biscuitId } = req.body;
+      let biscuitId = xss(req.body.biscuitId);
   
       //input validation
       biscuitId = checkString(biscuitId, 'biscuitId');
-      // // Throw error if the biscuit ID does not exist
-      // try {
-      //   await biscuitsFunctions.getBiscuitById(biscuitId);
-      // } catch (err) {
-      //   // data function throws if not found
-      //   return res.status(400).render('admin', {
-      //     updateError: 'That biscuit ID does not exist.'
-      //   });
-      // }
 
       // will throw if ID is invalid or biscuit not found
-      await biscuitsFunctions.getBiscuitById(biscuitId); //delete if not working
+      await biscuitsFunctions.getBiscuitById(biscuitId); //throws error if biscuit id does not exist
       await biscuitsFunctions.deleteBiscuitById(biscuitId);
   
       console.log('Successfully deleted biscuit!');
