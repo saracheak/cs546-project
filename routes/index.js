@@ -7,6 +7,7 @@ import editPupfileRoutes from "./editPupfile.js";
 import homeRoutes from "./home.js";
 import biscuitsRoutes from "./biscuits.js";
 import logoutRoutes from "./logout.js"
+import adminRoutes from "./admin.js"
 
 const constructorMethod = (app) => {
   app.use('/parks', parksRoutes);
@@ -18,6 +19,7 @@ const constructorMethod = (app) => {
   app.use('/home', homeRoutes);
   app.use('/biscuits', biscuitsRoutes);
   app.use('/logout', logoutRoutes);
+  app.use('/admin', adminRoutes);
 
   app.use(/(.*)/, (req, res) => {
     res.redirect('/home');
