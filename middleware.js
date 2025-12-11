@@ -55,9 +55,9 @@ export const requireAdmin = (req, res, next) => {
 // //1. import { requireLogin } from "../middleware.js"; at the top of the file 
 // //2. at the top of the route function add router.use(requireLogin)
 // //Refer to the top of route/admin.js to see how I imported and used the middleware there. 
-// export const requireLogin = (req, res, next) => {
-//     if (!req.session.userId) {
-//         return res.status(401).render("error", {error: "You must be logged in to access this page."});
-//     }
-//     next();
-// };
+export const requireLogin = (req, res, next) => {
+     if (!req.session.userId) {
+        return res.status(401).render("error", {error: "You must be logged in to access this page."});
+     }
+     next();
+ };
