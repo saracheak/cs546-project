@@ -32,20 +32,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-///parks/pending not needed anymore since it gets passed straight to admin temp. Needs to be passed directly to admin template otherwise it does not show up every time the page is rendered
-
-// GET /admin/parks/pending --> show all parks with approved = false
-// router.get("/parks/pending", async (req, res) => {
-//   try {
-//     const allParks = await parksFunctions.getAllParks(false);    // getAllParks(false) returns ALL parks, both approved and not
-//     const pendingParks = allParks.filter(p => !p.approved); //get parks that are not approved
-
-//     return res.status(200).render("admin", {title: "Pending Parks", pendingParks});
-//   } catch (e) {
-//     return res.status(500).render("error", {message: e.toString() });
-//   }
-// });
-
 // /*------------ Parks Admin Routes --> Approve and Deny User Park Suggestion------------*/
 
 router.post('/parks/:parkId/approve', async (req, res) => {
@@ -85,6 +71,21 @@ router.post('/parks/:parkId/deny', async (req, res) => {
 //     //TODO
 // });
 
+
+///Keep the GET code for parks pending below in case we need it. 
+//parks/pending not needed anymore since it gets passed straight to admin temp. Needs to be passed directly to admin template otherwise it does not show up every time the page is rendered
+
+// GET /admin/parks/pending --> show all parks with approved = false
+// router.get("/parks/pending", async (req, res) => {
+//   try {
+//     const allParks = await parksFunctions.getAllParks(false);    // getAllParks(false) returns ALL parks, both approved and not
+//     const pendingParks = allParks.filter(p => !p.approved); //get parks that are not approved
+
+//     return res.status(200).render("admin", {title: "Pending Parks", pendingParks});
+//   } catch (e) {
+//     return res.status(500).render("error", {message: e.toString() });
+//   }
+// });
 
 /*------------ Biscuit Admin Routes ------------*/
 
