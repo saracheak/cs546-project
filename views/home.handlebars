@@ -51,6 +51,47 @@
             make it easier for you to find places to bring your dog that have the amentities you desire. 
             </p> 
         {{/if}}
+
+        {{!-- Park Search Bar --}} 
+        <section class="park-search-bar">
+            <form class="park-search-form" method="get" action="/home/search">
+                <label for="parkQuery">Search for a park:</label>
+                <input
+                type="text"
+                id="parkQuery"
+                name="parkQuery"
+                placeholder="Enter park name"
+                required
+                />
+                <button type="submit">Search</button>
+            </form>
+        </section>  
+
+        {{!-- Search results will show if user searched for a park --}}
+        {{#if searchQuery}}
+        <section class="park-search-results">
+            <h2>Search results for "{{searchQuery}}"</h2>
+
+            {{#if parkFound}}
+            <p>
+                We found <a href="{{parkLink}}">{{park.park_name}}</a>.
+            </p>
+
+            {{#if peakTime}}
+                <p>The most popular time interval at this park is: <strong>{{peakTime}}</strong></p>
+            {{else}}
+                <p>We don’t have enough data yet to estimate a busy time.</p>
+            {{/if}}
+            {{else}}
+            <p>No park matched your search.</p>
+            <p>
+                Would you like to submit a new park?
+                <a href="/parks/new">Click here to submit a park.</a>
+            </p>
+            {{/if}}
+        </section>
+        {{/if}}
+ 
         <div class="homepage-top-ten-park-list">
             <ol> 
                 <p>Top Ten Parks <br>(they will contain <br>
