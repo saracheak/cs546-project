@@ -37,11 +37,13 @@ router.post("/:parkId/comments", requireLogin, async (req, res) => {
     try{
         let {parkId} = req.params;
         parkId= checkString(parkId, "parkId");
+        let commentSan = xss(req.body.comment);
+        let commentText = checkString(commentSan, "comment");
 
-        let commentText = checkString(req.body.comment, "comment");
         if(commentText.length > 500){
-            throw new Error("comment must be 500 characters or fewer");
+            throw new Error("comment must be 500 characters or less")
         }
+
 
         if(commentText.indexOf("<")!== -1 || commentText.indexOf(">") !== -1){
             throw new Error("comment cannot contain < or >")
@@ -245,7 +247,7 @@ router.get("/:parkId", async (req, res)=> {
                     comments[i].authorName = "Unknown pup";
                 }
             }catch(e){
-                comments[i].authorName = "Unkown pup";
+                comments[i].authorName = "Unknown pup";
             }
         }
          
