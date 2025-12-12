@@ -35,8 +35,113 @@
 
         <hr />
 
+        <section class="park-comments-section">
+            <h2>Comments</h2>
+
+            {{#if comments.length}}
+                <ul class="comments-list">
+                    {{#each comments}}
+                        <li class="comment-item" data-comment-id="{{this._id}}">
+                            <p class="comment-text">
+                                {{this.comment}}
+                            </p>
+
+                            <p class="comment-details">
+                                <span class="comment-author">
+                                    {{#if this.authorName}}
+                                        {{this.authorName}}
+                                    {{else}}
+                                        Anonymous Pup
+                                    {{/if}}
+                                </span>
+                                <span class="comment-date">
+                                    {{#if this.timestamp}}
+                                        {{this.timestamp}}
+                                    {{else}}
+                                        (no timestamp)
+                                    {{/if}}
+                                </span>
+                            </p>
+
+                            <div class="comment-interaction">
+                                {{#if ../isLoggedIn}}
+                                    <form 
+                                        method="POST"
+                                        action="/parks/comments/{{this._id}}/like"
+                                        class="inline-form"
+                                    >
+                                        <input type="hidden" name="parkId" value="{{../park._id}}">
+                                        <button
+                                            type="submit"
+                                            class="comment-like-button"
+                                        >
+                                        🦴 <span class="like-count">{{this.likes}}</span>
+                                        </button>
+                                    </form>
+                                {{/if}}
+
+                                {{#if this.canDelete}}
+                                    <form
+                                        method="POST"
+                                        action="/parks/comments/{{this._id}}/delete"
+                                        class="inline-form"
+                                    >
+                                        <input type="hidden" name="parkId" value="{{../park._id}}">
+                                        <button
+                                            type="submit"
+                                            class="comment-delete-button"
+                                            data-comment-id="{{this._id}}"
+                                        >
+                                            Delete 
+                                        </button>
+                                    </form>
+                                {{/if}} 
+                            </div>
+                        </li>
+                    {{/each}}
+                </ul>
+            {{else}}
+                <p> No comments yet. Be the first to comment!</p>
+            {{/if}}
+        </section>
+
+        <hr />
+
+        <section class="park-add-comment-section">
+            <h2>Leave a comment</h2>
+
+            {{#if isLoggedIn}}
+            <form
+                id="comment-form"
+                method="POST"
+                action="/parks/{{park._id}}/comments"
+                novalidate
+                class="comment-form"
+            >
+                <label for="comment">
+                    Your comment (max 500 characters):
+                </label>
+                <textarea
+                    id="comment"
+                    name="comment"
+                    rows="4"
+                    maxlength="500"
+                    required
+                ></textarea>
+
+                <p id="comment-error" class="form-error"></p>
+
+                <button type="submit">Post Comment</button>
+            </form>
+            {{else}}
+                <p>You must be logged in to leave a comment.</p>
+            {{/if}}
+        </section>
+
         <p class="back-link">
             <a href="/parks">Back to all parks</a>
         </p>
     </div>
 </section>
+
+<script src="/public/js/comments.js"></script>
