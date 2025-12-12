@@ -221,8 +221,9 @@ header h1 {
     border-radius: 20px;
     width: 200px;
     height: 400px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-top: 0px;
+    margin-left: 40px;
+    margin-right: 0px;
     margin-bottom: 50px;
     box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
 }
@@ -398,6 +399,225 @@ header h1 {
     background-color: #c68b3b;
 }
 
+.parks-page {
+    font-family: "Poppins", sans-serif;
+    background: #fff5e6 url("../images/grass.jpg") repeat;
+    min-height: 100vh;
+    margin: 0;
+    padding: 2rem 0;
+}
+
+.parks-list-container {
+    background: #fffaf2;
+    padding: 30px 40px;
+    border-radius: 20px;
+    width: 900px;
+    margin: 0 auto;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+}
+
+.parks-list-container h1{
+    margin-top: 0;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #534d46;
+}
+
+.parks-list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.park-item{
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid #e0ceaf;
+}
+
+.park-item:last-chid{
+    border-bottom: none;
+}
+
+.park-link{
+    text-decoration: none;
+    color: #5a3e1b;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.park-link:hover {
+    text-decoration: underline;
+    color: #c4874c;
+}
+
+.park-details-page{
+    font-family: "Poppins", sans-serif;
+    background: #fff5e6 url("../images/grass.jpg") repeat;
+    min-height: 100vh;
+    margin: 0;
+    padding: 2rem 0;
+}
+
+.park-details-card{
+    background: #fffaf2;
+    padding: 30px 40px;
+    border-radius: 20px;
+    width: 900px;
+    margin: 0 auto;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+}
+
+.park-details-card h1{
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: #534d46;
+}
+
+.park-details-card h2{
+    margin-top: 1.5rem;
+    color: #704214;
+}
+
+.park-address,
+.park-type{
+    margin: 0.25rem 0;
+    color: #333;
+}
+
+.park-ratings-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem 2rem;
+    margin-top: 0.75rem;
+}
+
+.park-ratings-grid p{
+    margin: 0;
+}
+
+.park-comments-section {
+    margin-top: 1.5rem;
+}
+
+.comments-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0 0;
+}
+
+.comment-item {
+    background-color: #fff5e6;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 0.75rem;
+    border: 1px solid #e0ceaf;
+}
+
+.comment-text {
+    margin: 0 0 0.25rem 0;
+    color: #333;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.comment-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #7a6a55;
+}
+
+.comment-author {
+    font-weight: 600;
+}
+.comment-date{
+    font-style: italic;
+}
+
+.comment-interaction{
+    margin-top: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.comment-like-button, 
+.comment-delete-button{
+    padding: 6px 10px;
+    font-size: 0.85rem;
+}
+
+.comment-like-button{
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.comment-like-button .like-count {
+    font-weight: 600;
+}
+
+.comment-delete-button{
+    background-color: #b7654a;
+}
+
+.comment-delete-button:hover{
+    background-color: #9b4f38;
+}
+
+.park-add-comment-section {
+    margin-top: 1.5rem;
+}
+
+.comment-form{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.comment-form label{
+    font-weight: 600;
+    color: #704214
+}
+
+.comment-form textarea{
+    font-family: inherit;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    border: 2px solid #e6c8a1;
+    padding: 10px;
+    resize: vertical;
+    min-height: 200px;
+    outline: none;
+}
+
+.comment-form textarea:focus{
+    border-color: #d2a46c;
+}
+
+.comment-form button{
+    align-self: flex-start;
+    margin-top: 0.25rem
+}
+
+.form-error{
+    color: #b00020;
+    font-size: 0.85rem;
+    margin: 0;
+}
+.back-link{
+    margin-top: 1.5rem;
+}
+
+.back-link a {
+    color: #5a3e1b;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-link a:hover{
+    text-decoration: underline;
+    color: #c4874c;
+}
 .rating-summary-page {
   min-height: 80vh;
   display: flex;
@@ -416,4 +636,41 @@ header h1 {
   padding: 1.5rem 2rem;
 }
 
+.error-page {
+    font-family: "Poppins", sans-serif;
+    background: #fff5e6 url("../images/error.jpg") repeat;
+    background-position: center bottom;  
+}
 
+.park-search-bar {
+    background: #fff5e6;
+    padding: 20px 30px;
+    border-radius: 20px;
+    width: 600px;
+    margin: 20px auto;
+    box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
+}
+
+.park-search-form {
+display: flex;
+gap: 10px;
+align-items: center;
+justify-content: center;
+}
+
+.park-search-form input[type="text"] {
+padding: 10px;
+border-radius: 10px;
+border: 2px solid #e6c8a1;
+font-size: 16px;
+flex: 1;
+}
+
+.park-search-results {
+background: #fff5e6;
+padding: 20px 30px;
+border-radius: 20px;
+width: 600px;
+margin: 10px auto 30px;
+box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
+}

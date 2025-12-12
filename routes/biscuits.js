@@ -18,7 +18,7 @@ router.get("/", async(req, res)=> {
         isLoggedIn: !!req.session.userId }); //verifies if the user is logged in
     } 
     catch(e){
-        return res.status(500).render("error", {error: e.toString() });
+        return res.status(500).render("error", {message: e.toString() });
     }
 });
 

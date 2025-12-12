@@ -70,8 +70,8 @@ const parseTime =(value)=>{
 };
 
 const prepComment=(comment)=>{
-    if(comment.park_id) {
-        comment.park_id = comment.park_id.toString();
+    if(comment.park_Id) {
+        comment.park_Id = comment.park_Id.toString();
     }
 
     if(comment.user_id){
@@ -82,17 +82,17 @@ const prepComment=(comment)=>{
 }
 
 export const commentsFunctions = {
-    async getCommentsForPark(park_id){
+    async getCommentsForPark(park_Id){
         try{
-            park_id = validateId(park_id);
+            park_Id = validateId(park_Id);
             const commentList = await commentsCollection
-            .find({park_id: new ObjectId(park_id)})
+            .find({park_id: new ObjectId(park_Id)})
             .sort({timestamp: -1})
             .toArray();
             
             const preppedComments = [];
             for(let i= 0; i< commentList.length; i++){
-                preppedComments.push(commentList[i]);
+                preppedComments.push(prepComment(commentList[i]));
             }
 
             return preppedComments;
@@ -110,15 +110,16 @@ export const commentsFunctions = {
 
             const commentObject = {
                 _id: new ObjectId(),
-                park_Id: new ObjectId(park_Id),
+                park_id: new ObjectId(park_Id),
                 user_id: new ObjectId(user_id),
                 comment: comment,
                 timestamp: timeS,
-                biscuits: 0,
+                likes: 0,
+                likedBy: []
             }
 
             const insert = await commentsCollection.insertOne(commentObject);
-            if(!insert.acknowledged || insert.insertedId ){
+            if(!insert.acknowledged || !insert.insertedId ){
                 throw new Error("Could not add comment");
             }
 
@@ -144,53 +145,102 @@ export const commentsFunctions = {
                 throw new Error(`No comment found of id ${comment_id}`);
             }
 
-            const isCommenter = checkExisting.user_id === requestingUserId.toString();
+            //const isCommenter = checkExisting.user_id && checkExisting.user_id.toString() === requestingUserId;
 
+            let isCommenter = false;
+            if(checkExisting.user_id){
+                const ownerId = checkExisting.user_id.toString();
+                if(ownerId === requestingUserId){
+                    isCommenter = true;
+                }
+            }
             if(!isAdmin && !isCommenter){
                 throw new Error("Not authorized to delete this comment");
             }
 
-            const deleteInfo = await commentsCollection.findOneAndDelete({
+            const deleteInfo = await commentsCollection.deleteOne({
                 _id: new ObjectId(comment_id)
             });
 
-            if(!deleteInfo.value){
+            if(deleteInfo.deletedCount === 0){
                 throw new Error(`Could not delete comment of id ${comment_id}`);
             }
 
-            return prepComment(deleteInfo.value);
+            return prepComment(checkExisting);
         }catch(e){
             throw new Error(e);
         }
     },
 
-    async incrementCommentBiscuits(comment_id, oldLikes, newLikes){
-       try{
-        comment_id = validateId(comment_id);
-        oldLikes = checkNumber(oldLikes, "oldLikes");
-        newLikes = checkNumber(newLikes, "newLikes");
+    async likeUnlikeComment(comment_id, userId){
+        try{
+            comment_id = validateId(comment_id);
+            userId = validateId(userId);
 
-        const newTotalLikes = oldLikes + newLikes;
 
-        const update = await commentsCollection.findOneAndUpdate (
-            {
-                _id: new ObjectId(comment_id),
-                biscuits: oldLikes
-            },
-            {
-                $set: {biscuits: newTotalLikes},
-            },
-            {returnDocument: "after"}
-        );
+            const existing = await commentsCollection.findOne({_id: new ObjectId(comment_id)});
 
-        if (!update.value){
-            throw new Error(`Could not update biscuit count for comment with id ${comment_id}`);
-        }
+            if(!existing){
+                throw new Error(`No comment found with id ${comment_id}`);
+            }
 
-        return prepComment(update.value);
-       }catch(e){
+            let likedBy = [];
+            if(Array.isArray(existing.likedBy)){
+                for(let i=0; i < existing.likedBy.length; i++){
+                    const val = existing.likedBy[i];
+
+                    likedBy.push(val.toString());
+                }
+            }
+
+            let hasLiked = false;
+            for(let i= 0; i< likedBy.length; i++){
+                if(likedBy[i] === userId){
+                    hasLiked = true;
+                    break;
+                }
+            }
+
+            let newLikedBy = [];
+            if(hasLiked){
+                for(let i = 0; i< likedBy.length ; i++){
+                    if(likedBy[i] !== userId){
+                        newLikedBy.push(likedBy[i]);
+                    }
+                }
+            }else{
+                for(let i=0; i< likedBy.length; i++){
+                    newLikedBy.push(likedBy[i]);
+                }
+                newLikedBy.push(userId);
+            }
+
+            const newLikes = newLikedBy.length;
+
+            const result = await commentsCollection.updateOne(
+                {_id: new ObjectId(comment_id)},
+                {
+                    $set: {
+                        likes: newLikes,
+                        likedBy: newLikedBy
+                    }
+                }
+            );
+
+            if(result.matchedCount === 0){
+                throw new Error(`Could not update likes for comment with id ${comment_id}`);
+            }
+
+            const updatedComment = {
+                ...existing,
+                likes: newLikes,
+                likedBy: newLikedBy
+            };
+
+            return prepComment(updatedComment);
+        } catch(e){
             throw new Error(e);
-       }
+        }
     }
 
 }

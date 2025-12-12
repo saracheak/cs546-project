@@ -2,10 +2,10 @@
 ## cs546 project
 
 ## authors
-- Aeslyn Vlahos
-- Bonnie Wang
-- Ravisara Cheakdkaipejchara
-- Shasha Alvares
+- Aeslyn Vlahos (gh: aeslyn-is-here)
+- Bonnie Wang (gh: BonnieWZY)
+- Ravisara Cheakdkaipejchara (gh: saracheak)
+- Shasha Alvares (gh: Shalva-1313)
 
 ## introduction
 The city isn’t always the most dog friendly place, which we are taking one step towards solving with our website. This app, PupMap, is catered towards dog owners to be able to check the status of nearby dog amenities (specifically parks and canine waste dispensers). Users can log whether the waste bag dispensers are empty or full, cleanliness and busy-ness of the park. 
