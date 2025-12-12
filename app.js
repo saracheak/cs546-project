@@ -46,7 +46,7 @@ const hbs = create({
         return arr.includes(value) ? "checked" : "";
     },
     selectIfEqual: (a, b) => {
-    return a === b ? "selected" : "";
+    return a.toLowerCase() === b.toLowerCase() ? "selected" : "";
     }
 }});
 app.engine('handlebars', hbs.engine)
