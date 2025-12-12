@@ -73,21 +73,46 @@ export const ratingsFunctions ={
     },
 
     async getRatingsForPark(park_id){
-        const ratingCollection = await ratings();
-
-        
-        const pid = checkIdInRatings(park_id, "park id");
-        //console.log(typeof(pid))
-        //const parkObjId = new ObjectId(pid);
-
-        const ratingsList = await ratingCollection
-            .find({ park_id: pid })  
-            .toArray();
-
-          return ratingsList;
-
-        
+        const col = await ratingsCollectionPromise;
+            return col
+                .find({ parkId: new ObjectId(park_id) })
+                .toArray();
     },
+    
+    async getUserRatingForPark(parkId, userId) {
+        const col = await ratingsCollectionPromise;
+        return col.findOne({
+        parkId: new ObjectId(parkId),
+        userId: new ObjectId(userId)
+        });
+    },
+
+    async createRating(ratingObj) {
+    const col = await ratingsCollectionPromise;
+
+    const doc = {
+      parkId: new ObjectId(ratingObj.parkId),
+      userId: new ObjectId(ratingObj.userId),
+      overall: ratingObj.overall,
+      cleanliness: ratingObj.cleanliness,
+      dogFriendliness: ratingObj.dogFriendliness,
+      busyness: ratingObj.busyness,
+      waterAvailability: ratingObj.waterAvailability,
+      wastebagAvailability: ratingObj.wastebagAvailability,
+      trashAvailability: ratingObj.trashAvailability,
+      surface: ratingObj.surface,
+      amenities: ratingObj.amenities,
+      comment: ratingObj.comment,
+      createdAt: new Date()
+    };
+
+    const insertInfo = await col.insertOne(doc);
+    if (!insertInfo.acknowledged) throw 'Could not insert rating';
+
+    doc._id = insertInfo.insertedId;
+    return doc;
+  },
+    
 
     async getAverageRatingsForPark(park_id) {
         const ratingCollection = await ratings();
@@ -98,41 +123,21 @@ export const ratingsFunctions ={
             .toArray();
 
         if (list.length === 0) {
-            return {
-                average_cleanliness: 0,
-                average_dog_friendliness: 0,
-                average_busyness: 0,
-                average_water_availability: 0,
-                average_wastebag_availability: 0,
-                average_trash_availability: 0,
-                average_surface: 0,
-                average_amenities: 0,
-                average_overall: 0
-            };
+            return;
         }
 
-        const avg = (field) => list.reduce((sum, r) => sum + r[field], 0) / list.length
-
-        const summary = {
-            average_cleanliness: avg("cleanliness"),
-            average_dog_friendliness: avg("dog_friendliness"),
-            average_busyness: avg("busyness"),
-            average_water_availability: avg("water_availability"),
-            average_wastebag_availability: avg("wastebag_availability"),
-            average_trash_availability: avg("trash_availability"),
-            average_surface: avg("surface"),
-            average_amenities: avg("amenities")
-        };
-    
-        summary.average_overall =
-            Object.values(summary).reduce((sum, x) => sum + x, 0) /
-            Object.values(summary).length;
-
-        for (const key in summary) {
-            summary[key] = Number(summary[key].toFixed(2));
-        }
-
-        return summary;
+        const a = list[0];
+        await parksFunctions.updateAverageRatings(parkId, {
+            average_overall: a.average_overall,
+            average_cleanliness: a.average_cleanliness,
+            average_dog_friendliness: a.average_dog_friendliness,
+            average_busyness: a.average_busyness,
+            average_water_availability: a.average_water_availability,
+            average_wastebag_availability: a.average_wastebag_availability,
+            average_trash_availability: a.average_trash_availability,
+            average_surface: a.average_surface,
+            average_amenities: a.average_amenities
+        });
     },
 
     async getTopParksByOverallScore(limit = 10) {
