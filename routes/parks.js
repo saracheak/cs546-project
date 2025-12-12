@@ -5,7 +5,6 @@ import { requireLogin } from "../middleware.js";
 import { checkString } from "../validation.js";
 import { usersFunctions } from "../data/users.js";
 import xss from "xss";
-import { checkString } from "../validation.js";
 
 const router = Router();
 
