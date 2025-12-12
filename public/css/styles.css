@@ -677,7 +677,7 @@ box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
 
 .admin-body {
     font-family: "Poppins", sans-serif;
-    background: #fff5e6 url(".../images/grass.jpg") repeat;
+    background: #fff5e6 url("../images/grass.jpg") repeat;
     margin: 0;
 }
 

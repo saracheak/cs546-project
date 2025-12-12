@@ -28,6 +28,12 @@
                 return;
             }
 
+            if(parkType !== "run" && parkType !== "off-leash"){
+                event.preventDefault();
+                createError.textContent= "Please select a valid park type."
+                return;
+            }
+
             const zipCheck = /^[0-9]{5}$/;
             if(!zipCheck.test(zip)){
                 event.preventDefault();
@@ -35,12 +41,7 @@
                 return;
             }
 
-            if(state.length !== 2){
-                event.preventDefault();
-                createError.textContent= "State should be a 2-letter code.";
-                return;
-            }
-
+           
             const xssCheck = [parkName, parkType, street1, street2, city, state];
             for(let i= 0; i< xssCheck.length; i++){
                 const value = xssCheck[i];

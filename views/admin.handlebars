@@ -74,7 +74,14 @@
             must not exactly match an existing park.
           </p>
 
-          <form method="post" action="/admin/parks/create" class="admin-form" id="create-park-form">
+          <form 
+            method="post" 
+            action="/admin/parks/create" 
+            class="admin-form" 
+            id="create-park-form">
+
+            <h4>Park Info</h4>
+
             <div>
               <label for="park_name">Park Name:</label>
               <input
@@ -82,19 +89,20 @@
                 id="park_name"
                 name="park_name"
                 required
+                value="{{park_name}}"
               />
             </div>
 
             <div>
               <label for="park_type">Park Type:</label>
-              <input
-                type="text"
-                id="park_type"
-                name="park_type"
-                placeholder="e.g., Off-Leah, Run"
-                required
-              />
+              <select id="park_type" name="park_type" required>
+                  <option value="">-- Select Type --</option>
+                  <option value="run">run</option>
+                  <option value="off-leash">off-leash</option>
+              </select>
             </div>
+
+            <h4>Address</h4>
 
             <div>
               <label for="street_1">Street 1:</label>
@@ -103,6 +111,7 @@
                 id="street_1"
                 name="street_1"
                 required
+                value="{{street_1}}"
               />
             </div>
 
@@ -112,6 +121,7 @@
                 type="text"
                 id="street_2"
                 name="street_2"
+                value="{{street_2}}"
               />
             </div>
 
@@ -122,17 +132,16 @@
                 id="city"
                 name="city"
                 required
+                value="{{city}}"
               />
             </div>
 
             <div>
               <label for="state">State:</label>
-              <input
-                type="text"
-                id="state"
-                name="state"
-                required
-              />
+              <select id="state" name="state" required>
+                <option value="">-- Select State --</option>
+                <option value="NY">NY</option>
+              </select>
             </div>
 
             <div>
@@ -143,6 +152,7 @@
                 name="zip_code"
                 maxlength="5"
                 required
+                value="{{zip_code}}"
               />
             </div>
 
@@ -154,14 +164,17 @@
         <section class="admin-section">
           <h3>Delete Park</h3>
 
+
+          {{#if deleteParkError}}
+            <p class="error">{{deleteParkError}}</p>
+          {{else}}
+            <p class="error" id="delete-park-error"></p>
+          {{/if}}
+
           {{#if deleteParkMessage}}
             <p class="success">{{deleteParkMessage}}</p>
           {{/if}}
-          {{#if deleteParkError}}
-            <p class="error">{{deleteParkError}}</p>
-          {{/if}}
 
-          <p id="delete-park-error" clas="error"></p>
 
           <p>
             Enter the <code>parkId</code> of the park you want to delete.

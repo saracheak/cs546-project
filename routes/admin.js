@@ -168,7 +168,7 @@ router.post("/parks/create", async (req, res) => {
     return res
       .status(200)
       .render("admin", {
-        creatParkMessage: "Park created!"
+        createParkMessage: "Park created!"
       });
   }catch(e){
     return res 
