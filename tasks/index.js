@@ -43,8 +43,10 @@ const main = async () => {
     for (const user of usersData) {
         try {
             const {user_id, dog_name, human_first_name, human_last_name, dog_gender, human_gender, email, password, role, favorite_parks, times, ratings, pet_friends, biscuits, parks_visited} = user;
+            console.log('Seeding user:', user);
             const newUser = await usersFunctions.createUser(dog_name, human_first_name, human_last_name, dog_gender, human_gender, email, password, role, favorite_parks, times, ratings, pet_friends, biscuits, parks_visited);
             console.log("Users seeded successfully");
+            
         } catch (e) {
             throw e;
         }   
