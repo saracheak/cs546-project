@@ -55,6 +55,132 @@
             <p>No pending parks to approve.</p>
           {{/if}}
         </section>
+
+        {{!-- CREATE NEW PARK: POST /admin/parks/create --}}
+        <section class="admin-section">
+          <h3>Create New Park</h3>
+
+          {{#if createParkMessage}}
+            <p class="success">{{createParkMessage}}</p>
+          {{/if}}
+          {{#if createParkError}}
+            <p class="error">{{createParkError}}</p>
+          {{/if}}
+
+          <p id="creat-park-error" class="error"></p>
+
+          <p>
+            Use this form to create a new park. The name and address (street, city, state, zip)
+            must not exactly match an existing park.
+          </p>
+
+          <form method="post" action="/admin/parks/create" class="admin-form" id="create-park-form">
+            <div>
+              <label for="park_name">Park Name:</label>
+              <input
+                type="text"
+                id="park_name"
+                name="park_name"
+                required
+              />
+            </div>
+
+            <div>
+              <label for="park_type">Park Type:</label>
+              <input
+                type="text"
+                id="park_type"
+                name="park_type"
+                placeholder="e.g., Off-Leah, Run"
+                required
+              />
+            </div>
+
+            <div>
+              <label for="street_1">Street 1:</label>
+              <input
+                type="text"
+                id="street_1"
+                name="street_1"
+                required
+              />
+            </div>
+
+            <div>
+              <label for="street_2">Street 2 (optional):</label>
+              <input
+                type="text"
+                id="street_2"
+                name="street_2"
+              />
+            </div>
+
+            <div>
+              <label for="city">City:</label>
+              <input
+                type="text"
+                id="city"
+                name="city"
+                required
+              />
+            </div>
+
+            <div>
+              <label for="state">State:</label>
+              <input
+                type="text"
+                id="state"
+                name="state"
+                required
+              />
+            </div>
+
+            <div>
+              <label for="zip_code">Zip Code:</label>
+              <input
+                type="text"
+                id="zip_code"
+                name="zip_code"
+                maxlength="5"
+                required
+              />
+            </div>
+
+            <button type="submit">Create Park</button>
+          </form>
+        </section>
+
+        {{!-- DELETE PARK: POST /admin/parks/delete --}}
+        <section class="admin-section">
+          <h3>Delete Park</h3>
+
+          {{#if deleteParkMessage}}
+            <p class="success">{{deleteParkMessage}}</p>
+          {{/if}}
+          {{#if deleteParkError}}
+            <p class="error">{{deleteParkError}}</p>
+          {{/if}}
+
+          <p id="delete-park-error" clas="error"></p>
+
+          <p>
+            Enter the <code>parkId</code> of the park you want to delete.
+            This will remove the park from the system.
+          </p>
+
+          <form method="post" action="/admin/parks/delete" class="admin-form" id="delete-park-form">
+            <div>
+              <label for="delete_park_id">Park ID:</label>
+              <input
+                type="text"
+                id="delete_park_id"
+                name="parkId"
+                required
+              />
+            </div>
+            <button type="submit">Delete Park</button>
+          </form>
+        </section>
       </section>
       <section>
         <h2>Manage Biscuits</h2>
@@ -169,5 +295,6 @@
         </section>
       </section>
     </main>
+    <script src="/public/js/adminParks.js"></script>
   </body>
 </html>

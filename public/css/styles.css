@@ -674,3 +674,69 @@ width: 600px;
 margin: 10px auto 30px;
 box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
 }
+
+.admin-body {
+    font-family: "Poppins", sans-serif;
+    background: #fff5e6 url(".../images/grass.jpg") repeat;
+    margin: 0;
+}
+
+.admin-section{
+    background: #fffaf2;
+    padding: 20px 30px;
+    border-radius: 20px;
+    margin: 20px auto;
+    width: 900px;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+}
+
+.admin-section h3{
+    margin-top: 0;
+    color: #704214;
+}
+
+.admin-form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-form label{
+    color: #704214;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.admin-form input,
+.admin-form textarea {
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #e6c8a1;
+    font-size: 15px;
+    outline: none;
+    font-family: inherit;
+}
+
+.admin-form input:focus,
+.admin-form textarea:focus {
+    border-color: #d2a46c;
+}
+
+.error {
+    color: #b00020;
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0.5rem 0;
+}
+
+.success {
+    color: #2e7d32;
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0.5rem 0;
+}
+
+#create-park-error,
+#delete-park-error{
+    color: #b00020;
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0.5rem 0;
+}
