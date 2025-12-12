@@ -1,6 +1,7 @@
 import { parks } from "../config/mongoCollections.js"
 import { ObjectId } from "mongodb";
 import { checkId } from "../validation.js";
+import { ratingsFunctions } from "./ratings.js";
 
 const parksCollection = await parks();
 
