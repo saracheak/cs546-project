@@ -146,7 +146,7 @@ export const parksFunctions = {
 
             return prepPark(parkObj);
         }catch(e) {
-            throw new Error(e);
+            throw e;
         }
     },
 
@@ -165,7 +165,7 @@ export const parksFunctions = {
 
             return preppedParks;
         }catch(e){
-            throw new Error(e);
+            throw e;
         }
     },
 
@@ -183,7 +183,7 @@ export const parksFunctions = {
 
             return prepPark(park);
         }catch(e){
-            throw new Error(e);
+            throw e;
         }
     },
 
@@ -224,7 +224,7 @@ export const parksFunctions = {
 
             return prepPark(setUpdate.value);
         }catch(e){
-            throw new Error(e);
+            throw e;
         }
     },
 
@@ -233,19 +233,19 @@ export const parksFunctions = {
             park_Id = validateId(park_Id);
             approvedBool = checkBool(approvedBool, "approvedBool");
 
-            const setUpdate = await parksCollection.findOneAndUpdate(
+            const setUpdate = await parksCollection.updateOne(
             {_id: new ObjectId(park_Id)},
             {$set: {approved: approvedBool}},
-            {returnDocument: "after"}
          );
 
-         if(!setUpdate.value){
+        if(!setUpdate.matchedCount){
             throw new Error(`Could not update approved status for park ${park_Id}`);
-         }
+        }
 
-         return prepPark(setUpdate.value);
+        const updatedDoc = await parksCollection.findOne({ _id: new ObjectId(park_Id) });
+        return prepPark(updatedDoc);
         }catch(e){
-            throw new Error(e);
+            throw e;
         }
     },
 
@@ -293,7 +293,7 @@ export const parksFunctions = {
 
             return prepPark(setUpdate.value);
         }catch(e){
-            throw new Error(e);
+            throw e;
         }
     },
 
@@ -301,17 +301,17 @@ export const parksFunctions = {
         try{
             park_Id = validateId(park_Id);
 
-            const deleteCheck = await parksCollection.findOneAndDelete({
+            const deleteCheck = await parksCollection.deleteOne({
                 _id: new ObjectId(park_Id),
             });
 
-            if(!deleteCheck.value){
+            if(!deleteCheck.deletedCount){
                 throw new Error(`Could not delete park ${park_Id}`);
             }
 
-            return prepPark(deleteCheck.value);
+            return true;
         }catch(e){
-            throw new Error(e);
+            throw e;
         }
     },
 };

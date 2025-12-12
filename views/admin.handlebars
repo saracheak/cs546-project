@@ -19,6 +19,44 @@
 
     <main>
       <section>
+        <h2>Manage Parks</h2>
+        <section class="admin-section">
+          <h3>Pending Parks</h3>
+
+          {{#if approveMessage}}
+            <p class="success">{{approveMessage}}</p>
+          {{/if}}
+          {{#if approveError}}
+            <p class="error">{{approveError}}</p>
+          {{/if}}
+          
+          {{#if pendingParks.length}}
+            <ul>
+            {{#each pendingParks}}
+              <li>
+                <p>{{this.park_name}}</p>
+                <br>({{this.park_type}})
+                <br>{{this.address.street_1}}
+                {{#if this.address.street_2}}
+                <br>{{this.address.street_2}}
+                 {{/if}}
+                <br>{{this.address.state}}
+                <br>{{this.address.zip_code}}
+                <form method="post" action="/admin/parks/{{this._id}}/approve" style="display:inline;">
+                  <button type="submit">Approve</button>
+                </form>
+                <form method="post" action="/admin/parks/{{this._id}}/deny" style="display:inline;">
+                  <button type="submit">Deny</button>
+                </form>
+              </li>
+            {{/each}}
+            </ul>
+          {{else}}
+            <p>No pending parks to approve.</p>
+          {{/if}}
+        </section>
+      </section>
+      <section>
         <h2>Manage Biscuits</h2>
         {{!-- CREATE biscuit: POST /admin/biscuits --}}
         <section class="admin-section">
@@ -73,6 +111,8 @@
             Both fields are required. 
             <br>If you only want to update one field, like the description, then you should enter the same 
             biscuit name with a new description. 
+            <br> NOTE: If you update a biscuit name, it must be fix it in the data/biscuits.js logic. If you create a biscuit the autoaward 
+            logic also needs to be created before it will work. 
           </p>
 
           <form method="post" action="/admin/biscuits/update" class="admin-form">
