@@ -13,39 +13,81 @@ const router = Router();
 //because all of the routes in this file require the user to be an admin 
 router.use(requireAdmin);
 
-/*------------ Admin Dashboard --> GET /admin ------------*/
+// /*------------ Admin Dashboard + loads pending parks --> GET /admin ------------*/
 router.get('/', async (req, res) => {
-    return res.render('admin');
-  });
+  try {
+    const allParks = await parksFunctions.getAllParks(false);
+    const pendingParks = allParks.filter(p => !p.approved);
 
-//Everything commented out under here in relation to parks is for Aeslyn to change/update as needed
+    // Pull messages out of session - needed bc otherwise when approve or deny is clicked the web page format gets messed up
+    const approveMessage = req.session.approveMessage;
+    const approveError = req.session.approveError;
 
-// /*------------ Admin Dashbooard --> GET /admin ------------*/
-// router.route('/').get(async (req, res) => {
-//     //TODO
-// });
+    // Clear them so they only show once
+    req.session.approveMessage = null;
+    req.session.approveError = null;
 
-// /*------------ Parks Admin Routes ------------*/
-// //GET /admin/parks/pending --> all pending parks with 'approved = false'
-// router.route('/parks/pending').get(async (req, res) => {
-//     //TODO
-// });
+    return res.status(200).render('admin', {pendingParks, approveMessage, approveError});
 
-// //POST /admin/parks/:parkId/approve --> admin can mark a park as approved
-// router.route('/parks/:pardId/approve').post(async (req,res) => {
-//     //TODO
-// });
+  } catch (e) {
+    return res.status(400).render('admin', {pendingParks: [], approveError: e.toString()});
+  }
+});
 
-// //PATCH /admin/parks/:parkId --> edit park details
-// router.route('/parks/:parkId').patch(async (req,res) => {
-//     //TODO
-// });
+// /*------------ Parks Admin Routes --> Approve and Deny User Park Suggestion------------*/
+
+router.post('/parks/:parkId/approve', async (req, res) => {
+  try {
+    const parkId = checkString(req.params.parkId, 'parkId');
+    await parksFunctions.setParkApproved(parkId, true);
+
+    // store message
+    req.session.approveMessage = "Park approved successfully!";
+
+    return res.redirect('/admin');
+
+  } catch (e) {
+    req.session.approveError = e.toString();
+    return res.redirect('/admin');
+  }
+});
+
+router.post('/parks/:parkId/deny', async (req, res) => {
+  try {
+    const parkId = checkString(req.params.parkId, 'parkId');
+    await parksFunctions.deletePark(parkId);
+
+    req.session.approveMessage = "Park denied and removed successfully.";
+    return res.redirect('/admin');
+
+  } catch (e) {
+    req.session.approveError = e.toString();
+    return res.redirect('/admin');
+  }
+});
+
+// /*------------ Parks Admin Routes TODO's for Aeslyn------------*/
 
 // //DELETE /admin/parks/:parkId --> remove a park if needed (maybe users reported it closed)
 // router.route('/parks/:parkId').delete(async (req,res) => {
 //     //TODO
 // });
 
+
+///Keep the GET code for parks pending below in case we need it. 
+//parks/pending not needed anymore since it gets passed straight to admin temp. Needs to be passed directly to admin template otherwise it does not show up every time the page is rendered
+
+// GET /admin/parks/pending --> show all parks with approved = false
+// router.get("/parks/pending", async (req, res) => {
+//   try {
+//     const allParks = await parksFunctions.getAllParks(false);    // getAllParks(false) returns ALL parks, both approved and not
+//     const pendingParks = allParks.filter(p => !p.approved); //get parks that are not approved
+
+//     return res.status(200).render("admin", {title: "Pending Parks", pendingParks});
+//   } catch (e) {
+//     return res.status(500).render("error", {message: e.toString() });
+//   }
+// });
 
 /*------------ Biscuit Admin Routes ------------*/
 
@@ -82,7 +124,7 @@ router.route('/biscuits').post(async (req,res) => {
         return res.status(200).render('admin', {createMessage: 'Biscuit created successfully!'
         });
     } catch (e) {
-        return res.status(400).render('admin', {createError: e.toString() + ' biscuit_name and description are required to create a new biscuit.'
+        return res.status(400).render('admin', {createError: e + ' biscuit_name and description are required to create a new biscuit.'
         });
     }
 })
@@ -151,7 +193,7 @@ router.route('/biscuits/update').post(async(req, res)=>{
           return res.status(200).render('admin', { updateMessage: 'Biscuit updated successfully!' });
         }
     catch (e){
-        return res.status(400).render('admin', {updateError: e.toString() });
+        return res.status(400).render('admin', {updateError: e});
     }
 });
 
@@ -172,7 +214,7 @@ router.route('/biscuits/delete').post(async (req, res) => {
       // Option 1: render admin page with a success message
       return res.status(200).render('admin', {deleteMessage: 'Biscuit deleted successfully!'});
     } catch (e) {
-      return res.status(400).render('admin', {deleteError: e.toString()});
+      return res.status(400).render('admin', {deleteError: e});
     }
   });
 
