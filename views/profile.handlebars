@@ -14,13 +14,20 @@
                     <a href="/parks">All Parks</a>
                     <a href="/editPupfile">Edit My PupFile</a>
                     <a href="/logout">Logout</a>
-                </div>
+                </div><br>
+                <div class="profile-bio">{{bio}}</div>
             </div>
         </header>
         <br><br>
         <div class="biscuits-container">
-            <h2>Biscuits</h2>
-            <p>Add user's biscuits here</p>
+            <h2>My Biscuits Earned 🦴</h2>
+            {{#if userBiscuits.length}}
+                {{#each userBiscuits}}
+                <li>{{this.name}}</li>
+                {{/each}}
+            {{else}}
+                <li>Go home to see what biscuits you can earn!</li>
+            {{/if}}
         </div>
         <br><br>
         <div class="dog-info-container">
@@ -28,19 +35,27 @@
                 <h2>Pet Friends:</h2>
                 <div class="info-box">
                     <ul>
-                        {{#each petFriends}}
-                        <li>{{this}}</li>
-                        {{/each}}
+                        {{#if petFriends.length}}
+                            {{#each petFriends}}
+                            <li>{{this}}</li>
+                            {{/each}}
+                        {{else}}
+                            <li>Search for friends to see their pupfile</li>
+                        {{/if}}
                     </ul>
                 </div>
             </div>
             <div class="dog-info-box">
-                <h2>Fav Parks:</h2>
+                <h2>Favorite Parks:</h2>
                 <div class="info-box">
                     <ul>
-                        {{#each favParks}}
-                        <li>{{this}}</li>
-                        {{/each}}
+                        {{#if favParks.length}}
+                            {{#each favParks}}
+                            <li><a href="/parks/{{this._id}}">{{this.name}}</a></li>
+                            {{/each}}
+                        {{else}}
+                            <li>Visit parks to mark them as your favorite!</li>
+                        {{/if}}
                     </ul>
                 </div>
             </div>
@@ -49,9 +64,13 @@
                 <h2>Times:</h2>
                 <div class="info-box">
                     <ul>
-                        {{#each times}}
-                        <li>{{this}}</li>
-                        {{/each}}
+                        {{#if times.length}}
+                            {{#each times}}
+                            <li>{{this}}</li>
+                            {{/each}}
+                        {{else}}
+                            <li>Edit your pupfile to add times you like to go to the park</li>
+                        {{/if}}
                     </ul>
                 </div>
             </div>
@@ -60,9 +79,13 @@
                 <h2>Parks Visited:</h2>
                 <div class="info-box">
                     <ul>
-                        {{#each parksVisited}}
-                        <li>{{this}}</li>
-                        {{/each}}
+                        {{#if parksVisited.length}}
+                            {{#each parksVisited}}
+                            <li><a href="/parks/{{this._id}}">{{this.name}}</a></li>
+                            {{/each}}
+                        {{else}}
+                        <li>Visit parks to mark them as visited!</li>
+                        {{/if}}
                     </ul>
                 </div>
             </div>

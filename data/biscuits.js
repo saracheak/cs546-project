@@ -164,35 +164,35 @@ export const biscuitsFunctions = {
         }
 
         //------Conditions for an award to be given--------------//
-        if(user.parks_visited?.length>=1){ //? means if the field is undefined/null this will not crash
+        if(user.parksVisited?.length>=1){ //? means if the field is undefined/null this will not crash
             let biscuitToGive = await biscuitsCollection.findOne({biscuit_name: 'First Park Visit'}); //get the entire biscuit
             if(biscuitToGive){
                 await giveNewBiscuit(biscuitToGive._id); //send biscuit_Id to be added to user.biscuits array
             }
         }
-        if(user.parks_visited?.length>=3){ //? means if the field is undefined/null this will not crash
+        if(user.parksVisited?.length>=3){ //? means if the field is undefined/null this will not crash
             let biscuitToGive = await biscuitsCollection.findOne({biscuit_name: 'Park Runner'}); //get the entire biscuit
             if(biscuitToGive){
                 await giveNewBiscuit(biscuitToGive._id); //send biscuit_Id to be added to user.biscuits array
             }
         }
-        if(user.parks_visited?.length>=5){ //? means if the field is undefined/null this will not crash
+        if(user.parksVisited?.length>=5){ //? means if the field is undefined/null this will not crash
             let biscuitToGive = await biscuitsCollection.findOne({biscuit_name: "Don't stop, retrieven'!"}); //get the entire biscuit
             if(biscuitToGive){
                 await giveNewBiscuit(biscuitToGive._id); //send biscuit_Id to be added to user.biscuits array
             }        
         }
-        if(user.favorite_parks?.length>=1){ //? means if the field is undefined/null this will not crash
+        if(user.favoriteParks?.length>=1){ //? means if the field is undefined/null this will not crash
             let biscuitToGive = await biscuitsCollection.findOne({biscuit_name: 'Unleash park funtime!'}); //get the entire biscuit
             if(biscuitToGive){
                 await giveNewBiscuit(biscuitToGive._id); //send biscuit_Id to be added to user.biscuits array
             }        }
-        if(user.pet_friends?.length>=1){ //? means if the field is undefined/null this will not crash
+        if(user.petFriends?.length>=1){ //? means if the field is undefined/null this will not crash
             let biscuitToGive = await biscuitsCollection.findOne({biscuit_name: 'Not about that pug-life'}); //get the entire biscuit
             if(biscuitToGive){
                 await giveNewBiscuit(biscuitToGive._id); //send biscuit_Id to be added to user.biscuits array
             }        }
-        if(user.pet_friends?.length>=5){ //? means if the field is undefined/null this will not crash
+        if(user.petFriends?.length>=5){ //? means if the field is undefined/null this will not crash
             let biscuitToGive = await biscuitsCollection.findOne({biscuit_name: 'Ulti-mutt dog lover!'}); //get the entire biscuit
             if(biscuitToGive){
                 await giveNewBiscuit(biscuitToGive._id); //send biscuit_Id to be added to user.biscuits array

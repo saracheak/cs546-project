@@ -5,8 +5,11 @@ import { requireLogin } from "../middleware.js";
 import { checkString } from "../validation.js";
 import { usersFunctions } from "../data/users.js";
 import xss from "xss";
+import {users} from "../config/mongoCollections.js"
+import { ObjectId } from "mongodb";
 
 const router = Router();
+const usersCollection = await users();
 
 router.get("/", async(req, res)=> {
     try{
@@ -62,8 +65,8 @@ router.post("/:parkId/comments", requireLogin, async (req, res) => {
         });
 
         return res.redirect(`/parks/${parkId}`);
-    }catch(e){
-        return res.status(400).render("error", {error: e.toString()});
+    } catch(e){
+        return res.status(400).render("error", {message: e.toString()});
     }
 });
 
@@ -85,7 +88,7 @@ router.post("/comments/:commentId/delete", requireLogin, async (req, res) =>{
         await commentsFunctions.deleteCommentFromPark(commentId, req.session.userId, isAdmin);
         return res.redirect(`/parks/${parkId}`);
     }catch (e){
-        return res.status(400).render("error", {error: e.toString()});
+        return res.status(400).render("error", {message: e.toString()});
     }
 });
 
@@ -106,7 +109,7 @@ router.post("/comments/:commentId/like", requireLogin, async (req, res) => {
 
         return res.redirect(`/parks/${parkId}`);
     } catch(e){
-        return res.status(400).render("error", {error: e.toString()});
+        return res.status(400).render("error", {message: e.toString()});
     }
 
 });
@@ -255,7 +258,81 @@ router.get("/:parkId", async (req, res)=> {
             comments: comments
         });
     }catch(e){
-        return res.status(404).render("error", {message: e.toString()});
+        return res.status(404).render("error", {error: e.toString()});
     }
 });
+
+router.post("/favorite-park", async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const { parkId } = req.body;
+        console.log("This park's id is", parkId);
+        if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
+
+        await usersCollection.updateOne(
+            { _id: new ObjectId(userId), favoriteParks: { $ne: new ObjectId(parkId) } },
+            { $push: { favoriteParks: new ObjectId(parkId) } }
+        );
+
+        res.json({ success: true, message: "Park added to favorites" });
+    } catch (e) {
+        res.status(400).json({ success: false, error: e.message });
+    }
+});
+
+router.post("/unfavorite-park", async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const { parkId } = req.body;
+
+        if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
+
+        await usersCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $pull: { favoriteParks: new ObjectId(parkId) } }
+        );
+
+        res.json({ success: true, message: "Park removed from favorites" });
+    } catch (e) {
+        res.status(400).json({ success: false, error: e.message });
+    }
+});
+
+
+router.post("/visited-park", async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const { parkId } = req.body;
+        console.log("This park's id is", parkId);
+        if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
+
+        await usersCollection.updateOne(
+            { _id: new ObjectId(userId), parksVisited: { $ne: new ObjectId(parkId) } },
+            { $push: { parksVisited: new ObjectId(parkId) } }
+        );
+
+        res.json({ success: true, message: "Park added to visited parks" });
+    } catch (e) {
+        res.status(400).json({ success: false, error: e.message });
+    }
+});
+
+router.post("/unvisited-park", async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const { parkId } = req.body;
+
+        if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
+
+        await usersCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $pull: { parksVisited: new ObjectId(parkId) } }
+        );
+
+        res.json({ success: true, message: "Park removed from visited parks" });
+    } catch (e) {
+        res.status(400).json({ success: false, error: e.message });
+    }
+});
+
 export default router;

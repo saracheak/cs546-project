@@ -45,13 +45,14 @@ const main = async () => {
 
     for (const user of usersData) {
         try {
-            const {user_id, dog_name, human_first_name, human_last_name, dog_gender, human_gender, email, password, role, favorite_parks, times, ratings, pet_friends, biscuits, parks_visited} = user;
-            const newUser = await usersFunctions.createUser(dog_name, human_first_name, human_last_name, dog_gender, human_gender, email, password, role, favorite_parks, times, ratings, pet_friends, biscuits, parks_visited);
+            const { userId, dogName, humanFirstName, humanLastName, dogGender, humanGender, email, password, bio, role, favoriteParks, times, ratings, petFriends, biscuits, parksVisited } = user;
+            const newUser = await usersFunctions.createUser(dogName, humanFirstName, humanLastName, dogGender, humanGender, email, password, bio, role, [], [], [], [], [], []);
             console.log("Users seeded successfully");
         } catch (e) {
             throw e;
-        }   
+        }
     }
+
 
     const allParks = await parksCollection.find({}).toArray();
     console.log(allParks);
