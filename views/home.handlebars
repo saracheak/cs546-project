@@ -93,23 +93,20 @@
         {{/if}}
  
         <div class="homepage-top-ten-park-list">
-            <ol> 
-                <p>Top Ten Parks <br>(they will contain <br>
-                    links once ratings are up<br>
-                    so the user can  <br>
-                    click on it to go to <br>
-                    that parks page.)</p>
-                <li>Park 1</li>
-                <li>Park 2</li>
-                <li>Park 3</li>
-                <li>Park 4</li>
-                <li>Park 5</li>
-                <li>Park 6</li>
-                <li>Park 7</li>
-                <li>Park 8</li>
-                <li>Park 9</li>
-                <li>Park 10</li>
-            </ol>
+                {{#if topParks.length}}
+                    <ol>
+                        {{#each topParks}}
+                            <li>
+                            <a href="/parks/{{this._id}}">{{this.park_name}}</a>
+                            {{#if this.average_overall}}
+                                <span> ⭐ {{this.average_overall}}</span>
+                            {{/if}}
+                            </li>
+                        {{/each}}
+                    </ol>
+                {{else}}
+                    <p>No rated parks yet.</p>
+                {{/if}}
         </div>
     </body>
 </html>

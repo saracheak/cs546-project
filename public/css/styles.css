@@ -636,12 +636,6 @@ header h1 {
   padding: 1.5rem 2rem;
 }
 
-.error-page {
-    font-family: "Poppins", sans-serif;
-    background: #fff5e6 url("../images/error.jpg") repeat;
-    background-position: center bottom;  
-}
-
 .park-search-bar {
     background: #fff5e6;
     padding: 20px 30px;
@@ -674,3 +668,201 @@ width: 600px;
 margin: 10px auto 30px;
 box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
 }
+
+.admin-body {
+    font-family: "Poppins", sans-serif;
+    background: #fff5e6 url("../images/grass.jpg") repeat;
+    margin: 0;
+}
+
+.admin-section{
+    background: #fffaf2;
+    padding: 20px 30px;
+    border-radius: 20px;
+    margin: 20px auto;
+    width: 900px;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+}
+
+.admin-title {
+    text-align: center;
+    color: #704214;
+    background: #fff5e6;
+    padding: 12px 20px;
+    border-radius: 20px;
+    width: 300px;
+    margin: 30px auto 20px auto;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+}
+
+.admin-section h3{
+    margin-top: 0;
+    color: #704214;
+}
+
+.admin-form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-form label{
+    color: #704214;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.admin-form input,
+.admin-form textarea {
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #e6c8a1;
+    font-size: 15px;
+    outline: none;
+    font-family: inherit;
+}
+
+.admin-form input:focus,
+.admin-form textarea:focus {
+    border-color: #d2a46c;
+}
+
+.error {
+    color: #b00020;
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0.5rem 0;
+}
+
+.success {
+    color: #2e7d32;
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0.5rem 0;
+}
+
+#create-park-error,
+#delete-park-error{
+    color: #b00020;
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0.5rem 0;
+}
+
+/* ========= Error Page ========= */
+
+.error-page {
+    font-family: "Poppins", sans-serif;
+    background: #fff5e6 url("../images/pawprint.png") repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.error-container {
+    background: white;
+    backdrop-filter: blur(6px);
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+    text-align: center;
+    width: 340px;
+}
+
+.error-title {
+    margin: 0;
+    font-size: 32px;
+    color: #704214;
+}
+
+.error-message {
+    margin-top: 10px;
+    margin-bottom: 25px;
+    color: #a2764b;
+    font-size: 15px;
+}
+
+.error-home-link {
+    display: inline-block;
+    text-decoration: none;
+    padding: 12px;
+    background: #d29b5f;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.error-home-link:hover {
+    background: #c4874c;
+    transform: translateY(-2px);
+}
+
+/* ===== New Park Page ===== */
+
+.new-park-main {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;      
+    margin-bottom: 60px; 
+}
+
+.new-park-form {
+    background: #fffaf2;
+    padding: 40px 50px;
+    border-radius: 20px;
+    width: 600px;
+    box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
+    font-family: "Poppins", sans-serif;
+}
+
+/* Section headers inside the form */
+.new-park-form h2 {
+    text-align: center;
+    color: #704214;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+/* Form layout */
+.new-park-form div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.new-park-form label {
+    color: #704214;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.new-park-form input,
+.new-park-form select {
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid #e6c8a1;
+    font-size: 15px;
+    outline: none;
+    font-family: inherit;
+}
+
+.new-park-form input:focus,
+.new-park-form select:focus {
+    border-color: #d2a46c;
+}
+
+/* Submit button */
+.new-park-form button {
+    margin-top: 15px;
+    align-self: center;
+    width: 200px;
+}
+
+.new-park-form .form-msg {
+    margin: 0 0 15px 0;
+    padding: 10px 12px;
+    border-radius: 12px;
+    text-align: center;
+  }
+  

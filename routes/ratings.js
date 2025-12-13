@@ -5,81 +5,72 @@ import { ratingsFunctions } from '../data/ratings.js';
 import { parksFunctions } from '../data/parks.js';
 
 const router = Router();
-//console.log('>> routes/ratings.js loaded');
 
 router.get('/:parkId/ratings', async (req, res) => {
   let parkId;
   console.log("routes/ratings.js has been loaded");
 
   try {
-    parkId = checkIdInRatings(req.params.parkId, 'park_id');
-    //console.log('route parkId =', parkId, 'typeof =', typeof parkId);
+    parkId = checkIdInRatings(req.params.parkId, 'parkId');
   } catch (e) {
-    return res.status(400).json({ error: e });
-  }
-  try {
-    const ratings = await ratingsFunctions.getRatingsForPark(parkId);
-     return res.json(ratings);
-  } catch (e) {
-    console.error(e);
-    return res.status(500).json({ error: 'Error: Can not fetch ratings for this park' });
-  }
-});
-
-router.get('/:parkId/ratings/summary', async (req, res) => {
-  let parkId;
-  try {
-    parkId =checkIdInRatings(req.params.parkId, 'park_id');
-  } catch (e) {
-    return res.status(400).json({ error: e });
+    return res.status(400).render('error', { error: e.toString() });
   }
 
+  const user = req.session.user;
+  if (!user) {
+    return res
+      .status(401)
+      .render('error', { error: 'You must be logged in to leave a rating.' });
+  }
   try {
-    //const ratingList = await ratingsFunctions.getRatingsForPark(parkId);
-    const ratingSummary = await ratingsFunctions.getAverageRatingsForPark(parkId);
-    return res.render('ratingSummary', {
-      title: 'Rating Summary',
-      ratingSummary//to handlebars
+    const existing = await ratingsFunctions.getUserRatingForPark(parkId, user._id);
+    if (existing) {
+      return res.status(200).render('ratingForm', {
+        title: 'Rating',
+        parkId,
+        cannotRate: true,
+        existingRating: existing
+      });
     }
-
-    );
-  } catch (e) {
+    return res.status(200).render('ratingForm', {
+      title: 'Rating',
+      parkId,
+      cannotRate: false
+    });
+    }catch (e) {
     console.error(e);
-    return res.status(500).json({ error: 'Cannot fetch rating summary' });
+    return res.status(500).render('error', { error: e.toString() });
   }
 });
 
 router.post('/:parkId/ratings', async (req, res) => {
-
-  if (!req.session.user) {
-    return res.status(401).json({ error: 'Login required' });
-  }
-
-  const userId = req.session.user._id;
-
-  //vheck park id
   let parkId;
+
   try {
-    parkId = checkIdInRatings(req.params.parkId, 'park_id');
+    parkId = checkId(req.params.parkId, 'park id');
   } catch (e) {
-    return res.status(400).json({ error: e });
+    return res.status(400).render('error', { error: e.toString() });
   }
 
-  //get rating data from body
-  const {
-    cleanliness,
-    dog_friendliness,
-    busyness,
-    water_availability,
-    wastebag_availability,
-    trash_availability,
-    surface,
-    amenities,
-    dog_size
-  } = req.body;
-  const ratingData = {
-      user_id: userId,
-      park_id: parkId,
+  const user = req.session.user;
+  if (!user) {
+    return res
+      .status(401)
+      .render('error', { error: 'You must be logged in to leave a rating.' });
+  }
+  try {
+    const existing = await ratingsFunctions.getUserRatingForPark(parkId, user._id);
+    if (existing) {
+      return res.status(400).render('ratingForm', {
+        title: 'Rating',
+        parkId,
+        cannotRate: true,
+        existingRating: existing,
+        error: 'You have already rated this park.'
+      });
+    }
+    let {
+      overall,
       cleanliness,
       dog_friendliness,
       busyness,
@@ -88,24 +79,76 @@ router.post('/:parkId/ratings', async (req, res) => {
       trash_availability,
       surface,
       amenities,
-      dog_size
+      comment
+    } = req.body;
+
+    const parseScore = (v, name) => {
+      const num = Number(v);
+      if (!Number.isInteger(num) || num < 0 || num > 5) {
+        throw `${name} must be an integer between 0 and 5`;
+      }
+      return num;
     };
 
-  try {
-    const newRating = await ratingsFunctions.createRating(ratingData);
-    const averages = await ratingsFunctions.getAverageRatingsForPark(parkId);
-    
-    await parksFunctions.updateAverageRatings(parkId, averages);
+    overall = parseScore(overall, 'Overall');
+    cleanliness = parseScore(cleanliness, 'Cleanliness');
+    dog_friendliness = parseScore(dog_friendliness, 'Dog friendliness');
+    busyness = parseScore(busyness, 'Busyness');
+    water_availability = parseScore(water_availability, 'Water availability');
+    wastebag_availability = parseScore(wastebag_availability, 'Wastebag availability');
+    trash_availability = parseScore(trash_availability, 'Trash availability');
+    surface = parseScore(surface, 'Surface');
+    amenities = parseScore(amenities, 'Amenities');
 
-    return res.status(200).json({
-      message: 'Rating created and park averages updated',
-      rating: newRating,
-      averages: averages
+    if (typeof comment !== 'string') throw 'Comment must be a string';
+    comment = xss(comment.trim());
+    if (!comment) throw 'Comment cannot be empty';
+
+    const newRating = await ratingsFunctions.createRating({
+      parkId: park._id,
+      userId: user._id,
+      overall,
+      cleanliness,
+      dog_friendliness,
+      busyness,
+      water_availability,
+      wastebag_availability,
+      trash_availability,
+      surface,
+      amenities,
+      comment
     });
+
+    const ratings = await ratingsFunctions.getRatingsForPark(parkId);
+     return res.json(ratings);
   } catch (e) {
-      console.error(e);
-      return res.status(500).json({ error: 'Cannot create rating or update averages' });
-    }
+    console.error(e);
+    return res.status(400).render('ratingForm', {
+      title: 'Rating',
+      parkId,
+      cannotRate: false,
+      error: e.toString(),
+      formData: req.body
+    });
+  }
+});
+
+router.get('/:parkId/ratings/summary', async (req, res) => {
+  let parkId;
+  try {
+    parkId =checkIdInRatings(req.params.parkId, 'parkId');
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
+
+  try {
+    //const ratingList = await ratingsFunctions.getRatingsForPark(parkId);
+    const ratingSummary = await ratingsFunctions.getAverageRatingsForPark(parkId);
+    return res.redirect(`/parks/${parkId}`);
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ error: 'Cannot fetch rating summary' });
+  }
 });
 
 export default router;

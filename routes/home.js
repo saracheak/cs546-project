@@ -11,7 +11,16 @@ const router = Router();
 router.route('/').get(async (req, res) => {
     //code here for GET will render the home handlebars file
     try {
-      res.render("home");
+      const topParks = await parksFunctions.getTopRatedParks(10);
+      topParks.forEach(p => {
+        if (p.average_overall !== undefined && p.average_overall !== null) {
+          p.average_overall = Number(p.average_overall).toFixed(2);
+        }
+      });
+      res.render('home', {
+        title: 'Home',
+        topParks
+      });
     } catch (e) {
       res.status(404).render("error", {message: "Bad Request"});
     }
