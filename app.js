@@ -10,11 +10,6 @@ import { create } from 'express-handlebars';
 import cookieParser from 'cookie-parser';
 import { attachUserToLocals } from './middleware.js';
 
-const testAdminUser = await usersFunctions.createUser("doggie", "human", "smith", "male", "male", "dogman@gmail.com", "Test123$", "admin", [], [], [], [], [], []);
-console.log(testAdminUser); //returns userId
-
-
-
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

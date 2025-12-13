@@ -5,7 +5,6 @@ import { ratingsFunctions } from '../data/ratings.js';
 import { parksFunctions } from '../data/parks.js';
 
 const router = Router();
-//console.log('>> routes/ratings.js loaded');
 
 router.get('/:parkId/ratings', async (req, res) => {
   let parkId;
@@ -13,7 +12,6 @@ router.get('/:parkId/ratings', async (req, res) => {
 
   try {
     parkId = checkIdInRatings(req.params.parkId, 'parkId');
-    //console.log('route parkId =', parkId, 'typeof =', typeof parkId);
   } catch (e) {
     return res.status(400).render('error', { error: e.toString() });
   }
