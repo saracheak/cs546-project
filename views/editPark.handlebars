@@ -4,8 +4,8 @@
     <title>Edit Pending Park</title>
     <link rel="stylesheet" href="/css/styles.css">
   </head>
-  <body class="home-body">
-    <header class="home-header">
+  <body class="edit-body">
+    <header class="edit-header">
       <h1>Edit Pending Park</h1>
     </header>
 
@@ -13,13 +13,13 @@
       <a href="/admin">Back to Admin Dashboard</a>
     </nav>
 
-    <main class="new-park-main">
+    <main class="edit-park-main">
       {{#if error}}
         <p class="error form-msg">{{error}}</p>
       {{/if}}
       <p id="edit-park-error" class="error form-msg"></p>
 
-      <form method="post" action="/admin/parks/{{park._id}}/edit" class="new-park-form">
+      <form method="post" action="/admin/parks/{{park._id}}/edit" class="edit-park-form">
         <h2>Park Info</h2>
 
         <div>
