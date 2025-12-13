@@ -218,66 +218,50 @@ router.get("/:parkId/comments", async (req, res)=>{
 });
 
 
-router.get("/:parkId", async (req, res)=> {
-    try{
-        let {parkId} = req.params;
-        parkId = checkString(parkId, "parkId");
+router.get("/:parkId", async (req, res) => {
+  try {
+    let { parkId } = req.params;
+    parkId = checkString(parkId, "parkId");
 
-        await parksFunctions.getParkById(parkId);
-        const comments = await commentsFunctions.getCommentsForPark(parkId);
-        const ratings = await ratingsFunctions.getRatingsForPark(parkId);
-        await ratingsFunctions.getAverageRatingsForPark(parkId);
-        const park = await parksFunctions.getParkById(parkId);
-        
-        const currentUserId = req.session.userId;
-        const isAdmin = res.locals.isAdmin === true;
+    // fetch once
+    const park = await parksFunctions.getParkById(parkId);
 
-        for (const c of comments) {
+    const comments = await commentsFunctions.getCommentsForPark(parkId);
+    const ratings = await ratingsFunctions.getRatingsForPark(parkId);
+    const ratingSummary = await ratingsFunctions.getAverageRatingsForPark(parkId);
+
+    const currentUserId = req.session.userId;
+    const isAdmin = res.locals.isAdmin === true;
+
+    for (const c of comments) {
       c.canDelete =
-        !!currentUserId && (isAdmin || c.user_id?.toString() === currentUserId);
+        !!currentUserId &&
+        (isAdmin || c.user_id?.toString() === currentUserId);
 
-            if(currentUserId){
-                if(isAdmin || comments[i].user_id === currentUserId){
-                    canDelete = true;
-                }
-            }
-            comments[i].canDelete = canDelete;
-
-            try{
-                const user = await usersFunctions.getUser(comments[i].user_id);
-
-                if(user && user.dog_name){
-                    comments[i].authorName = user.dog_name;
-                } else if(user && user.human_first_name){
-                    comments[i].authorName = user.human_first_name;
-                }else if(user && user.email){
-                    comments[i].authorName = user.email;
-                }else{
-                    comments[i].authorName = "Unknown pup";
-                }
-            }catch(e){
-                comments[i].authorName = "Unknown pup";
-            }
-        }
       try {
         const user = await usersFunctions.getUser(c.user_id.toString());
         c.authorName =
-          user?.dog_name || user?.human_first_name || user?.email || "Unknown pup";
+          user?.dog_name ||
+          user?.human_first_name ||
+          user?.email ||
+          "Unknown pup";
       } catch (e) {
         c.authorName = "Unknown pup";
       }
     }
-         
-        return res.status(200).render("parkDetail", {
-            title: park.park_name,
-            park,
-            comments,
-            ratings,
-            hasRatings: ratings.length > 0
-        });
-    }catch(e){
-        return res.status(404).render("error", {error: e.toString()});
-    }
+
+    return res.status(200).render("parkDetail", {
+      title: park.park_name,
+      park,
+      comments,
+      ratings,
+      ratingSummary,
+      hasRatings: ratings.length > 0
+    });
+  } catch (e) {
+    console.error("ERROR in GET /parks/:parkId:", e);
+    return res.status(404).render("error", { error: e.toString() });
+  }
 });
 
 router.post("/favorite-park", async (req, res) => {
