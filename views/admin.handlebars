@@ -45,9 +45,13 @@
                 <form method="post" action="/admin/parks/{{this._id}}/approve" style="display:inline;">
                   <button type="submit">Approve</button>
                 </form>
+                <form method="post" action="/admin/parks/{{this._id}}/edit" style="display:inline;">
+                  <button type="submit">Edit</button>
+                </form>
                 <form method="post" action="/admin/parks/{{this._id}}/deny" style="display:inline;">
                   <button type="submit">Deny</button>
                 </form>
+                
               </li>
             {{/each}}
             </ul>

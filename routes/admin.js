@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// /*------------ Parks Admin Routes --> Approve and Deny User Park Suggestion------------*/
+// /*------------ Parks Admin Routes --> Approve, Edit, Deny User Park Suggestion------------*/
 
 router.post('/parks/:parkId/approve', async (req, res) => {
   try {
@@ -52,6 +52,65 @@ router.post('/parks/:parkId/approve', async (req, res) => {
     return res.redirect('/admin');
   }
 });
+
+//Shows the edit form
+router.get('/parks/:parkId/edit', async (req, res) => {
+  try {
+    const parkId = checkString(req.params.parkId, 'parkId');
+    const park = await parksFunctions.getParkById(parkId);
+
+    if (park.approved) {
+      req.session.approveError = "You can only edit pending (unapproved) parks.";
+      return res.redirect('/admin');
+    }
+
+    return res.render('editPark', { park });
+  } catch (e) {
+    req.session.approveError = e.toString();
+    return res.redirect('/admin');
+  }
+});
+
+//Saves any edits the admin made to the user input park information
+router.post('/parks/:parkId/edit', async (req, res) => {
+  try {
+    const parkId = checkString(req.params.parkId, 'parkId');
+
+    // basic string validation; you can also use xss() like you did earlier
+    let park_name = checkString(req.body.park_name, 'park_name');
+    let park_type = checkString(req.body.park_type, 'park_type');
+
+    const address = {
+      street_1: checkString(req.body.street_1, 'address.street_1'),
+      street_2: req.body.street_2 ? checkString(req.body.street_2, 'address.street_2') : "",
+      city: checkString(req.body.city, 'address.city'),
+      state: checkString(req.body.state, 'address.state'),
+      zip_code: checkString(req.body.zip_code, 'address.zip_code')
+    };
+
+    const updateInfo = {
+      park_name,
+      park_type,
+      address
+      // we leave approved + averages alone
+    };
+
+    await parksFunctions.updatePark(parkId, updateInfo);
+
+    req.session.approveMessage = 'Park updated successfully!';
+    return res.redirect('/admin');
+  } catch (e) {
+    // If something goes wrong, re-render the edit form with an error
+    try {
+      const park = await parksFunctions.getParkById(req.params.parkId);
+      return res.status(400).render('editPark', { park, error: e.toString() });
+    } catch {
+      req.session.approveError = e.toString();
+      return res.redirect('/admin');
+    }
+  }
+});
+
 
 router.post('/parks/:parkId/deny', async (req, res) => {
   try {
