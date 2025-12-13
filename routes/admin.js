@@ -53,7 +53,6 @@ router.post('/parks/:parkId/approve', async (req, res) => {
   }
 });
 
-//Shows the edit form
 router.get('/parks/:parkId/edit', async (req, res) => {
   try {
     const parkId = checkString(req.params.parkId, 'parkId');
@@ -64,43 +63,37 @@ router.get('/parks/:parkId/edit', async (req, res) => {
       return res.redirect('/admin');
     }
 
-    return res.render('editPark', { park });
+    return res.render('editPark', {
+      park,
+      isRun: park.park_type === 'run',
+      isOffLeash: park.park_type === 'off-leash'
+    });
   } catch (e) {
     req.session.approveError = e.toString();
     return res.redirect('/admin');
   }
 });
 
-//Saves any edits the admin made to the user input park information
 router.post('/parks/:parkId/edit', async (req, res) => {
   try {
     const parkId = checkString(req.params.parkId, 'parkId');
 
-    // basic string validation; you can also use xss() like you did earlier
-    let park_name = checkString(req.body.park_name, 'park_name');
-    let park_type = checkString(req.body.park_type, 'park_type');
+    const park_name = checkString(xss(req.body.park_name), 'park_name');
+    const park_type = checkString(xss(req.body.park_type), 'park_type');
 
     const address = {
-      street_1: checkString(req.body.street_1, 'address.street_1'),
-      street_2: req.body.street_2 ? checkString(req.body.street_2, 'address.street_2') : "",
-      city: checkString(req.body.city, 'address.city'),
-      state: checkString(req.body.state, 'address.state'),
-      zip_code: checkString(req.body.zip_code, 'address.zip_code')
+      street_1: checkString(xss(req.body.street_1), 'address.street_1'),
+      street_2: req.body.street_2 ? checkString(xss(req.body.street_2), 'address.street_2') : "",
+      city: checkString(xss(req.body.city), 'address.city'),
+      state: checkString(xss(req.body.state), 'address.state'),
+      zip_code: checkString(xss(req.body.zip_code), 'address.zip_code')
     };
 
-    const updateInfo = {
-      park_name,
-      park_type,
-      address
-      // we leave approved + averages alone
-    };
-
-    await parksFunctions.updatePark(parkId, updateInfo);
+    await parksFunctions.updatePark(parkId, { park_name, park_type, address });
 
     req.session.approveMessage = 'Park updated successfully!';
     return res.redirect('/admin');
   } catch (e) {
-    // If something goes wrong, re-render the edit form with an error
     try {
       const park = await parksFunctions.getParkById(req.params.parkId);
       return res.status(400).render('editPark', { park, error: e.toString() });
