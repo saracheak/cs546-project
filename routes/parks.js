@@ -8,6 +8,7 @@ import xss from "xss";
 import {users} from "../config/mongoCollections.js"
 import { ObjectId } from "mongodb";
 import { ratingsFunctions } from "../data/ratings.js";
+import { biscuitsFunctions } from "../data/biscuits.js";
 
 
 const router = Router();
@@ -65,9 +66,9 @@ router.post("/:parkId/comments", requireLogin, async (req, res) => {
         await commentsFunctions.addCommentToPark(parkId, {
             user_id: userId,
             comment: commentText,
-     
         });
 
+        await biscuitsFunctions.autoAwardBiscuits(userId);//update biscuit
         return res.redirect(`/parks/${parkId}`);
     } catch(e){
         return res.status(400).render("error", {message: e.toString()});
@@ -276,6 +277,8 @@ router.post("/favorite-park", async (req, res) => {
             { $push: { favoriteParks: new ObjectId(parkId) } }
         );
 
+        await biscuitsFunctions.autoAwardBiscuits(userId);//update biscuits
+
         res.json({ success: true, message: "Park added to favorites" });
     } catch (e) {
         res.status(400).json({ success: false, error: e.message });
@@ -312,6 +315,8 @@ router.post("/visited-park", async (req, res) => {
             { _id: new ObjectId(userId), parksVisited: { $ne: new ObjectId(parkId) } },
             { $push: { parksVisited: new ObjectId(parkId) } }
         );
+
+        await biscuitsFunctions.autoAwardBiscuits(userId);//update biscuit
 
         res.json({ success: true, message: "Park added to visited parks" });
     } catch (e) {
