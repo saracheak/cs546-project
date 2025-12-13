@@ -128,7 +128,7 @@
           if (err) errors.push(err);
         }
   
-        // street_2 optional: if present, keep it reasonable
+        // street_2 optional
         if (street2El && isNonEmptyString(street2El.value)) {
           const s2 = street2El.value.trim();
           if (s2.length > 120) errors.push("Street 2 must be 120 characters or fewer.");
