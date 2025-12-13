@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { ratings,parks} from "../config/mongoCollections.js";
+import { ratings} from "../config/mongoCollections.js";
 import { checkIdInRatings,checkString } from "../validation.js";
 import { parksFunctions } from "./parks.js";
 
@@ -14,14 +14,6 @@ export const ratingsFunctions ={
         const {
             user_id,
             park_id,
-            cleanliness,
-            dog_friendliness,
-            busyness,
-            water_availability,
-            wastebag_availability,
-            trash_availability,
-            surface,
-            amenities,
             comment,
             dog_size,
         } = ratingData;
@@ -30,7 +22,17 @@ export const ratingsFunctions ={
         const uid = checkIdInRatings(user_id, "user id");
         const pid = checkIdInRatings(park_id, "park id");
             
-       
+        const s = ratingData.scores ?? ratingData;
+        const {
+            cleanliness,
+            dog_friendliness,
+            busyness,
+            water_availability,
+            wastebag_availability,
+            trash_availability,
+            surface,
+            amenities
+        } = s;
         const fields = [
             cleanliness,
             dog_friendliness,
@@ -47,33 +49,23 @@ export const ratingsFunctions ={
                 throw "Each rating field must be a number between 0 and 5";
             }
         }
-
-            
+       
          const dogSizeStr = checkString(dog_size);
          const commentStr = checkString(comment);
-        
-        //  const overall =
-        //     (cleanliness +
-        //         dog_friendliness +
-        //         busyness +
-        //         water_availability+
-        //         wastebag_availability+
-        //         trash_availability+
-        //         surface +
-        //         amenities) / 8;
-
 
          const ratingObj = {
             user_id: new ObjectId(uid),
             park_id: new ObjectId(pid),
-            cleanliness,
-            dog_friendliness,
-            busyness,
-            water_availability,
-            wastebag_availability,
-            trash_availability,
-            surface,
-            amenities,
+            scores:{
+                cleanliness,
+                dog_friendliness,
+                busyness,
+                water_availability,
+                wastebag_availability,
+                trash_availability,
+                surface,
+                amenities
+            },
             comment: commentStr,
             dog_size: dogSizeStr,
             createdAt: new Date()
@@ -88,16 +80,18 @@ export const ratingsFunctions ={
 
     async getRatingsForPark(park_id){
         const col = await ratings();
-            return col
-                .find({ park_id: new ObjectId(park_id) })
-                .toArray();
+        const pid = checkIdInRatings(park_id, "park id");
+            return col.find({ park_id: new ObjectId(pid) }).toArray();
     },
     
     async getUserRatingForPark(park_id, user_id) {
         const col = await ratings();
+        const pid = checkIdInRatings(park_id, "park id");
+        const uid = checkIdInRatings(user_id, "user id");
+
         return col.findOne({
-        park_id: new ObjectId(park_id),
-        user_id: new ObjectId(user_id)
+            park_id: new ObjectId(pid),
+            user_id: new ObjectId(uid)
         });
     },
 
@@ -105,9 +99,8 @@ export const ratingsFunctions ={
         const ratingCollection = await ratings();
         const pid = checkIdInRatings(park_id, "park id");
         
-
         const list = await ratingCollection
-            .find({ park_id: pid  })
+            .find({ park_id: new ObjectId(pid)})
             .toArray();
 
         if (list.length === 0) {
@@ -126,8 +119,9 @@ export const ratingsFunctions ={
             };
 
         for (const r of list) {
+            const s = r.scores ?? r;
             for (const key in totals) {
-                totals[key] += r[key];
+            totals[key] += Number(s[key] ?? 0);
             }
         }
 
@@ -153,16 +147,8 @@ export const ratingsFunctions ={
                 totals.amenities) / (8 * count)
         };
 
-        
-
-const parksCol = await parks();
-const exists = await parksCol.findOne({ _id: new ObjectId(pid) });
-console.log("DEBUG park exists?", !!exists, pid);
-
         await parksFunctions.updateAverageRatings(pid, averages);
         console.log("DEBUG list length in getAverageRatingsForPark =", list.length);
-
-
         return list; 
     },
 

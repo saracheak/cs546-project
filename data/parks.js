@@ -213,17 +213,17 @@ export const parksFunctions = {
                 throw new Error("No fields provided for park update");
             }
 
-            const setUpdate = await parksCollection.findOneAndUpdate(
+            const setUpdate = await parksCollection.updateOne(
                 {_id: new ObjectId(park_Id)},
                 {$set: update_fields},
-                {returnDocument: "after"}
+                //{returnDocument: "after"}
             );
 
-            if(!setUpdate.value) {
+            if(!setUpdate.matchedCount) {
                 throw new Error(`Could not update park ${park_Id}`);
             }
-
-            return prepPark(setUpdate.value);
+            const updatedDoc = await parksCollection.findOne({ _id: new ObjectId(park_Id) });
+            return prepPark(updatedDoc);
         }catch(e){
             throw e;
         }
@@ -282,17 +282,19 @@ export const parksFunctions = {
                 throw new Error("No average rating fields provided for update")
             }
 
-            const setUpdate = await parksCollection.findOneAndUpdate(
-                {_id: new ObjectId(park_Id)},
+             const parkObjId = new ObjectId(park_Id);
+
+            const setUpdate = await parksCollection.updateOne(
+                {_id: parkObjId},
                 {$set: updateFields },
-                {returnDocument: "after"}
+                //{returnDocument: "after"}
             );
 
-            if(!setUpdate.value){
-                throw new Error(`Unable to update averages for park ${park_Id}`);
+            if(!setUpdate.matchedCount) {
+                   throw new Error(`Unable to update averages for park ${park_Id}`);
             }
-
-            return prepPark(setUpdate.value);
+            const updated = await parksCollection.findOne({ _id: parkObjId });
+            return prepPark(updated.value);
         }catch(e){
             throw e;
         }
