@@ -3,6 +3,7 @@ import { commentsFunctions } from "../data/comments.js";
 import {parksFunctions} from "../data/parks.js";
 import { requireLogin } from "../middleware.js";
 import { usersFunctions } from "../data/users.js";
+import { checkString } from "../validation.js";
 import xss from "xss";
 import { ratingsFunctions } from "../data/ratings.js";
 
