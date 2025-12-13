@@ -137,11 +137,34 @@
                 <p>You must be logged in to leave a comment.</p>
             {{/if}}
         </section>
+        <br>
+        {{#if (parksIncludes ../user.favoriteParks park._id)}}
+            <button class="favorite-btn" data-id="{{park._id}}" data-action="remove">Remove this park from my Favorite Parks</button>
+        {{else}}
+            <button class="favorite-btn" data-id="{{park._id}}" data-action="add">Add this park to my Favorite Parks</button>
+        {{/if}}
+
+        <div id="favorite-park-msg" class="favorite-park-msg">
+            <p>{{message}}</p>
+        </div>
+
+        {{#if (parksIncludes ../user.parksVisited park._id)}}
+            <button class="parks-visited-btn" data-id="{{park._id}}" data-action="remove">Remove this park from my Parks Visited</button>
+        {{else}}
+            <button class="parks-visited-btn" data-id="{{park._id}}" data-action="add">Add this park to my Parks Visited</button>
+        {{/if}}
+
+        <div id="parks-visited-msg" class="parks-visited-msg">
+            <p>{{message}}</p>
+        </div>
 
         <p class="back-link">
             <a href="/parks">Back to all parks</a>
         </p>
+
     </div>
 </section>
 
 <script src="/public/js/comments.js"></script>
+
+<script src="/js/parks.js"></script>

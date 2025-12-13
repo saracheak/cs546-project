@@ -8,55 +8,66 @@ import validator from "validator";
 const usersCollection = await users();
 
 export const usersFunctions = {
-    async createUser(dog_name, human_first_name, human_last_name, dog_gender, human_gender, email, password, 
-        role, favorite_parks, times, ratings, pet_friends, biscuits, parks_visited){
-
+    async createUser(dogName, humanFirstName, humanLastName, dogGender, humanGender, email, password, 
+        bio, role, favoriteParks, times, ratings, petFriends, biscuits, parksVisited){
         try{
             //Validations
-            checkName(dog_name);
-            checkName(human_first_name);
-            checkName(human_last_name);
-            checkGender(dog_gender);
-            checkGender(human_gender);
-            checkEmail(email);
+            checkName(dogName);
+            checkName(humanFirstName);
+            checkName(humanLastName);
+            checkGender(dogGender);
+            checkGender(humanGender);
+            await checkEmail(email);
             checkPassword(password);
+            checkBio(bio);
             checkRole(role);
-            checkFavoriteParks(favorite_parks);
+            checkFavoriteParks(favoriteParks);
             checkTimes(times);
             checkRatings(ratings);
-            checkPetFriends(pet_friends);
+            checkPetFriends(petFriends);
             checkBiscuits(biscuits);
-            checkParksVisited(parks_visited);
+            checkParksVisited(parksVisited);
         } catch(e){
-            throw new Error(e);
+            throw new Error(e.message);
         }
 
         //hash password
-        let hashed_password = password;
+        let hashedPassword = password;
         try{
             const saltRounds = 10;
-            hashed_password = await bcrypt.hash(password, saltRounds);
+            hashedPassword = await bcrypt.hash(password, saltRounds);
         } catch(e){
             throw new Error("Error occured while salting password");
         }
 
+        //sanitize all text inputs before adding to db
+        try {
+            dogName = validator.escape(dogName);
+            humanFirstName = validator.escape(humanFirstName);
+            humanLastName = validator.escape(humanLastName);
+            bio = validator.escape(bio);
+        } catch (error) {
+            console.log("error with santising fields", error);
+        }
+        
         try{
             let userObj = { 
                 _id: new ObjectId(),
-                dog_name: dog_name,
-                human_first_name: human_first_name,
-                human_last_name: human_last_name,
-                dog_gender: dog_gender,
-                human_gender: human_gender,
+                dogName: dogName,
+                humanFirstName: humanFirstName,
+                humanLastName: humanLastName,
+                dogGender: dogGender,
+                humanGender: humanGender,
                 email: email,
-                hashed_password: hashed_password,
+                hashedPassword: hashedPassword,
+                bio: bio,
                 role: role,
-                favorite_parks: favorite_parks,
+                favoriteParks: favoriteParks,
                 times: times,
                 ratings: ratings,
-                pet_friends: pet_friends,
+                petFriends: petFriends,
                 biscuits: biscuits,
-                parks_visited: parks_visited
+                parksVisited: parksVisited
             };
         
             const insertInfo = await usersCollection.insertOne(userObj);
@@ -86,16 +97,14 @@ export const usersFunctions = {
 
             let updatedUser = await usersCollection.findOneAndUpdate({_id: new ObjectId(userId)},
             {$set: {
-                dog_name: updateInfo.dogName,
-                human_first_name: updateInfo.humanFirstName,
-                human_last_name: updateInfo.humanLastName,
-                dog_gender: updateInfo.dogGender,
-                human_gender: updateInfo.humanGender,
-                email: updateInfo.email,
-                favorite_parks: updateInfo.favoriteParks ? updateInfo.favoriteParks.split(",").map(s => s.trim()) : [],
-                times: updateInfo.times ? updateInfo.times.split(",").map(s => s.trim()) : [],
-                pet_friends: updateInfo.petFriends ? updateInfo.petFriends.split(",").map(s => s.trim()) : [],
-                parks_visited: updateInfo.parksVisited ? updateInfo.parksVisited.split(",").map(s => s.trim()) : []
+                dogName: updateInfo.dogName,
+                humanFirstName: updateInfo.humanFirstName,
+                humanLastName: updateInfo.humanLastName,
+                dogGender: updateInfo.dogGender,
+                humanGender: updateInfo.humanGender,
+                bio: updateInfo.bio,
+                times: updateInfo.times,
+                petFriends: updateInfo.petFriends,
             }},
             {returnNewDocument : true});
             
@@ -125,7 +134,7 @@ export const usersFunctions = {
                 throw new Error("userId is not a valid ObjectId");
             }
             let user = await usersCollection.findOne({_id: new ObjectId(userId)});
-            let petFriends = user.pet_friends;
+            let petFriends = user.petFriends;
             return petFriends;
         } catch (e) {
             throw new Error(e);
@@ -138,7 +147,7 @@ export const usersFunctions = {
                 throw new Error("userId is not a valid ObjectId");
             }
             let user = await usersCollection.findOne({_id: new ObjectId(userId)});
-            let favParks = user.favorite_parks;
+            let favParks = Array.isArray(user.favoriteParks) ? user.favoriteParks : [];
             return favParks;
         } catch (e) {
             throw new Error(e);
@@ -164,7 +173,7 @@ export const usersFunctions = {
                 throw new Error("userId is not a valid ObjectId");
             }
             let user = await usersCollection.findOne({_id: new ObjectId(userId)});
-            let parksVisited = user.parks_visited;
+            let parksVisited = user.parksVisited;
             return parksVisited;
         } catch (e) {
             throw new Error(e);
@@ -187,8 +196,11 @@ const checkGender = (gender) => {
     return true;
 }
 
-const checkEmail = (email) => {
+const checkEmail = async (email) => {
     let isValidEmail = validator.isEmail(email);
+    let emailRegex = new RegExp(email, "i");
+    let emailInDb = await usersCollection.findOne({email: emailRegex});
+    if(emailInDb) throw new Error("This email is already taken. Login instead.");
     if(!isValidEmail) throw new Error("The email entered is not valid.");
     return true;
 }
@@ -201,6 +213,13 @@ const checkPassword = (password) => {
     //1 lowercase, 1 uppercase, 1 number, 1 special character respectively
     const strongPasswordRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])");
     if(!strongPasswordRegex.test(password)) throw new Error("Password must have at least 1 lowercase, 1 uppercase, 1 number and 1 special character");
+    return true;
+}
+
+const checkBio = (bio) => {
+    if(typeof bio !== "string") throw new Error("Bio has to be type string");
+    bio = bio.trim();
+    if(bio.length > 100) throw new Error("Bio has to be <100 characters");
     return true;
 }
 

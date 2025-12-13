@@ -15,7 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 app.use(cookieParser());
-app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(
@@ -34,6 +34,18 @@ const hbs = create({
     includes: (arr, value) => { //helper function used in biscuits.handlebars to verify if biscuits user has earned
       if (!Array.isArray(arr)) return false;
       return arr.includes(value);
+    },
+    parksIncludes: (arr, id) => {
+      if (!Array.isArray(arr)) return false;
+      if (!id) return false;
+      arr.some(favPark => favPark.toString() === id.toString()) //helper function used to favorite a park
+    },
+    timesIncludes:(arr, value) => {
+      if (!Array.isArray(arr)) return "";
+        return arr.includes(value) ? "checked" : "";
+    },
+    selectIfEqual: (a, b) => {
+    return a.toLowerCase() === b.toLowerCase() ? "selected" : "";
     }
 }});
 app.engine('handlebars', hbs.engine)

@@ -1,53 +1,56 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Sign Up Page</title>
-        <link rel="stylesheet" href="/css/styles.css">
-    </head>
-    
-    <body class="signup-body">
-        <div class="signup-container">
+<div class="signup-body">
+    <div class="signup-container">
         <header>
             <h1>🐾 Sign Up 🐶</h1>
         </header>
-        <main>
-            <p>Sign up here!</p>
-            <form action="/signup" method="POST" id="signup-form">
-                <label for="dog-name">Dog Name</label><br>
-                <input type="text" name="dogName" id="dog-name"><br><br>
+        <p>Sign up here!</p>
 
-                <label for="human-first-name">Human's First Name</label><br>
-                <input type="text" name="humanFirstName" id="human-first-name"><br><br>
-
-                <label for="human-last-name">Human's Last Name</label><br>
-                <input type="text" name="humanLastName" id="human-last-name"><br><br>
-
-                <label for="dog-gender">Dog Gender</label><br>
-                <select name="dogGender" id="dog-gender"><br><br>
-                    <option value=""></option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select> <br><br>
-
-                <label for="human-gender">Human Gender</label><br>
-                <select name="humanGender" id="human-gender"><br><br>
-                    <option value=""></option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Non-Binary">Non-Binary</option>
-                    <option value="Prefer Not to Say">Prefer Not to Say</option>
-                    <option value="Other">Other</option>
-                </select> <br><br>
-                
-                <label for="email">Email</label><br>
-                <input type="text" name="email" id="email"><br><br>
-                
-                <label for="password">Password</label><br>
-                <input type="password" name="password" id="password"><br><br>
-
-                <button type="submit">Login</button>
-            </form>
-        </main>
+        <div id="signup-error" class="signup-error">
+            {{#if error}}
+                <p>{{error}}</p>
+            {{/if}}
         </div>
-    </body>
-</html>
+
+        <form action="/signup" method="POST" id="signup-form">
+            <label for="dogName">Dog Name</label><br>
+            <input type="text" name="dogName" id="dogName" value="{{dogName}}"><br><br>
+
+            <label for="humanFirstName">Human's First Name</label><br>
+            <input type="text" name="humanFirstName" id="humanFirstName" value="{{humanFirstName}}"><br><br>
+
+            <label for="humanLastName">Human's Last Name</label><br>
+            <input type="text" name="humanLastName" id="humanLastName" value="{{humanLastName}}"><br><br>
+
+            <label for="dogGender">Dog Gender</label><br>
+            <select name="dogGender" id="dogGender">
+                <option value="">Select a Dog Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select> <br><br>
+
+            <label for="humanGender">Human Gender</label><br>
+            <select name="humanGender" id="humanGender">
+                <option value="">Select a Human Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Non-Binary">Non-Binary</option>
+                <option value="Prefer Not to Say">Prefer Not to Say</option>
+                <option value="Other">Other</option>
+            </select> <br><br>
+            
+            <label for="email">Email</label><br>
+            <input type="text" name="email" id="email" value="{{email}}"><br><br>
+            
+            <label for="password">Password</label><br>
+            <input type="password" name="password" id="password"><br><br>
+
+            <label for="bio">Write an optional short bio:</label><br>
+            <input type="text" name="bio" id="bio" value="{{bio}}"><br><br>
+
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <p class="back-link"><a href="/home">Back to home</a></p>
+        <p class="back-link"><a href="/login">Already have an account? Login instead</a></p>
+    </div>
+</div>
