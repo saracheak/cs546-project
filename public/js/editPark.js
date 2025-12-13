@@ -1,8 +1,6 @@
 (function () {
-    const form = document.getElementById("new-park-form");
-    const errorEl = document.getElementById("new-park-error");
-  
-    // If we're not on the new park page, do nothing
+    const form = document.getElementById("edit-park-form");
+    const errorEl = document.getElementById("edit-park-error");
     if (!form || !errorEl) return;
   
     form.addEventListener("submit", function (event) {
@@ -16,21 +14,18 @@
       const state    = document.getElementById("state")?.value.trim();
       const zip      = document.getElementById("zip_code")?.value.trim();
   
-      // Required fields (street_2 optional)
       if (!parkName || !parkType || !street1 || !city || !state || !zip) {
         event.preventDefault();
         errorEl.textContent = "All fields except Street 2 are required.";
         return;
       }
   
-      // Park type validation 
       if (parkType !== "run" && parkType !== "off-leash") {
         event.preventDefault();
         errorEl.textContent = "Please select a valid park type.";
         return;
       }
   
-      // Zip must be exactly 5 digits
       if (!/^\d{5}$/.test(zip)) {
         event.preventDefault();
         errorEl.textContent = "Zip code must be exactly 5 digits.";

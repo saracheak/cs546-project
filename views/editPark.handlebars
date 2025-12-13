@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Edit Park</title>
+    <link rel="stylesheet" href="/css/styles.css">
+  </head>
+
+  <body class="home-body">
+    <header class="home-header">
+      <h1>Edit Park</h1>
+    </header>
+
+    <nav class="home-nav">
+      <a href="/admin">Back to Admin</a>
+      <a href="/parks">All Parks</a>
+      <a href="/logout">Logout</a>
+    </nav>
+
+    <main class="new-park-main">
+      {{#if error}}
+        <p class="error form-msg">{{error}}</p>
+      {{/if}}
+      <p id="edit-park-error" class="error form-msg"></p>
+
+      <form
+        method="post"
+        action="/admin/parks/{{park._id}}/edit"
+        class="new-park-form"
+        id="edit-park-form"
+      >
+        <h2>Park Info</h2>
+
+        <div>
+          <label for="park_name">Park Name:</label>
+          <input type="text" id="park_name" name="park_name" required value="{{park.park_name}}" />
+        </div>
+
+        <div>
+          <label for="park_type">Park Type:</label>
+          <select id="park_type" name="park_type" required>
+            <option value="">-- Select Type --</option>
+            <option value="run" {{selectIfEqual park.park_type "run"}}>Run</option>
+            <option value="off-leash" {{selectIfEqual park.park_type "off-leash"}}>Off-Leash</option>
+          </select>
+        </div>
+
+        <h2>Address</h2>
+
+        <div>
+          <label for="street_1">Street 1:</label>
+          <input type="text" id="street_1" name="street_1" required value="{{park.address.street_1}}" />
+        </div>
+
+        <div>
+          <label for="street_2">Street 2 (optional):</label>
+          <input type="text" id="street_2" name="street_2" value="{{park.address.street_2}}" />
+        </div>
+
+        <div>
+          <label for="city">City:</label>
+          <input type="text" id="city" name="city" required value="{{park.address.city}}" />
+        </div>
+
+        <div>
+          <label for="state">State:</label>
+          <select id="state" name="state" required>
+            <option value="">-- Select State --</option>
+            <option value="NY" {{#if (selectIfEqual park.address.state "NY")}}selected{{/if}}>NY</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="zip_code">Zip Code:</label>
+          <input type="text" id="zip_code" name="zip_code" maxlength="5" required value="{{park.address.zip_code}}" />
+        </div>
+
+        <button type="submit">Save Changes</button>
+      </form>
+    </main>
+
+    <script src="/public/js/editPark.js"></script>
+  </body>
+</html>
