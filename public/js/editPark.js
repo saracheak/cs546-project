@@ -1,4 +1,3 @@
-// public/js/editPark.js
 (() => {
     function getEl(id) {
       return document.getElementById(id);
@@ -7,7 +6,6 @@
     function setError(msg) {
       let errorEl = document.getElementById("edit-park-error");
       if (!errorEl) {
-        // Create a message container if your template doesn't have one
         errorEl = document.createElement("p");
         errorEl.id = "edit-park-error";
         errorEl.className = "error form-msg";
@@ -26,7 +24,6 @@
       return typeof s === "string" && s.trim().length > 0;
     }
   
-    // Light validation rules (client-side only; server must still validate)
     function validateParkName(name) {
       if (!isNonEmptyString(name)) return "Park name is required.";
       const trimmed = name.trim();
@@ -55,9 +52,7 @@
   
     function validateState(state) {
       if (!isNonEmptyString(state)) return "State is required.";
-      // If you only allow NY in your app, enforce it:
-      // return state.trim() === "NY" ? null : "State must be NY.";
-      return null;
+      return state.trim() === "NY" ? null : "State must be NY.";
     }
   
     function validateZip(zip) {
@@ -85,7 +80,6 @@
     }
   
     document.addEventListener("DOMContentLoaded", () => {
-      // Your editPark.handlebars uses the same ids as newPark.handlebars
       const form =
         document.getElementById("edit-park-form") ||
         document.querySelector("form.new-park-form") ||
@@ -101,7 +95,6 @@
       const stateEl = getEl("state");
       const zipEl = getEl("zip_code");
   
-      // Optional: live clear error when user edits fields
       const inputs = [parkNameEl, parkTypeEl, street1El, street2El, cityEl, stateEl, zipEl].filter(Boolean);
       inputs.forEach((el) => el.addEventListener("input", clearError));
   
@@ -151,7 +144,7 @@
   
         if (errors.length > 0) {
           e.preventDefault();
-          setError(errors[0]); // show first error only (clean UX)
+          setError(errors[0]); 
           return;
         }
       });
