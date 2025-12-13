@@ -4,7 +4,9 @@ import { requireAdmin } from "../middleware.js";
 import { parksFunctions } from "../data/parks.js";
 import { biscuitsFunctions } from "../data/biscuits.js";
 import { checkString } from "../validation.js";
+import xss from "xss";
 import { ObjectId } from "mongodb";
+
 const router = Router();
 
 //requireAdmin middleware will run for every request that is made through this route page
@@ -71,28 +73,145 @@ router.post('/parks/:parkId/deny', async (req, res) => {
 //     //TODO
 // });
 
+router.post("/parks/create", async (req, res) => {
+  try{
+    let park_name=xss(req.body.park_name);
+    let park_type = xss(req.body.park_type);
+    let street_1 = xss(req.body.street_1);
+    let street_2 = xss(req.body.street_2 || "");
+    let city = xss(req.body.city);
+    let state = xss(req.body.state);
+    let zip_code = xss(req.body.zip_code);
 
-///Keep the GET code for parks pending below in case we need it. 
-//parks/pending not needed anymore since it gets passed straight to admin temp. Needs to be passed directly to admin template otherwise it does not show up every time the page is rendered
+    park_name = checkString(park_name, "park_name");
+    park_type = checkString(park_type, "park_type");
+    street_1 = checkString(street_1, "address.street_1");
+    city = checkString(city, "address.city");
+    state = checkString(state, "address.state");
+    zip_code = checkString(zip_code, "address.zip_code");
 
-// GET /admin/parks/pending --> show all parks with approved = false
-// router.get("/parks/pending", async (req, res) => {
-//   try {
-//     const allParks = await parksFunctions.getAllParks(false);    // getAllParks(false) returns ALL parks, both approved and not
-//     const pendingParks = allParks.filter(p => !p.approved); //get parks that are not approved
+    if(!/^[0-9]{5}$/.test(zip_code)){
+      throw "zip_code must be a 5-digit number.";
+    }
+    street_2 = street_2.trim();
 
-//     return res.status(200).render("admin", {title: "Pending Parks", pendingParks});
-//   } catch (e) {
-//     return res.status(500).render("error", {message: e.toString() });
-//   }
-// });
+    const address = {
+      street_1,
+      city,
+      state,
+      zip_code
+    };
+
+    if(street_2.length > 0){
+      address.street_2 = street_2;
+    }
+
+    const allParks = await parksFunctions.getAllParks(false);
+    const newName = park_name.toLowerCase();
+    const newStreet = street_1.toLowerCase();
+    const newCity = city.toLowerCase();
+    const newState = state.toLowerCase();
+    const newZip = String(zip_code);
+    
+    let checkExists = false;
+
+    for(let i = 0; i< allParks.length; i++){
+      const p= allParks[i];
+      if(!p.address){
+        continue;
+      }
+      const existingName = p.park_name.toLowerCase();
+      const existingStreet = p.address.street_1.toLowerCase();
+      const existingCity = p.address.city.toLowerCase();
+      const existingState = p.address.state.toLowerCase();
+      const existingZip = String(p.address.zip_code);
+
+      const nameCheck = existingName === newName;
+      const sameStreet = existingStreet === newStreet;
+      const sameCity = existingCity === newCity;
+      const sameState = existingState === newState;
+      const sameZip = existingZip === newZip;
+
+      if(nameCheck && sameStreet && sameCity && sameState && sameZip){
+        checkExists = true;
+        break;
+      }
+    }
+
+    if(checkExists){
+      return res
+        .status(400)
+        .render("admin", {
+          createParkError: "A park with that name already exists"
+      });
+    }
+
+    const approved = true;
+    const comments = [];
+    const avg = 0;
+
+    await parksFunctions.createPark(
+      park_name,
+      park_type,
+      approved,
+      comments,
+      address,
+      avg,
+      avg,
+      avg,
+      avg,
+      avg,
+      avg,
+      avg,
+      avg
+    );
+
+    return res
+      .status(200)
+      .render("admin", {
+        createParkMessage: "Park created!"
+      });
+  }catch(e){
+    return res 
+      .status(400)
+      .render("admin", {
+        createParkError: e.toString()
+      });
+  }
+});
+
+router.post("/parks/delete", async (req, res)=>{
+  try{
+    let parkId = xss(req.body.parkId);
+    parkId = checkString(parkId, "parkId");
+
+    await parksFunctions.getParkById(parkId);
+
+    await parksFunctions.deletePark(parkId);
+
+    return res
+      .status(200)
+      .render("admin", {
+        deleteParkMessage: "Park deleted successfully!"
+      });
+  }catch(e){
+    return res  
+      .status(400)
+      .render("admin", {
+        deleteParkError: e.toString()
+      });
+  }
+});
+
+
 
 /*------------ Biscuit Admin Routes ------------*/
 
 //POST /admin/biscuits/ --> Create new biscuit
 router.route('/biscuits').post(async (req,res) => {
     try{
-        let {biscuit_name, description} = req.body;
+        let biscuit_name = xss(req.body.biscuit_name);
+        let description = xss(req.body.description);
 
         //input validation check
         biscuit_name = checkString(biscuit_name, 'biscuit_name');
@@ -132,7 +251,9 @@ router.route('/biscuits').post(async (req,res) => {
 //extra checks for if a parameter exists
 router.route('/biscuits/update').post(async(req, res)=>{
     try{
-        let {biscuitId, biscuit_name, description} = req.body;
+        let biscuitId = xss(req.body.biscuitId);
+        let biscuit_name = xss(req.body.biscuit_name);
+        let description = xss(req.body.description);
 
         //input validation check
         // Both fields are required; if either is missing, show an error
@@ -195,22 +316,13 @@ router.route('/biscuits/update').post(async(req, res)=>{
 // POST /admin/biscuits/delete --> delete biscuit by ID from form
 router.route('/biscuits/delete').post(async (req, res) => {
     try {
-      let { biscuitId } = req.body;
+      let biscuitId = xss(req.body.biscuitId);
   
       //input validation
       biscuitId = checkString(biscuitId, 'biscuitId');
-      // // Throw error if the biscuit ID does not exist
-      // try {
-      //   await biscuitsFunctions.getBiscuitById(biscuitId);
-      // } catch (err) {
-      //   // data function throws if not found
-      //   return res.status(400).render('admin', {
-      //     updateError: 'That biscuit ID does not exist.'
-      //   });
-      // }
 
       // will throw if ID is invalid or biscuit not found
-      await biscuitsFunctions.getBiscuitById(biscuitId); //delete if not working
+      await biscuitsFunctions.getBiscuitById(biscuitId); //throws error if biscuit id does not exist
       await biscuitsFunctions.deleteBiscuitById(biscuitId);
   
       console.log('Successfully deleted biscuit!');
