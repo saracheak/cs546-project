@@ -1,9 +1,11 @@
 import { ObjectId } from "mongodb";
 import { ratings} from "../config/mongoCollections.js";
-import { checkId,checkIdInRatings,checkString } from "../validation.js";
+import { checkIdInRatings,checkString } from "../validation.js";
+import { parksFunctions } from "./parks.js";
 
 
 export const ratingsFunctions ={
+
     async createRating(ratingData){
         
 
@@ -12,14 +14,6 @@ export const ratingsFunctions ={
         const {
             user_id,
             park_id,
-            cleanliness,
-            dog_friendliness,
-            busyness,
-            water_availability,
-            wastebag_availability,
-            trash_availability,
-            surface,
-            amenities,
             comment,
             dog_size,
         } = ratingData;
@@ -28,7 +22,17 @@ export const ratingsFunctions ={
         const uid = checkIdInRatings(user_id, "user id");
         const pid = checkIdInRatings(park_id, "park id");
             
-        
+        const s = ratingData.scores ?? ratingData;
+        const {
+            cleanliness,
+            dog_friendliness,
+            busyness,
+            water_availability,
+            wastebag_availability,
+            trash_availability,
+            surface,
+            amenities
+        } = s;
         const fields = [
             cleanliness,
             dog_friendliness,
@@ -45,24 +49,26 @@ export const ratingsFunctions ={
                 throw "Each rating field must be a number between 0 and 5";
             }
         }
-
-            
+       
          const dogSizeStr = checkString(dog_size);
          const commentStr = checkString(comment);
 
          const ratingObj = {
             user_id: new ObjectId(uid),
             park_id: new ObjectId(pid),
-            cleanliness,
-            dog_friendliness,
-            busyness,
-            water_availability,
-            wastebag_availability,
-            trash_availability,
-            surface,
-            amenities,
+            scores:{
+                cleanliness,
+                dog_friendliness,
+                busyness,
+                water_availability,
+                wastebag_availability,
+                trash_availability,
+                surface,
+                amenities
+            },
             comment: commentStr,
             dog_size: dogSizeStr,
+            createdAt: new Date()
            
         };
 
@@ -73,108 +79,77 @@ export const ratingsFunctions ={
     },
 
     async getRatingsForPark(park_id){
-        const ratingCollection = await ratings();
-
-        
+        const col = await ratings();
         const pid = checkIdInRatings(park_id, "park id");
-        //console.log(typeof(pid))
-        //const parkObjId = new ObjectId(pid);
+            return col.find({ park_id: new ObjectId(pid) }).toArray();
+    },
+    
+    async getUserRatingForPark(park_id, user_id) {
+        const col = await ratings();
+        const pid = checkIdInRatings(park_id, "park id");
+        const uid = checkIdInRatings(user_id, "user id");
 
-        const ratingsList = await ratingCollection
-            .find({ park_id: pid })  
-            .toArray();
-
-          return ratingsList;
-
-        
+        return col.findOne({
+            park_id: new ObjectId(pid),
+            user_id: new ObjectId(uid)
+        });
     },
 
     async getAverageRatingsForPark(park_id) {
         const ratingCollection = await ratings();
         const pid = checkIdInRatings(park_id, "park id");
-
+        
         const list = await ratingCollection
-            .find({ park_id: pid  })
+            .find({ park_id: new ObjectId(pid)})
             .toArray();
 
         if (list.length === 0) {
-            return {
-                average_cleanliness: 0,
-                average_dog_friendliness: 0,
-                average_busyness: 0,
-                average_water_availability: 0,
-                average_wastebag_availability: 0,
-                average_trash_availability: 0,
-                average_surface: 0,
-                average_amenities: 0,
-                average_overall: 0
+            return null;;
+        }
+
+        const totals = {
+            cleanliness: 0,
+            dog_friendliness: 0,
+            busyness: 0,
+            water_availability: 0,
+            wastebag_availability: 0,
+            trash_availability: 0,
+            surface: 0,
+            amenities: 0
             };
+
+        for (const r of list) {
+            const s = r.scores ?? r;
+            for (const key in totals) {
+            totals[key] += Number(s[key] ?? 0);
+            }
         }
 
-        const avg = (field) => list.reduce((sum, r) => sum + r[field], 0) / list.length
+        const count = list.length;
 
-        const summary = {
-            average_cleanliness: avg("cleanliness"),
-            average_dog_friendliness: avg("dog_friendliness"),
-            average_busyness: avg("busyness"),
-            average_water_availability: avg("water_availability"),
-            average_wastebag_availability: avg("wastebag_availability"),
-            average_trash_availability: avg("trash_availability"),
-            average_surface: avg("surface"),
-            average_amenities: avg("amenities")
+        const averages = {
+            average_cleanliness: totals.cleanliness / count,
+            average_dog_friendliness: totals.dog_friendliness / count,
+            average_busyness: totals.busyness / count,
+            average_water_availability: totals.water_availability / count,
+            average_wastebag_availability: totals.wastebag_availability / count,
+            average_trash_availability: totals.trash_availability / count,
+            average_surface: totals.surface / count,
+            average_amenities: totals.amenities / count,
+            average_overall:
+                (totals.cleanliness +
+                totals.dog_friendliness +
+                totals.busyness +
+                totals.water_availability +
+                totals.wastebag_availability +
+                totals.trash_availability +
+                totals.surface +
+                totals.amenities) / (8 * count)
         };
-    
-        summary.average_overall =
-            Object.values(summary).reduce((sum, x) => sum + x, 0) /
-            Object.values(summary).length;
 
-        for (const key in summary) {
-            summary[key] = Number(summary[key].toFixed(2));
-        }
-
-        return summary;
+        await parksFunctions.updateAverageRatings(pid, averages);
+        console.log("DEBUG list length in getAverageRatingsForPark =", list.length);
+        return averages; 
     },
-
-    async getTopParksByOverallScore(limit = 10) {
-        const ratingCollection = await ratings();
-
-        const agg = await ratingCollection
-            .aggregate([
-                {
-                    $group: {
-                        _id: "$park_id",
-                        cleanliness: { $avg: "$cleanliness" },
-                        dog_friendliness: { $avg: "$dog_friendliness" },
-                        busyness: { $avg: "$busyness" },
-                        water_availability: { $avg: "$water_availability" },
-                        wastebag_availability: { $avg: "$wastebag_availability" },
-                        trash_availability: { $avg: "$trash_availability" },
-                        surface: { $avg: "$surface" },
-                        amenities: { $avg: "$amenities" }
-                    }
-                },
-                {
-                    $addFields: {
-                        overall: {
-                            $avg: [
-                                "$cleanliness",
-                                "$dog_friendliness",
-                                "$busyness",
-                                "$water_availability",
-                                "$wastebag_availability",
-                                "$trash_availability",
-                                "$surface",
-                                "$amenities"
-                            ]
-                        }
-                    }
-                },
-                { $sort: { overall: -1 } },
-                { $limit: limit }
-            ])
-            .toArray();
-
-        return agg;
-    }
 
 }

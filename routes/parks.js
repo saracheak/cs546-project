@@ -2,11 +2,13 @@ import {Router} from "express";
 import { commentsFunctions } from "../data/comments.js";
 import {parksFunctions} from "../data/parks.js";
 import { requireLogin } from "../middleware.js";
-import { checkString } from "../validation.js";
 import { usersFunctions } from "../data/users.js";
+import { checkString } from "../validation.js";
 import xss from "xss";
 import {users} from "../config/mongoCollections.js"
 import { ObjectId } from "mongodb";
+import { ratingsFunctions } from "../data/ratings.js";
+
 
 const router = Router();
 const usersCollection = await users();
@@ -40,11 +42,13 @@ router.post("/:parkId/comments", requireLogin, async (req, res) => {
     try{
         let {parkId} = req.params;
         parkId= checkString(parkId, "parkId");
+        let commentSan = xss(req.body.comment);
+        let commentText = checkString(commentSan, "comment");
 
-        let commentText = checkString(req.body.comment, "comment");
         if(commentText.length > 500){
-            throw new Error("comment must be 500 characters or fewer");
+            throw new Error("comment must be 500 characters or less")
         }
+
 
         if(commentText.indexOf("<")!== -1 || commentText.indexOf(">") !== -1){
             throw new Error("comment cannot contain < or >")
@@ -219,14 +223,18 @@ router.get("/:parkId", async (req, res)=> {
         let {parkId} = req.params;
         parkId = checkString(parkId, "parkId");
 
-        const park = await parksFunctions.getParkById(parkId);
+        await parksFunctions.getParkById(parkId);
         const comments = await commentsFunctions.getCommentsForPark(parkId);
-
+        const ratings = await ratingsFunctions.getRatingsForPark(parkId);
+        await ratingsFunctions.getAverageRatingsForPark(parkId);
+        const park = await parksFunctions.getParkById(parkId);
+        
         const currentUserId = req.session.userId;
         const isAdmin = res.locals.isAdmin === true;
 
-        for(let i = 0; i<comments.length; i++){
-            let canDelete = false;
+        for (const c of comments) {
+      c.canDelete =
+        !!currentUserId && (isAdmin || c.user_id?.toString() === currentUserId);
 
             if(currentUserId){
                 if(isAdmin || comments[i].user_id === currentUserId){
@@ -248,14 +256,24 @@ router.get("/:parkId", async (req, res)=> {
                     comments[i].authorName = "Unknown pup";
                 }
             }catch(e){
-                comments[i].authorName = "Unkown pup";
+                comments[i].authorName = "Unknown pup";
             }
         }
+      try {
+        const user = await usersFunctions.getUser(c.user_id.toString());
+        c.authorName =
+          user?.dog_name || user?.human_first_name || user?.email || "Unknown pup";
+      } catch (e) {
+        c.authorName = "Unknown pup";
+      }
+    }
          
         return res.status(200).render("parkDetail", {
             title: park.park_name,
-            park:park,
-            comments: comments
+            park,
+            comments,
+            ratings,
+            hasRatings: ratings.length > 0
         });
     }catch(e){
         return res.status(404).render("error", {error: e.toString()});

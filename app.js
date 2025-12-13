@@ -9,7 +9,6 @@ import {dirname} from 'path';
 import { create } from 'express-handlebars';
 import cookieParser from 'cookie-parser';
 import { attachUserToLocals } from './middleware.js';
-import { usersFunctions } from './data/users.js';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
