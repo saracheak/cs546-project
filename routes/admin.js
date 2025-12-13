@@ -6,7 +6,6 @@ import { biscuitsFunctions } from "../data/biscuits.js";
 import { checkString } from "../validation.js";
 import xss from "xss";
 import { ObjectId } from "mongodb";
-import xss from "xss";
 
 const router = Router();
 
