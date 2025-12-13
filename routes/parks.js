@@ -245,8 +245,7 @@ router.get("/:parkId", async (req, res)=> {
             park,
             comments,
             ratings,
-            isLoggedIn: !!req.session.userId,
-            isAdmin
+            hasRatings: ratings.length > 0
         });
     }catch(e){
         return res.status(404).render("error", {message: e.toString()});

@@ -104,7 +104,7 @@ export const ratingsFunctions ={
             .toArray();
 
         if (list.length === 0) {
-            return[];
+            return null;;
         }
 
         const totals = {
@@ -149,49 +149,7 @@ export const ratingsFunctions ={
 
         await parksFunctions.updateAverageRatings(pid, averages);
         console.log("DEBUG list length in getAverageRatingsForPark =", list.length);
-        return list; 
+        return averages; 
     },
-
-    async getTopParksByOverallScore(limit = 10) {
-        const ratingCollection = await ratings();
-
-        const agg = await ratingCollection
-            .aggregate([
-                {
-                    $group: {
-                        _id: "$park_id",
-                        cleanliness: { $avg: "$cleanliness" },
-                        dog_friendliness: { $avg: "$dog_friendliness" },
-                        busyness: { $avg: "$busyness" },
-                        water_availability: { $avg: "$water_availability" },
-                        wastebag_availability: { $avg: "$wastebag_availability" },
-                        trash_availability: { $avg: "$trash_availability" },
-                        surface: { $avg: "$surface" },
-                        amenities: { $avg: "$amenities" }
-                    }
-                },
-                {
-                    $addFields: {
-                        overall: {
-                            $avg: [
-                                "$cleanliness",
-                                "$dog_friendliness",
-                                "$busyness",
-                                "$water_availability",
-                                "$wastebag_availability",
-                                "$trash_availability",
-                                "$surface",
-                                "$amenities"
-                            ]
-                        }
-                    }
-                },
-                { $sort: { overall: -1 } },
-                { $limit: limit }
-            ])
-            .toArray();
-
-        return agg;
-    }
 
 }

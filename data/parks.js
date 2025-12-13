@@ -294,10 +294,26 @@ export const parksFunctions = {
                    throw new Error(`Unable to update averages for park ${park_Id}`);
             }
             const updated = await parksCollection.findOne({ _id: parkObjId });
-            return prepPark(updated.value);
+            return prepPark(updated);
         }catch(e){
             throw e;
         }
+    },
+
+    async getTopRatedParks(limit = 10){
+        const parksCollection = await parks();
+        
+
+        const topParks = await parksCollection
+            .find({
+                approved: true,
+                average_overall: { $exists: true }
+            })
+            .sort({  average_overall: -1 })
+            .limit(limit)
+            .toArray();
+
+        return topParks.map(prepPark);
     },
 
     async deletePark(park_Id){ /// TO DO: This should be an admin only feature 
