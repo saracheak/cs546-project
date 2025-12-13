@@ -10,11 +10,11 @@
   
       const parkName = document.getElementById("park_name")?.value.trim();
       const parkType = document.getElementById("park_type")?.value.trim();
-      const street1  = document.getElementById("street_1")?.value.trim();
-      const street2  = document.getElementById("street_2")?.value.trim() || "";
-      const city     = document.getElementById("city")?.value.trim();
-      const state    = document.getElementById("state")?.value.trim();
-      const zip      = document.getElementById("zip_code")?.value.trim();
+      const street1 = document.getElementById("street_1")?.value.trim();
+      const street2 = document.getElementById("street_2")?.value.trim() || "";
+      const city = document.getElementById("city")?.value.trim();
+      const state = document.getElementById("state")?.value.trim();
+      const zip = document.getElementById("zip_code")?.value.trim();
   
       // Required fields (street_2 optional)
       if (!parkName || !parkType || !street1 || !city || !state || !zip) {
