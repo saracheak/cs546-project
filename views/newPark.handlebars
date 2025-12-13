@@ -16,16 +16,17 @@
     </nav>
 
     <main class="new-park-main">
-      {{#if error}}
-        <p class="error">{{error}}</p>
-      {{/if}}
-
-      {{#if successMessage}}
-        <p class="success">{{successMessage}}</p>
-      {{/if}}
-
-      <form method="post" action="/parks/new" class="new-park-form">
+      <form method="post" action="/parks/new" class="new-park-form" id="new-park-form">
         <h2>Park Info</h2>
+
+          {{#if error}}
+            <p class="error form-msg">{{error}}</p>
+          {{/if}}
+
+          {{#if successMessage}}
+            <p class="success form-msg">{{successMessage}}</p>
+          {{/if}}
+          <p id="new-park-error" class="error form-msg"></p>
 
         <div>
           <label for="park_name">Park Name:</label>
@@ -103,5 +104,6 @@
         <button type="submit">Submit Park</button>
       </form>
     </main>
+    <script src="/public/js/newPark.js"></script>
   </body>
 </html>

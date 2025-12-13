@@ -38,7 +38,8 @@ router.get('/', async (req, res) => {
 
 router.post('/parks/:parkId/approve', async (req, res) => {
   try {
-    const parkId = checkString(req.params.parkId, 'parkId');
+    let parkId = xss(req.body.parkId);
+    parkId = checkString(req.params.parkId, 'parkId');
     await parksFunctions.setParkApproved(parkId, true);
 
     // store message
@@ -54,7 +55,8 @@ router.post('/parks/:parkId/approve', async (req, res) => {
 
 router.post('/parks/:parkId/deny', async (req, res) => {
   try {
-    const parkId = checkString(req.params.parkId, 'parkId');
+    let parkId = xss(req.body.parkId);
+    parkId = checkString(req.params.parkId, 'parkId');
     await parksFunctions.deletePark(parkId);
 
     req.session.approveMessage = "Park denied and removed successfully.";
@@ -66,12 +68,7 @@ router.post('/parks/:parkId/deny', async (req, res) => {
   }
 });
 
-// /*------------ Parks Admin Routes TODO's for Aeslyn------------*/
-
-// //DELETE /admin/parks/:parkId --> remove a park if needed (maybe users reported it closed)
-// router.route('/parks/:parkId').delete(async (req,res) => {
-//     //TODO
-// });
+/*------------ Parks Admin Route Create ------------*/
 
 router.post("/parks/create", async (req, res) => {
   try{
@@ -180,6 +177,8 @@ router.post("/parks/create", async (req, res) => {
   }
 });
 
+/*------------ Parks Admin Route Delete ------------*/
+
 router.post("/parks/delete", async (req, res)=>{
   try{
     let parkId = xss(req.body.parkId);
@@ -202,8 +201,6 @@ router.post("/parks/delete", async (req, res)=>{
       });
   }
 });
-
-
 
 /*------------ Biscuit Admin Routes ------------*/
 
@@ -235,7 +232,7 @@ router.route('/biscuits').post(async (req,res) => {
 
          // create new biscuit if no dups are found
         await biscuitsFunctions.createBiscuit(biscuit_name, description);
-        console.log('Successfully created biscuit!');
+         console.log('Successfully created biscuit!');
 
         return res.status(200).render('admin', {createMessage: 'Biscuit created successfully!'
         });
