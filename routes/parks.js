@@ -39,11 +39,13 @@ router.post("/:parkId/comments", requireLogin, async (req, res) => {
     try{
         let {parkId} = req.params;
         parkId= checkString(parkId, "parkId");
+        let commentSan = xss(req.body.comment);
+        let commentText = checkString(commentSan, "comment");
 
-        let commentText = checkString(req.body.comment, "comment");
         if(commentText.length > 500){
-            throw new Error("comment must be 500 characters or fewer");
+            throw new Error("comment must be 500 characters or less")
         }
+
 
         if(commentText.indexOf("<")!== -1 || commentText.indexOf(">") !== -1){
             throw new Error("comment cannot contain < or >")
@@ -231,6 +233,29 @@ router.get("/:parkId", async (req, res)=> {
       c.canDelete =
         !!currentUserId && (isAdmin || c.user_id?.toString() === currentUserId);
 
+            if(currentUserId){
+                if(isAdmin || comments[i].user_id === currentUserId){
+                    canDelete = true;
+                }
+            }
+            comments[i].canDelete = canDelete;
+
+            try{
+                const user = await usersFunctions.getUser(comments[i].user_id);
+
+                if(user && user.dog_name){
+                    comments[i].authorName = user.dog_name;
+                } else if(user && user.human_first_name){
+                    comments[i].authorName = user.human_first_name;
+                }else if(user && user.email){
+                    comments[i].authorName = user.email;
+                }else{
+                    comments[i].authorName = "Unknown pup";
+                }
+            }catch(e){
+                comments[i].authorName = "Unknown pup";
+            }
+        }
       try {
         const user = await usersFunctions.getUser(c.user_id.toString());
         c.authorName =
