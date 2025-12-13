@@ -48,32 +48,32 @@ router.route('/search').get(async (req, res) => {
 //---------- TODO - figure out how to get peak time bc this isnt working. will have to likely seed times and parks to do this ----------//
     // If park found find all users whose favorite_park include this park name 
     // and then find peak time from users who like this park
-    const usersCollection = await users(); 
-    const userDocs = await usersCollection.find({ favorite_parks: matchedPark.park_name }).toArray();
+    // const usersCollection = await users(); 
+    // const userDocs = await usersCollection.find({ favorite_parks: matchedPark.park_name }).toArray();
   
-    //Count time intervals across those users
-    const timeCounts = {};
-    for (const u of userDocs) {
-      if (!Array.isArray(u.times)) continue;
+    // //Count time intervals across those users
+    // const timeCounts = {};
+    // for (const u of userDocs) {
+    //   if (!Array.isArray(u.times)) continue;
 
-      for (let t of u.times) {
-        if (!t) continue;
-        t = t.trim();
-        if (!t) continue;
+    //   for (let t of u.times) {
+    //     if (!t) continue;
+    //     t = t.trim();
+    //     if (!t) continue;
 
-        timeCounts[t] = (timeCounts[t] || 0) + 1;
-      }
-    }
+    //     timeCounts[t] = (timeCounts[t] || 0) + 1;
+    //   }
+    // }
 
-    //Determine the single peak time (if any)
-    let peakTime = null;
-    let maxCount = 0;
-    for (const [t, count] of Object.entries(timeCounts)) {
-      if (count > maxCount) {
-        maxCount = count;
-        peakTime = t;
-      }
-    }
+    // //Determine the single peak time (if any)
+    // let peakTime = null;
+    // let maxCount = 0;
+    // for (const [t, count] of Object.entries(timeCounts)) {
+    //   if (count > maxCount) {
+    //     maxCount = count;
+    //     peakTime = t;
+    //   }
+    // }
 
     //Render home with search results
     return res.status(200).render('home', {
@@ -81,7 +81,7 @@ router.route('/search').get(async (req, res) => {
       parkFound: true,
       park: matchedPark,
       parkLink: `/parks/${matchedPark._id}`,
-      peakTime
+      //peakTime
     });
   } catch (e) {
     return res.status(400).render('error', {message: e.toString()});
