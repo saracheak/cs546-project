@@ -3,9 +3,13 @@ import { commentsFunctions } from "../data/comments.js";
 import {parksFunctions} from "../data/parks.js";
 import { ratingsFunctions } from "../data/ratings.js";
 import { requireLogin } from "../middleware.js";
-import { checkString } from "../validation.js";
+import { checkIdInRatings, checkString } from "../validation.js";
 import { usersFunctions } from "../data/users.js";
 import xss from "xss";
+import {users} from "../config/mongoCollections.js"
+import { ObjectId } from "mongodb";
+import { biscuitsFunctions } from "../data/biscuits.js";
+
 
 const router = Router();
 
@@ -37,6 +41,7 @@ router.get("/", async(req, res)=> {
 router.post("/:parkId/comments", requireLogin, async (req, res) => {
     try{
         let {parkId} = req.params;
+        parkId= checkIdInRatings(parkId, "parkId");
         parkId= checkString(parkId, "parkId");
 
         let commentText = checkString(req.body.comment, "comment");
@@ -59,6 +64,8 @@ router.post("/:parkId/comments", requireLogin, async (req, res) => {
             user_id: userId,
             comment: commentText,
         });
+
+        await biscuitsFunctions.autoAwardBiscuits(userId);//update biscuit
 
         const timestamp = new Date(newComment.timestamp).toLocaleString();
         const user = await usersFunctions.getUser(userId);
@@ -93,7 +100,7 @@ router.post("/comments/:commentId/delete", requireLogin, async (req, res) =>{
         commentId = checkString(commentId, "commentId");
 
         let {parkId} = req.body;
-        parkId= checkString(parkId, "parkId");
+        parkId= checkIdInRatings(parkId, "parkId");
 
         const isAdmin = res.locals.isAdmin === true;
 
@@ -115,7 +122,7 @@ router.post("/comments/:commentId/like", requireLogin, async (req, res) => {
         commentId = checkString(commentId, "commentId");
         
         let {parkId} = req.body;
-        parkId = checkString(parkId, "parkId");
+        parkId = checkIdInRatings(parkId, "parkId");
 
         const likes = await commentsFunctions.likeUnlikeComment(commentId, req.session.userId)
 
@@ -218,7 +225,7 @@ router.post("/new", async (req, res) => {
 router.get("/:parkId/comments", async (req, res)=>{
     try{
         let {parkId} = req.params;
-        parkId = checkString(parkId, "parkId");
+        parkId = checkIdInRatings(parkId, "parkId");
         
        await parksFunctions.getParkById(parkId);
        const comments = await commentsFunctions.getCommentsForPark(parkId);
@@ -232,7 +239,7 @@ router.get("/:parkId/comments", async (req, res)=>{
 router.get("/:parkId", async (req, res) => {
   try {
     let { parkId } = req.params;
-    parkId = checkString(parkId, "parkId");
+    parkId = checkIdInRatings(parkId, "parkId");
 
     // fetch once
     const park = await parksFunctions.getParkById(parkId);
@@ -243,6 +250,12 @@ router.get("/:parkId", async (req, res) => {
 
     const currentUserId = req.session.userId;
     const isAdmin = res.locals.isAdmin === true;
+
+    let hasRated = false;
+    if(!!currentUserId){
+        const existingRating = await ratingsFunctions.getUserRatingForPark(parkId, req.session.userId);
+        hasRated = !!existingRating;
+    }
 
     for (const c of comments) {
       c.canDelete =
@@ -257,6 +270,7 @@ router.get("/:parkId", async (req, res) => {
           user?.human_first_name ||
           user?.email ||
           "Unknown pup";
+          
       } catch (e) {
         c.authorName = "Unknown pup";
       }
@@ -268,11 +282,90 @@ router.get("/:parkId", async (req, res) => {
       comments,
       ratings,
       ratingSummary,
-      hasRatings: ratings.length > 0
+      hasRatings: ratings.length > 0,
+      hasRated
     });
   } catch (e) {
     console.error("ERROR in GET /parks/:parkId:", e);
     return res.status(404).render("error", {error: e.toString(), bodyClass: "error-page"});
   }
 });
+
+router.post("/favorite-park", async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const { parkId } = req.body;
+        console.log("This park's id is", parkId);
+        if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
+
+        await usersCollection.updateOne(
+            { _id: new ObjectId(userId), favoriteParks: { $ne: new ObjectId(parkId) } },
+            { $push: { favoriteParks: new ObjectId(parkId) } }
+        );
+
+        await biscuitsFunctions.autoAwardBiscuits(userId);//update biscuits
+
+        res.json({ success: true, message: "Park added to favorites" });
+    } catch (e) {
+        res.status(400).json({ success: false, error: e.message });
+    }
+});
+
+router.post("/unfavorite-park", async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const { parkId } = req.body;
+
+        if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
+
+        await usersCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $pull: { favoriteParks: new ObjectId(parkId) } }
+        );
+
+        res.json({ success: true, message: "Park removed from favorites" });
+    } catch (e) {
+        res.status(400).json({ success: false, error: e.message });
+    }
+});
+
+
+router.post("/visited-park", async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const { parkId } = req.body;
+        console.log("This park's id is", parkId);
+        if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
+
+        await usersCollection.updateOne(
+            { _id: new ObjectId(userId), parksVisited: { $ne: new ObjectId(parkId) } },
+            { $push: { parksVisited: new ObjectId(parkId) } }
+        );
+
+        await biscuitsFunctions.autoAwardBiscuits(userId);//update biscuit
+
+        res.json({ success: true, message: "Park added to visited parks" });
+    } catch (e) {
+        res.status(400).json({ success: false, error: e.message });
+    }
+});
+
+router.post("/unvisited-park", async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const { parkId } = req.body;
+
+        if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
+
+        await usersCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $pull: { parksVisited: new ObjectId(parkId) } }
+        );
+
+        res.json({ success: true, message: "Park removed from visited parks" });
+    } catch (e) {
+        res.status(400).json({ success: false, error: e.message });
+    }
+});
+
 export default router;

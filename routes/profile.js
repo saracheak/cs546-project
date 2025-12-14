@@ -14,8 +14,6 @@ router.get("/", async (req, res) => {
     const userId = req.session.userId;
     const user = await usersFunctions.getUser(userId);
 
-    console.log("user details pulled from /get profile", user);
-
     //since parks and friends are stored as IDs, convert first to their names
     const favoriteParks = await favoriteParksIdToName(await usersFunctions.getFavParks(userId));
     const parksVisited = await parksVisitedIDToName(await usersFunctions.getParksVisited(userId));

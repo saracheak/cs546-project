@@ -1,0 +1,117 @@
+<section class="rating-page">
+  <div class="rating-card">
+    <h1>{{title}}</h1>
+
+  {{#if error}}
+    <p class="form-error">{{error}}</p>
+  {{/if}}
+
+  {{#if cannotRate}}
+    <p class="form-note">You already rated this park.</p>
+
+    {{#if existingRating}}
+        <div class="rating-existing">
+        <p><strong>Cleanliness:</strong> {{existingRating.scores.cleanliness}}</p>
+        <p><strong>Dog Friendliness:</strong> {{existingRating.scores.dog_friendliness}}</p>
+        <p><strong>Busyness:</strong> {{existingRating.scores.busyness}}</p>
+        <p><strong>Water Availability:</strong> {{existingRating.scores.water_availability}}</p>
+        <p><strong>Wastebag Availability:</strong> {{existingRating.scores.wastebag_availability}}</p>
+        <p><strong>Trash Availability:</strong> {{existingRating.scores.trash_availability}}</p>
+        <p><strong>Surface:</strong> {{existingRating.scores.surface}}</p>
+        <p><strong>Amenities:</strong> {{existingRating.scores.amenities}}</p>
+
+        {{#if existingRating.dog_size}}
+            <p><strong>Dog size:</strong> {{existingRating.dog_size}}</p>
+        {{/if}}
+
+        <p><strong>Comment:</strong> {{existingRating.comment}}</p>
+
+        <a href="/parks/{{parkId}}">Back to park</a>
+        </div>
+    {{/if}}
+
+
+  {{else}}
+
+      <form method="POST" action="/parks/{{parkId}}/ratings" class="rating-form" novalidate>
+       
+        <div class="rating-grid">
+          <div class="field">
+            <label for="overall">Overall (0-5)</label>
+            <input id="overall" name="overall" type="number" min="0" max="5" step="1"
+              value="{{formData.overall}}" required />
+          </div>
+
+          <div class="field">
+            <label for="cleanliness">Cleanliness (0-5)</label>
+            <input id="cleanliness" name="cleanliness" type="number" min="0" max="5" step="1"
+              value="{{formData.cleanliness}}" required />
+          </div>
+
+          <div class="field">
+            <label for="dog_friendliness">Dog Friendliness (0-5)</label>
+            <input id="dog_friendliness" name="dog_friendliness" type="number" min="0" max="5" step="1"
+              value="{{formData.dog_friendliness}}" required />
+          </div>
+
+          <div class="field">
+            <label for="busyness">Busyness (0-5)</label>
+            <input id="busyness" name="busyness" type="number" min="0" max="5" step="1"
+              value="{{formData.busyness}}" required />
+          </div>
+
+          <div class="field">
+            <label for="water_availability">Water Availability (0-5)</label>
+            <input id="water_availability" name="water_availability" type="number" min="0" max="5" step="1"
+              value="{{formData.water_availability}}" required />
+          </div>
+
+          <div class="field">
+            <label for="wastebag_availability">Wastebag Availability (0-5)</label>
+            <input id="wastebag_availability" name="wastebag_availability" type="number" min="0" max="5" step="1"
+              value="{{formData.wastebag_availability}}" required />
+          </div>
+
+          <div class="field">
+            <label for="trash_availability">Trash Availability (0-5)</label>
+            <input id="trash_availability" name="trash_availability" type="number" min="0" max="5" step="1"
+              value="{{formData.trash_availability}}" required />
+          </div>
+
+          <div class="field">
+            <label for="surface">Surface (0-5)</label>
+            <input id="surface" name="surface" type="number" min="0" max="5" step="1"
+              value="{{formData.surface}}" required />
+          </div>
+
+          <div class="field">
+            <label for="amenities">Amenities (0-5)</label>
+            <input id="amenities" name="amenities" type="number" min="0" max="5" step="1"
+              value="{{formData.amenities}}" required />
+          </div>
+
+          <div class="field">
+            <label for="dog_size">Dog size</label>
+            <select id="dog_size" name="dog_size" required>
+              <option value="">Select</option>
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+
+          <div class="field field-wide">
+            <label for="comment">Comment (required)</label>
+            <textarea id="comment" name="comment" rows="4" maxlength="500" required>{{formData.comment}}</textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn">Submit Rating</button>
+          <a class="btn btn-secondary" href="/parks/{{parkId}}">Cancel</a>
+        </div>
+      </form>
+
+    {{/if}}
+  </div>
+</section>
