@@ -1,8 +1,10 @@
 import {Router} from 'express';
 
-import { checkId, checkIdInRatings } from '../validation.js';
+import { checkString, checkIdInRatings } from '../validation.js';
 import { ratingsFunctions } from '../data/ratings.js';
 import { parksFunctions } from '../data/parks.js';
+import xss from 'xss';
+
 
 const router = Router();
 
@@ -11,31 +13,33 @@ router.get('/:parkId/ratings', async (req, res) => {
   console.log("routes/ratings.js has been loaded");
 
   try {
-    parkId = checkIdInRatings(req.params.parkId, 'parkId');
+    parkId = checkIdInRatings(req.params.parkId, 'park id');
   } catch (e) {
     return res.status(400).render('error', { error: e.toString() });
   }
 
-  const user = req.session.user;
-  if (!user) {
+  const userId = req.session.userId;
+  if (!userId) {
     return res
       .status(401)
       .render('error', { error: 'You must be logged in to leave a rating.' });
   }
   try {
-    const existing = await ratingsFunctions.getUserRatingForPark(parkId, user._id);
+    const existing = await ratingsFunctions.getUserRatingForPark(parkId, req.session.userId);
     if (existing) {
       return res.status(200).render('ratingForm', {
         title: 'Rating',
         parkId,
         cannotRate: true,
-        existingRating: existing
+        existingRating: existing,
+        bodyClass: "home-body"
       });
     }
     return res.status(200).render('ratingForm', {
       title: 'Rating',
       parkId,
-      cannotRate: false
+      cannotRate: false,
+      bodyClass: "home-body"
     });
     }catch (e) {
     console.error(e);
@@ -47,26 +51,28 @@ router.post('/:parkId/ratings', async (req, res) => {
   let parkId;
 
   try {
-    parkId = checkId(req.params.parkId, 'park id');
+    parkId = checkIdInRatings(req.params.parkId, 'park id');
   } catch (e) {
     return res.status(400).render('error', { error: e.toString() });
   }
 
-  const user = req.session.user;
-  if (!user) {
+  const currentUserId = req.session.userId;   
+  if (!currentUserId) {
     return res
       .status(401)
       .render('error', { error: 'You must be logged in to leave a rating.' });
   }
   try {
-    const existing = await ratingsFunctions.getUserRatingForPark(parkId, user._id);
+    const existing = await ratingsFunctions.getUserRatingForPark(parkId, req.session.userId);
     if (existing) {
       return res.status(400).render('ratingForm', {
         title: 'Rating',
-        parkId,
+        parkId:parkId,
+        user_id:currentUserId,
         cannotRate: true,
         existingRating: existing,
-        error: 'You have already rated this park.'
+        error: 'You have already rated this park.',
+        bodyClass: "home-body"
       });
     }
     let {
@@ -104,10 +110,12 @@ router.post('/:parkId/ratings', async (req, res) => {
     comment = xss(comment.trim());
     if (!comment) throw 'Comment cannot be empty';
 
-    const newRating = await ratingsFunctions.createRating({
-      parkId: park._id,
-      userId: user._id,
-      overall,
+    let { dog_size } = req.body;
+    dog_size = checkString(dog_size, "dog size");
+    
+    await ratingsFunctions.createRating({
+      parkId:parkId,
+      user_id: req.session.userId,
       cleanliness,
       dog_friendliness,
       busyness,
@@ -116,11 +124,14 @@ router.post('/:parkId/ratings', async (req, res) => {
       trash_availability,
       surface,
       amenities,
-      comment
+      comment,
+      dog_size
     });
 
-    const ratings = await ratingsFunctions.getRatingsForPark(parkId);
-     return res.json(ratings);
+    // const ratings = await ratingsFunctions.getRatingsForPark(parkId);
+    //  return res.json(ratings);
+    return res.redirect(`/parks/${parkId}`);
+
   } catch (e) {
     console.error(e);
     return res.status(400).render('ratingForm', {
@@ -128,9 +139,37 @@ router.post('/:parkId/ratings', async (req, res) => {
       parkId,
       cannotRate: false,
       error: e.toString(),
-      formData: req.body
+      formData: req.body,
+      bodyClass: "home-body"
     });
   }
+});
+
+router.get('/:parkId/ratings/new', async (req, res) => {
+
+  const parkId = checkIdInRatings(req.params.parkId, 'parkId');
+
+  const currentUserId = req.session.userId;
+  if (!currentUserId) {
+    return res.status(401).render('error', { error: 'You must be logged in to leave a rating.' });
+  }
+
+  const existing = await ratingsFunctions.getUserRatingForPark(parkId, req.session.userId);
+  if (existing) {
+    return res.status(200).render('ratingForm', {
+      title: 'Rating',
+      parkId:parkId,
+      cannotRate: true,
+      existingRating: existing,
+      bodyClass: "home-body"
+    });
+  }
+  return res.status(200).render('ratingForm', {
+    title: 'Rating',
+    parkId,
+    cannotRate: false,
+    bodyClass: "home-body"
+  });
 });
 
 router.get('/:parkId/ratings/summary', async (req, res) => {

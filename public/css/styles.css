@@ -865,7 +865,6 @@ box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
     margin-bottom: 20px;
 }
 
-/* Form layout */
 .new-park-form div {
     display: flex;
     flex-direction: column;
@@ -893,7 +892,6 @@ box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
     border-color: #d2a46c;
 }
 
-/* Submit button */
 .new-park-form button {
     margin-top: 15px;
     align-self: center;
@@ -906,4 +904,139 @@ box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
     border-radius: 12px;
     text-align: center;
   }
-  
+
+.rating-page {
+  max-width: 980px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+.rating-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  padding: 26px 28px;
+}
+
+.rating-card h1 {
+  margin: 0 0 14px 0;
+  font-size: 40px;
+  line-height: 1.1;
+}
+
+.form-error {
+  color: #b00020;
+  background: #fff2f2;
+  border: 1px solid #ffd0d0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin: 10px 0 14px 0;
+}
+
+.form-note {
+  background: #f4f4f4;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 10px 0 18px 0;
+  color: #333;
+}
+
+.rating-existing {
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+.rating-existing p {
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.rating-existing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 26px;
+  padding: 14px 0 12px 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.rating-existing-grid p {
+  margin: 5px;
+  font-size: 16px;
+}
+
+.rating-existing-comment {
+  margin-top: 14px;
+}
+
+.rating-existing-comment p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 700;
+  background: #c99a63;
+  color: #fff;
+}
+
+.btn:hover {
+  opacity: 0.92;
+}
+
+.btn-secondary {
+  background: #ece7dd;
+  color: #2b2b2b;
+}
+
+.btn-secondary:hover {
+  opacity: 0.92;
+}
+
+.rating-form {
+  margin-top: 12px;
+}
+
+.rating-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 14px 18px;
+}
+
+.field label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 10px 10px;
+  border-radius: 10px;
+  border: 1px solid #d7d7d7;
+  background: #fff;
+  font-size: 14px;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.field-wide {
+  grid-column: 1 / -1;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+}
