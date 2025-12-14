@@ -130,8 +130,6 @@ export const commentsFunctions = {
                 { _id: new ObjectId(user_id) },
                 { $inc: { commentCount: 1 } }
               );
-              await biscuitsFunctions.autoAwardBiscuits(user_id); //autoaward biscuits
-
             await biscuitsFunctions.autoAwardBiscuits(user_id); //auto award biscuit based on comment number
             return prepComment(commentObject);
         }catch(e){
