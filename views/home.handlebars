@@ -78,7 +78,7 @@
             </p>
 
             {{#if peakTime}}
-                <p>The most popular time interval at this park is: <strong>{{peakTime}}</strong></p>
+                <p>The busiest time at this park is: {{peakTime}} (based on {{peakTimeCount}} users)</p>
             {{else}}
                 <p>We don’t have enough data yet to estimate a busy time.</p>
             {{/if}}
