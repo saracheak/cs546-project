@@ -37,6 +37,12 @@
        
         <div class="rating-grid">
           <div class="field">
+            <label for="overall">Overall (0-5)</label>
+            <input id="overall" name="overall" type="number" min="0" max="5" step="1"
+              value="{{formData.overall}}" required />
+          </div>
+
+          <div class="field">
             <label for="cleanliness">Cleanliness (0-5)</label>
             <input id="cleanliness" name="cleanliness" type="number" min="0" max="5" step="1"
               value="{{formData.cleanliness}}" required />
