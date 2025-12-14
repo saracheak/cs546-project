@@ -80,48 +80,33 @@
 
 {{!-- Search results --}}
 {{#if searchQuery}}
-<section class="park-search-results">
+  <section class="park-search-results">
     <h2>Search results for "{{searchQuery}}"</h2>
 
-<<<<<<< HEAD
-            {{#if parkFound}}
-            <p> We found <a href="{{parkLink}}">{{park.park_name}}</a>.</p>
-                {{#if peakTimes.length}}
-                <p>
-                    The busiest time(s) at this park is:
-                    {{#each peakTimes}} {{!-- loops through the peakTimes array --}}
-                        {{this}}{{#unless @last}}, {{/unless}} {{!-- adds a comma after every string except the last one in the array --}}
-                    {{/each}}
-                    (based on {{peakTimeCount}} user(s))
-                </p>
-                {{else}}
-                <p>We don’t have enough data yet to estimate a busy time.</p>
-                {{/if}}
-            {{else}}
-            <p>No park matched your search.</p>
-            <p>
-                Would you like to submit a new park?
-                <a href="/parks/new">Click here to submit a park.</a>
-=======
     {{#if parkFound}}
-        <p>
-            We found <a href="{{parkLink}}">{{park.park_name}}</a>.
-        </p>
+      <p>We found <a href="/parks/{{park._id}}">{{park.park_name}}</a>.</p>
 
-        {{#if peakTime}}
-            <p>The most popular time interval at this park is:
-                <strong>{{peakTime}}</strong>
->>>>>>> origin
-            </p>
+      {{#if peakTimes}}
+        {{#if peakTimes.length}}
+          <p>
+            The busiest time(s) at this park is:
+            {{#each peakTimes}}
+              {{this}}{{#unless @last}}, {{/unless}}
+            {{/each}}
+            (based on {{peakTimeCount}} user(s))
+          </p>
         {{else}}
-            <p>We don’t have enough data yet to estimate a busy time.</p>
+          <p>We don’t have enough data yet to estimate a busy time.</p>
         {{/if}}
+      {{else}}
+        <p>We don’t have enough data yet to estimate a busy time.</p>
+      {{/if}}
     {{else}}
-        <p>No park matched your search.</p>
-        <p>
-            Would you like to submit a new park?
-            <a href="/parks/new">Click here to submit a park.</a>
-        </p>
+      <p>No park matched your search.</p>
+      <p>
+        Would you like to submit a new park?
+        <a href="/parks/new">Click here to submit a park.</a>
+      </p>
     {{/if}}
-</section>
+  </section>
 {{/if}}
