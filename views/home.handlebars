@@ -73,15 +73,18 @@
             <h2>Search results for "{{searchQuery}}"</h2>
 
             {{#if parkFound}}
-            <p>
-                We found <a href="{{parkLink}}">{{park.park_name}}</a>.
-            </p>
-
-            {{#if peakTime}}
-                <p>The busiest time at this park is: {{peakTime}} (based on {{peakTimeCount}} users)</p>
-            {{else}}
+            <p> We found <a href="{{parkLink}}">{{park.park_name}}</a>.</p>
+                {{#if peakTimes.length}}
+                <p>
+                    The busiest time(s) at this park is:
+                    {{#each peakTimes}} {{!-- loops through the peakTimes array --}}
+                        {{this}}{{#unless @last}}, {{/unless}} {{!-- adds a comma after every string except the last one in the array --}}
+                    {{/each}}
+                    (based on {{peakTimeCount}} user(s))
+                </p>
+                {{else}}
                 <p>We don’t have enough data yet to estimate a busy time.</p>
-            {{/if}}
+                {{/if}}
             {{else}}
             <p>No park matched your search.</p>
             <p>
