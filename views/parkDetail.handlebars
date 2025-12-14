@@ -46,71 +46,45 @@
         <section class="park-comments-section">
             <h2>Comments</h2>
 
-            {{#if comments.length}}
-                <ul class="comments-list">
-                    {{#each comments}}
-                        <li class="comment-item" data-comment-id="{{this._id}}">
-                            <p class="comment-text">
-                                {{this.comment}}
-                            </p>
+            <div class="comment-list" id="comment-list" data-park-id="{{park._id}}">
+                {{#each comments}}
+                    <div class="comment-item" data-comment-id="{{this._id}}">
+                        <p class="comment-text">{{this.comment}}</p>
 
-                            <p class="comment-details">
-                                <span class="comment-author">
-                                    {{#if this.authorName}}
-                                        {{this.authorName}}
-                                    {{else}}
-                                        Anonymous Pup
-                                    {{/if}}
-                                </span>
-                                <span class="comment-date">
-                                    {{#if this.timestamp}}
-                                        {{this.timestamp}}
-                                    {{else}}
-                                        (no timestamp)
-                                    {{/if}}
-                                </span>
-                            </p>
-
-                            <div class="comment-interaction">
-                                {{#if ../isLoggedIn}}
-                                    <form 
-                                        method="POST"
-                                        action="/parks/comments/{{this._id}}/like"
-                                        class="inline-form"
-                                    >
-                                        <input type="hidden" name="parkId" value="{{../park._id}}">
-                                        <button
-                                            type="submit"
-                                            class="comment-like-button"
-                                        >
-                                        🦴 <span class="like-count">{{this.likes}}</span>
-                                        </button>
-                                    </form>
+                        <p class="comment-details">
+                            <span class="comment-author">
+                                {{#if this.authorName}}
+                                    {{this.authorName}}
+                                {{else}}
+                                    Anonymous Pup
                                 {{/if}}
+                            </span>
+                            <span class="comment-date">
+                                {{#if this.timestamp}}
+                                    {{this.timestamp}}
+                                {{else}}
+                                    (no timestamp)
+                                {{/if}}
+                            </span>
+                        </p>
 
-                                {{#if this.canDelete}}
-                                    <form
-                                        method="POST"
-                                        action="/parks/comments/{{this._id}}/delete"
-                                        class="inline-form"
-                                    >
-                                        <input type="hidden" name="parkId" value="{{../park._id}}">
-                                        <button
-                                            type="submit"
-                                            class="comment-delete-button"
-                                            data-comment-id="{{this._id}}"
-                                        >
-                                            Delete 
-                                        </button>
-                                    </form>
-                                {{/if}} 
-                            </div>
-                        </li>
-                    {{/each}}
-                </ul>
-            {{else}}
-                <p> No comments yet. Be the first to comment!</p>
-            {{/if}}
+                        <div class="comment-interaction">
+                            {{#if ../isLoggedIn}}
+                                <button type="button" class="comment-like-button" data-comment-id="{{this._id}}">
+                                    🦴 
+                                    <span class="like-count">{{this.likes}}</span>
+                                </button>
+                            {{/if}}
+
+                            {{#if this.canDelete}}
+                                <button type="button" class="comment-delete-button" data-comment-id="{{this._id}}">
+                                    Delete
+                                </button>
+                            {{/if}} 
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
         </section>
 
         <hr />
@@ -173,6 +147,6 @@
     </div>
 </section>
 
-<script src="/public/js/comments.js"></script>
+<script src="/js/comments.js"></script>
 
 <script src="/js/parks.js"></script>

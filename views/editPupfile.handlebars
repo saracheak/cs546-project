@@ -1,115 +1,138 @@
-{{!-- for filling out a form to edit my profile details --}}
+<div class="edit-pupfile-container">
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Edit PupFile</title>
-        <link rel="stylesheet" href="/css/styles.css">
-    </head>
-    
-    <body class="edit-pupfile-body">
-        <div class="edit-pupfile-container">
-        <header>
-            <h1>🐾 Edit My PupFile 🐶</h1>
-        </header>
-        <p>Update fields</p>
-        <div id="edit-pupfile-error" class="edit-pupfile-error">
-            {{#if error}}
+    <header>
+        <h1>🐾 Edit My PupFile 🐶</h1>
+    </header>
+
+    <p>Update fields</p>
+
+    <div id="edit-pupfile-error" class="edit-pupfile-error">
+        {{#if error}}
             <p>{{error}}</p>
-            {{/if}}
-        </div>
-        <form action="/editPupfile" method="POST" id="edit-pupfile-form">
-            <label for="dogName">Dog Name</label><br>
-            <input type="text" name="dogName" id="dogName" 
-                value="{{#if formData}}{{formData.dogName}}{{else}}{{user.dogName}}{{/if}}"><br><br>
+        {{/if}}
+    </div>
 
-            <label for="humanFirstName">Human's First Name</label><br>
-            <input type="text" name="humanFirstName" id="humanFirstName" 
-                value="{{#if formData}}{{formData.humanFirstName}}{{else}}{{user.humanFirstName}}{{/if}}"><br><br>
+    <form action="/editPupfile" method="POST" id="edit-pupfile-form">
 
-            <label for="humanLastName">Human's Last Name</label><br>
-            <input type="text" name="humanLastName" id="humanLastName" 
-                value="{{#if formData}}{{formData.humanLastName}}{{else}}{{user.humanLastName}}{{/if}}"><br><br>
+        <label for="dogName">Dog Name</label><br>
+        <input
+            type="text"
+            name="dogName"
+            id="dogName"
+            value="{{#if formData}}{{formData.dogName}}{{else}}{{user.dogName}}{{/if}}"
+        ><br><br>
 
-            <label for="dogGender">Dog Gender</label><br>
-            <select name="dogGender" id="dogGender"><br><br>
-                <option value=""></option>
-                <option value="Male" {{selectIfEqual selectedDogGender "Male"}}>Male</option>
-                <option value="Female" {{selectIfEqual selectedDogGender "Female"}}>Female</option>
-            </select> <br><br>
+        <label for="humanFirstName">Human's First Name</label><br>
+        <input
+            type="text"
+            name="humanFirstName"
+            id="humanFirstName"
+            value="{{#if formData}}{{formData.humanFirstName}}{{else}}{{user.humanFirstName}}{{/if}}"
+        ><br><br>
 
-            <label for="humanGender">Human Gender</label><br>
-            <select name="humanGender" id="humanGender"><br><br>
-                <option value=""></option>
-                <option value="Male" {{selectIfEqual selectedHumanGender "Male"}}>Male</option>
-                <option value="Female" {{selectIfEqual selectedHumanGender "Female"}}>Female</option>
-                <option value="Non-Binary" {{selectIfEqual selectedHumanGender "Non-Binary"}}>Non-Binary</option>
-                <option value="Prefer Not to Say" {{selectIfEqual selectedHumanGender "Prefer Not to Say"}}>Prefer Not to Say</option>
-                <option value="Other" {{selectIfEqual selectedHumanGender "Other"}}>Other</option>
-            </select> <br><br>
-        
-            <label for="bio">Write an optional short bio:</label><br>
-            <input type="text" name="bio" id="bio"
-            value="{{#if formData}}{{formData.bio}}{{else}}{{user.bio}}{{/if}}"><br><br>
+        <label for="humanLastName">Human's Last Name</label><br>
+        <input
+            type="text"
+            name="humanLastName"
+            id="humanLastName"
+            value="{{#if formData}}{{formData.humanLastName}}{{else}}{{user.humanLastName}}{{/if}}"
+        ><br><br>
 
-            <label>Times you'll likely be at the park</label><br>
-            <input type="checkbox" name="times[]" id="t-06" value="06:00-07:00" {{{timesIncludes times "06:00-07:00"}}}>
-            <label for="t-06">06:00–07:00</label><br><br>
+        <label for="dogGender">Dog Gender</label><br>
+        <select name="dogGender" id="dogGender">
+            <option value="">Select a Gender</option>
+            <option value="Male" {{selectIfEqual selectedDogGender "Male"}}>Male</option>
+            <option value="Female" {{selectIfEqual selectedDogGender "Female"}}>Female</option>
+        </select>
+        <br><br>
 
-            <input type="checkbox" name="times[]" id="t-07" value="07:00-08:00" {{{timesIncludes times "07:00-08:00"}}}>
-            <label for="t-07">07:00–08:00</label><br><br>
+        <label for="humanGender">Human Gender</label><br>
+        <select name="humanGender" id="humanGender">
+            <option value="">Select a Gender</option>
+            <option value="Male" {{selectIfEqual selectedHumanGender "Male"}}>Male</option>
+            <option value="Female" {{selectIfEqual selectedHumanGender "Female"}}>Female</option>
+            <option value="Non-Binary" {{selectIfEqual selectedHumanGender "Non-Binary"}}>Non-Binary</option>
+            <option value="Prefer Not to Say" {{selectIfEqual selectedHumanGender "Prefer Not to Say"}}>Prefer Not to Say</option>
+            <option value="Other" {{selectIfEqual selectedHumanGender "Other"}}>Other</option>
+        </select>
+        <br><br>
 
-            <input type="checkbox" name="times[]" id="t-08" value="08:00-09:00" {{{timesIncludes times "08:00-09:00"}}}>
-            <label for="t-08">08:00–09:00</label><br><br>
+        <label for="bio">Write an optional short bio:</label><br>
+        <input
+            type="text"
+            name="bio"
+            id="bio"
+            value="{{#if formData}}{{formData.bio}}{{else}}{{user.bio}}{{/if}}"
+        ><br><br>
 
-            <input type="checkbox" name="times[]" id="t-09" value="09:00-10:00" {{{timesIncludes times "09:00-10:00"}}}>
-            <label for="t-09">09:00–10:00</label><br><br>
+        <label>Times you'll likely be at the park</label><br>
 
-            <input type="checkbox" name="times[]" id="t-10" value="10:00-11:00" {{{timesIncludes times "10:00-11:00"}}}>
-            <label for="t-10">10:00–11:00</label><br><br>
+        {{!-- Times checkboxes --}}
+        <input type="checkbox" name="times[]" id="t-06" value="06:00-07:00" {{{timesIncludes times "06:00-07:00"}}}>
+        <label for="t-06">06:00–07:00</label><br><br>
 
-            <input type="checkbox" name="times[]" id="t-11" value="11:00-12:00" {{{timesIncludes times "11:00-12:00"}}}>
-            <label for="t-11">11:00–12:00</label><br><br>
+        <input type="checkbox" name="times[]" id="t-07" value="07:00-08:00" {{{timesIncludes times "07:00-08:00"}}}>
+        <label for="t-07">07:00–08:00</label><br><br>
 
-            <input type="checkbox" name="times[]" id="t-12" value="12:00-13:00" {{{timesIncludes times "12:00-13:00"}}}>
-            <label for="t-12">12:00–13:00</label><br><br>
+        <input type="checkbox" name="times[]" id="t-08" value="08:00-09:00" {{{timesIncludes times "08:00-09:00"}}}>
+        <label for="t-08">08:00–09:00</label><br><br>
 
-            <input type="checkbox" name="times[]" id="t-13" value="13:00-14:00" {{{timesIncludes times "13:00-14:00"}}}>
-            <label for="t-13">13:00–14:00</label><br><br>
+        <input type="checkbox" name="times[]" id="t-09" value="09:00-10:00" {{{timesIncludes times "09:00-10:00"}}}>
+        <label for="t-09">09:00–10:00</label><br><br>
 
-            <input type="checkbox" name="times[]" id="t-14" value="14:00-15:00" {{{timesIncludes times "14:00-15:00"}}}>
-            <label for="t-14">14:00–15:00</label><br><br>
+        <input type="checkbox" name="times[]" id="t-10" value="10:00-11:00" {{{timesIncludes times "10:00-11:00"}}}>
+        <label for="t-10">10:00–11:00</label><br><br>
 
-            <input type="checkbox" name="times[]" id="t-15" value="15:00-16:00" {{{timesIncludes times "15:00-16:00"}}}>
-            <label for="t-15">15:00–16:00</label><br><br>
+        <input type="checkbox" name="times[]" id="t-11" value="11:00-12:00" {{{timesIncludes times "11:00-12:00"}}}>
+        <label for="t-11">11:00–12:00</label><br><br>
 
-            <input type="checkbox" name="times[]" id="t-16" value="16:00-17:00" {{{timesIncludes times "16:00-17:00"}}}>
-            <label for="t-16">16:00–17:00</label><br><br>
+        <input type="checkbox" name="times[]" id="t-12" value="12:00-13:00" {{{timesIncludes times "12:00-13:00"}}}>
+        <label for="t-12">12:00–13:00</label><br><br>
 
-            <input type="checkbox" name="times[]" id="t-17" value="17:00-18:00" {{{timesIncludes times "17:00-18:00"}}}>
-            <label for="t-17">17:00–18:00</label><br><br>
+        <input type="checkbox" name="times[]" id="t-13" value="13:00-14:00" {{{timesIncludes times "13:00-14:00"}}}>
+        <label for="t-13">13:00–14:00</label><br><br>
 
-            <input type="checkbox" name="times[]" id="t-18" value="18:00-19:00" {{{timesIncludes times "18:00-19:00"}}}>
-            <label for="t-18">18:00–19:00</label><br><br>
+        <input type="checkbox" name="times[]" id="t-14" value="14:00-15:00" {{{timesIncludes times "14:00-15:00"}}}>
+        <label for="t-14">14:00–15:00</label><br><br>
 
-            <input type="checkbox" name="times[]" id="t-19" value="19:00-20:00" {{{timesIncludes times "19:00-20:00"}}}>
-            <label for="t-19">19:00–20:00</label><br><br>
+        <input type="checkbox" name="times[]" id="t-15" value="15:00-16:00" {{{timesIncludes times "15:00-16:00"}}}>
+        <label for="t-15">15:00–16:00</label><br><br>
 
-            <input type="checkbox" name="times[]" id="t-20" value="20:00-21:00" {{{timesIncludes times "20:00-21:00"}}}>
-            <label for="t-20">20:00–21:00</label><br><br>
+        <input type="checkbox" name="times[]" id="t-16" value="16:00-17:00" {{{timesIncludes times "16:00-17:00"}}}>
+        <label for="t-16">16:00–17:00</label><br><br>
 
-            <input type="checkbox" name="times[]" id="t-21" value="21:00-22:00" {{{timesIncludes times "21:00-22:00"}}}>
-            <label for="t-21">21:00–22:00</label><br><br>
+        <input type="checkbox" name="times[]" id="t-17" value="17:00-18:00" {{{timesIncludes times "17:00-18:00"}}}>
+        <label for="t-17">17:00–18:00</label><br><br>
 
-            <label for="petFriends">Pet Friends</label><br>
-            <input type="text" name="petFriends" id="petFriends"
-                value="{{#if formData}}{{formData.petFriends}}{{else}}{{user.petFriends}}{{/if}}"><br><br>
+        <input type="checkbox" name="times[]" id="t-18" value="18:00-19:00" {{{timesIncludes times "18:00-19:00"}}}>
+        <label for="t-18">18:00–19:00</label><br><br>
 
-            <button type="submit">Save Changes</button>
-            <br><br>
-        </form>
-        <p class="back-link"><a href="/home">Back to home</a></p>
-        <p class="back-link"><a href="/profile">Back to my PupFile (changes will not be saved)</a></p>
-        </div>
-    </body>
-</html>
+        <input type="checkbox" name="times[]" id="t-19" value="19:00-20:00" {{{timesIncludes times "19:00-20:00"}}}>
+        <label for="t-19">19:00–20:00</label><br><br>
+
+        <input type="checkbox" name="times[]" id="t-20" value="20:00-21:00" {{{timesIncludes times "20:00-21:00"}}}>
+        <label for="t-20">20:00–21:00</label><br><br>
+
+        <input type="checkbox" name="times[]" id="t-21" value="21:00-22:00" {{{timesIncludes times "21:00-22:00"}}}>
+        <label for="t-21">21:00–22:00</label><br><br>
+
+        <label for="petFriends">Pet Friends</label><br>
+        <input
+            type="text"
+            name="petFriends"
+            id="petFriends"
+            value="{{#if formData}}{{formData.petFriends}}{{else}}{{user.petFriends}}{{/if}}"
+        ><br><br>
+
+        <button type="submit">Save Changes</button>
+        <br><br>
+    </form>
+
+    <p class="back-link">
+        <a href="/home">Back to home</a>
+    </p>
+    <p class="back-link">
+        <a href="/profile">Back to my PupFile (changes will not be saved)</a>
+    </p>
+
+</div>

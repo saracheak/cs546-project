@@ -38,6 +38,7 @@ router.post("/:parkId/comments", requireLogin, async (req, res) => {
     try{
         let {parkId} = req.params;
         parkId= checkIdInRatings(parkId, "parkId");
+        parkId= checkString(parkId, "parkId");
 
         let commentText = checkString(req.body.comment, "comment");
         if(commentText.length > 500){
@@ -129,7 +130,7 @@ router.post("/comments/:commentId/like", requireLogin, async (req, res) => {
 //shows user the new park form if they click the link from the search bar
 router.get("/new", async (req, res)=> {
     try{
-        res.status(200).render('newPark');
+        res.status(200).render('newPark', {bodyClass: "home-body"});
     }catch(e){
         return res.status(404).render("error", {message: e.toString(), bodyClass: "error-page"});
     }
@@ -195,7 +196,8 @@ router.post("/new", async (req, res) => {
       return res.status(200).render("newPark", {
         successMessage:
           "Park submitted successfully and is pending admin approval!",
-          newPark        // optional: send newPark back to show its info - not sure if i want to keep this
+          newPark,        // optional: send newPark back to show its info - not sure if i want to keep this
+          bodyClass: "home-body"
       });
     } catch (e) {
       // On error, re-render with error and keep previously typed values
@@ -254,6 +256,7 @@ router.get("/:parkId", async (req, res) => {
         !!currentUserId &&
         (isAdmin || c.user_id?.toString() === currentUserId);
         c.timestamp = new Date(c.timestamp).toLocaleString();
+
       try {
         const user = await usersFunctions.getUser(c.user_id.toString());
         c.authorName =
