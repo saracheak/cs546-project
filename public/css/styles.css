@@ -884,7 +884,6 @@ box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
     border-color: #d2a46c;
 }
 
-/* Submit button */
 .new-park-form button {
     margin-top: 15px;
     align-self: center;
@@ -898,7 +897,6 @@ box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
     text-align: center;
   }
 
-  /* ===== Rating Page ===== */
 .rating-page {
   max-width: 980px;
   margin: 32px auto;
@@ -918,7 +916,6 @@ box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
   line-height: 1.1;
 }
 
-/* messages */
 .form-error {
   color: #b00020;
   background: #fff2f2;
@@ -936,9 +933,14 @@ box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
   color: #333;
 }
 
-/* existing rating display */
 .rating-existing {
   margin-top: 10px;
+  margin-right: 5px;
+}
+
+.rating-existing p {
+    line-height: 1.5;
+    margin-bottom: 8px;
 }
 
 .rating-existing-grid {
@@ -951,7 +953,7 @@ box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
 }
 
 .rating-existing-grid p {
-  margin: 0;
+  margin: 5px;
   font-size: 16px;
 }
 
@@ -964,7 +966,6 @@ box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
   font-size: 16px;
 }
 
-/* buttons */
 .btn {
   display: inline-block;
   padding: 10px 16px;
@@ -990,7 +991,6 @@ box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
   opacity: 0.92;
 }
 
-/* ===== Rating Form ===== */
 .rating-form {
   margin-top: 12px;
 }
@@ -1032,21 +1032,3 @@ box-shadow: 0 6px 12px rgba(128, 96, 60, 0.18);
   gap: 12px;
   margin-top: 18px;
 }
-
-/* responsive */
-@media (max-width: 860px) {
-  .rating-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 560px) {
-  .rating-grid {
-    grid-template-columns: 1fr;
-  }
-  .form-actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-}
-  

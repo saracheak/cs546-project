@@ -31,13 +31,15 @@ router.get('/:parkId/ratings', async (req, res) => {
         title: 'Rating',
         parkId,
         cannotRate: true,
-        existingRating: existing
+        existingRating: existing,
+        bodyClass: "home-body"
       });
     }
     return res.status(200).render('ratingForm', {
       title: 'Rating',
       parkId,
-      cannotRate: false
+      cannotRate: false,
+      bodyClass: "home-body"
     });
     }catch (e) {
     console.error(e);
@@ -65,11 +67,12 @@ router.post('/:parkId/ratings', async (req, res) => {
     if (existing) {
       return res.status(400).render('ratingForm', {
         title: 'Rating',
-        park_id:parkId,
+        parkId:parkId,
         user_id:currentUserId,
         cannotRate: true,
         existingRating: existing,
-        error: 'You have already rated this park.'
+        error: 'You have already rated this park.',
+        bodyClass: "home-body"
       });
     }
     let {
@@ -111,7 +114,7 @@ router.post('/:parkId/ratings', async (req, res) => {
     dog_size = checkString(dog_size, "dog size");
     
     await ratingsFunctions.createRating({
-      park_id:parkId,
+      parkId:parkId,
       user_id: req.session.userId,
       cleanliness,
       dog_friendliness,
@@ -136,7 +139,8 @@ router.post('/:parkId/ratings', async (req, res) => {
       parkId,
       cannotRate: false,
       error: e.toString(),
-      formData: req.body
+      formData: req.body,
+      bodyClass: "home-body"
     });
   }
 });
@@ -154,18 +158,19 @@ router.get('/:parkId/ratings/new', async (req, res) => {
   if (existing) {
     return res.status(200).render('ratingForm', {
       title: 'Rating',
-      park_id:parkId,
+      parkId:parkId,
       cannotRate: true,
-      existingRating: existing
+      existingRating: existing,
+      bodyClass: "home-body"
     });
   }
   return res.status(200).render('ratingForm', {
     title: 'Rating',
     parkId,
-    cannotRate: false
+    cannotRate: false,
+    bodyClass: "home-body"
   });
 });
-
 
 router.get('/:parkId/ratings/summary', async (req, res) => {
   let parkId;
