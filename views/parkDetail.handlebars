@@ -22,6 +22,14 @@
 
         <h2>Ratings</h2>
 
+        {{#if isLoggedIn}}
+            <p class="rating-link">
+                <a class="btn" href="/parks/{{park._id}}/ratings/new">Leave a rating</a>
+            </p>
+        {{else}}
+            <p>You must be logged in to leave a rating.</p>
+        {{/if}}
+
         <div class="park-ratings-grid">
             <p><strong>Cleanliness: </strong> {{park.average_cleanliness}}</p>
             <p><strong>Dog Friendliness: </strong> {{park.average_dog_friendliness}}</p>

@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 import { ratings} from "../config/mongoCollections.js";
 import { checkIdInRatings,checkString } from "../validation.js";
 import { parksFunctions } from "./parks.js";
+import { biscuitsFunctions } from "./biscuits.js";
 
 
 export const ratingsFunctions ={
@@ -49,7 +50,7 @@ export const ratingsFunctions ={
                 throw "Each rating field must be a number between 0 and 5";
             }
         }
-       
+        
          const dogSizeStr = checkString(dog_size);
          const commentStr = checkString(comment);
 
@@ -74,7 +75,7 @@ export const ratingsFunctions ={
 
         const insertInfo = await ratingCollection.insertOne(ratingObj);
         if (!insertInfo.acknowledged) throw "Could not add rating";
-
+        await biscuitsFunctions.autoAwardBiscuits(user_id); //autoaward biscuit will work once users are able to create ratings
         return await ratingCollection.findOne({ _id: insertInfo.insertedId });
     },
 
