@@ -8,7 +8,6 @@ import { usersFunctions } from "../data/users.js";
 import xss from "xss";
 import {users} from "../config/mongoCollections.js"
 import { ObjectId } from "mongodb";
-import { ratingsFunctions } from "../data/ratings.js";
 import { biscuitsFunctions } from "../data/biscuits.js";
 
 
