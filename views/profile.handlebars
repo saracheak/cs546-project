@@ -1,101 +1,107 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Profile Page</title>
-        <link rel="stylesheet" href="/css/styles.css">
-    </head>
-    
-    <body class="profile-body">
-        <header>
-            <div class="profile-header-container">
-                <h1>Welcome {{humanFirstName}} to your PupFile!</h1>
-                <div class="topnav">
-                    <a href="/home">Home</a>
-                    <a href="/parks">All Parks</a>
-                    <a href="/editPupfile">Edit My PupFile</a>
-                    <a href="/logout">Logout</a>
-                </div><br>
-                <div class="profile-bio">{{bio}}</div>
-            </div>
-        </header>
-        <br><br>
-        <div class="biscuits-container">
-            <h2>My Biscuits Earned 🦴</h2>
-            {{#if userBiscuits.length}}
-                {{#each userBiscuits}}
+<header>
+    <div class="profile-header-container">
+        <h1>Welcome {{humanFirstName}} to your PupFile!</h1>
+
+        <div class="topnav">
+            <a href="/home">Home</a>
+            <a href="/parks">All Parks</a>
+            <a href="/editPupfile">Edit My PupFile</a>
+            <a href="/logout">Logout</a>
+        </div>
+
+        <br>
+        <div class="profile-bio">{{bio}}</div>
+    </div>
+</header>
+
+<br><br>
+
+<div class="biscuits-container">
+    <h2>My Biscuits Earned 🦴</h2>
+    <ul>
+        {{#if userBiscuits.length}}
+            {{#each userBiscuits}}
                 <li>{{this.name}}</li>
-                {{/each}}
-            {{else}}
-                <li>Go home to see what biscuits you can earn!</li>
-            {{/if}}
-        </div>
-        <br><br>
-        <div class="dog-info-container">
-            <div class="dog-info-box">
-                <h2>Pet Friends:</h2>
-                <div class="info-box">
-                    <ul>
-                        {{#if petFriends.length}}
-                            {{#each petFriends}}
-                            <li>{{this}}</li>
-                            {{/each}}
-                        {{else}}
-                            <li>Search for friends to see their pupfile</li>
-                        {{/if}}
-                    </ul>
-                </div>
-            </div>
-            <div class="dog-info-box">
-                <h2>Favorite Parks:</h2>
-                <div class="info-box">
-                    <ul>
-                        {{#if favParks.length}}
-                            {{#each favParks}}
-                            <li><a href="/parks/{{this._id}}">{{this.name}}</a></li>
-                            {{/each}}
-                        {{else}}
-                            <li>Visit parks to mark them as your favorite!</li>
-                        {{/if}}
-                    </ul>
-                </div>
-            </div>
+            {{/each}}
+        {{else}}
+            <li>Go home to see what biscuits you can earn!</li>
+        {{/if}}
+    </ul>
+</div>
 
-            <div class="dog-info-box">
-                <h2>Times:</h2>
-                <div class="info-box">
-                    <ul>
-                        {{#if times.length}}
-                            {{#each times}}
-                            <li>{{this}}</li>
-                            {{/each}}
-                        {{else}}
-                            <li>Edit your pupfile to add times you like to go to the park</li>
-                        {{/if}}
-                    </ul>
-                </div>
-            </div>
+<br><br>
 
-            <div class="dog-info-box">
-                <h2>Parks Visited:</h2>
-                <div class="info-box">
-                    <ul>
-                        {{#if parksVisited.length}}
-                            {{#each parksVisited}}
-                            <li><a href="/parks/{{this._id}}">{{this.name}}</a></li>
-                            {{/each}}
-                        {{else}}
-                        <li>Visit parks to mark them as visited!</li>
-                        {{/if}}
-                    </ul>
-                </div>
-            </div>
+<div class="dog-info-container">
+
+    <div class="dog-info-box">
+        <h2>Pet Friends:</h2>
+        <div class="info-box">
+            <ul>
+                {{#if petFriends.length}}
+                    {{#each petFriends}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{else}}
+                    <li>Search for friends to see their pupfile</li>
+                {{/if}}
+            </ul>
         </div>
-        <br><br>
-        <div class="profile-ratings-container">
-            <h2>All My Ratings</h2>
-            <p>Add user's ratings here</p>
+    </div>
+
+    <div class="dog-info-box">
+        <h2>Favorite Parks:</h2>
+        <div class="info-box">
+            <ul>
+                {{#if favParks.length}}
+                    {{#each favParks}}
+                        <li>
+                            <a href="/parks/{{this._id}}">{{this.name}}</a>
+                        </li>
+                    {{/each}}
+                {{else}}
+                    <li>Visit parks to mark them as your favorite!</li>
+                {{/if}}
+            </ul>
         </div>
-        <br><br>
+    </div>
+
+    <div class="dog-info-box">
+        <h2>Times:</h2>
+        <div class="info-box">
+            <ul>
+                {{#if times.length}}
+                    {{#each times}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                {{else}}
+                    <li>Edit your pupfile to add times you like to go to the park</li>
+                {{/if}}
+            </ul>
         </div>
-    </body>
-</html>
+    </div>
+
+    <div class="dog-info-box">
+        <h2>Parks Visited:</h2>
+        <div class="info-box">
+            <ul>
+                {{#if parksVisited.length}}
+                    {{#each parksVisited}}
+                        <li>
+                            <a href="/parks/{{this._id}}">{{this.name}}</a>
+                        </li>
+                    {{/each}}
+                {{else}}
+                    <li>Visit parks to mark them as visited!</li>
+                {{/if}}
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<br><br>
+
+<div class="profile-ratings-container">
+    <h2>All My Ratings</h2>
+    <p>Add user's ratings here</p>
+</div>
