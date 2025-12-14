@@ -135,6 +135,8 @@ button:active {
     font-family: "Poppins", sans-serif;
     background: #fff5e6 url("../images/grass.jpg") repeat;
     margin: 0;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 .home-nav {
     background-color: white;
@@ -230,19 +232,25 @@ header h1 {
     margin-bottom: 30px;
     box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
 }
-.homepage-top-ten-park-list{
+.homepage-top-five-park-list{
     text-align: left;
     background: #fff5e6;
     padding: 35px 25px;
     border-radius: 20px;
-    width: 200px;
-    height: 400px;
+    width: 600px;
+    height: 300px;
     margin-top: 0px;
     margin-left: 40px;
     margin-right: 0px;
     margin-bottom: 50px;
+    margin: auto;
     box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
 }
+
+.homepage-top-five-park-list h2{
+    text-align: center;
+}
+
 .edit-pupfile-body {
     font-family: "Poppins", sans-serif;
     background: #fff5e6 url("../images/pawprint.png") repeat;

@@ -44,21 +44,39 @@
         make it easier for you to find places to bring your dog that have the amenities you desire.
     </p>
 {{/if}}
+    {{!-- Top 5 parks --}}
+          <div class="homepage-top-five-park-list">
+                <h2>Top 5 Parks by Overall Rating</h2>
+                {{#if topParks.length}}
+                    <ol>
+                        {{#each topParks}}
+                            <li>
+                            <a href="/parks/{{this._id}}">{{this.park_name}}</a>
+                            {{#if this.average_overall}}
+                                <span> ⭐ {{this.average_overall}}</span>
+                            {{/if}}
+                            </li>
+                        {{/each}}
+                    </ol>
+                {{else}}
+                    <p>No rated parks yet.</p>
+                {{/if}}
+        </div>
 
-{{!-- Park Search Bar --}}
-<section class="park-search-bar">
-    <form class="park-search-form" method="get" action="/home/search">
-        <label for="parkQuery">Search for a park:</label>
-        <input
-            type="text"
-            id="parkQuery"
-            name="parkQuery"
-            placeholder="Enter park name"
-            required
-        />
-        <button type="submit">Search</button>
-    </form>
-</section>
+        {{!-- Park Search Bar --}} 
+        <section class="park-search-bar">
+            <form class="park-search-form" method="get" action="/home/search">
+                <label for="parkQuery">Search for a park:</label>
+                <input
+                type="text"
+                id="parkQuery"
+                name="parkQuery"
+                placeholder="Enter park name"
+                required
+                />
+                <button type="submit">Search</button>
+            </form>
+        </section>  
 
 {{!-- Search results --}}
 {{#if searchQuery}}
@@ -86,20 +104,3 @@
     {{/if}}
 </section>
 {{/if}}
-
-<div class="homepage-top-ten-park-list">
-    {{#if topParks.length}}
-        <ol>
-            {{#each topParks}}
-                <li>
-                    <a href="/parks/{{this._id}}">{{this.park_name}}</a>
-                    {{#if this.average_overall}}
-                        <span> ⭐ {{this.average_overall}}</span>
-                    {{/if}}
-                </li>
-            {{/each}}
-        </ol>
-    {{else}}
-        <p>No rated parks yet.</p>
-    {{/if}}
-</div>
