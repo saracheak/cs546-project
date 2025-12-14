@@ -129,7 +129,7 @@ router.post("/comments/:commentId/like", requireLogin, async (req, res) => {
 //shows user the new park form if they click the link from the search bar
 router.get("/new", async (req, res)=> {
     try{
-        res.status(200).render('newPark');
+        res.status(200).render('newPark', {bodyClass: "home-body"});
     }catch(e){
         return res.status(404).render("error", {message: e.toString(), bodyClass: "error-page"});
     }
@@ -195,7 +195,8 @@ router.post("/new", async (req, res) => {
       return res.status(200).render("newPark", {
         successMessage:
           "Park submitted successfully and is pending admin approval!",
-          newPark        // optional: send newPark back to show its info - not sure if i want to keep this
+          newPark,        // optional: send newPark back to show its info - not sure if i want to keep this
+          bodyClass: "home-body"
       });
     } catch (e) {
       // On error, re-render with error and keep previously typed values

@@ -1,109 +1,99 @@
-{{!-- page where users will fill out a form to add a park to our database --}}
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Submit a New Park</title>
-    <link rel="stylesheet" href="/css/styles.css">
-  </head>
-  <body class="home-body">
-    <header class="home-header">
-      <h1>Submit a New Park</h1>
-    </header>
+<header class="home-header">
+  <h1>Submit a New Park</h1>
+</header>
 
-    <nav class="home-nav">
-      <a href="/home">Home</a>
-      <a href="/parks">All Parks</a>
-    </nav>
+<nav class="home-nav">
+  <a href="/home">Home</a>
+  <a href="/parks">All Parks</a>
+</nav>
+<div class="new-park-main">
+  <form method="post" action="/parks/new" class="new-park-form" id="new-park-form">
+    <h2>Park Info</h2>
 
-    <main class="new-park-main">
-      <form method="post" action="/parks/new" class="new-park-form" id="new-park-form">
-        <h2>Park Info</h2>
+    {{#if error}}
+      <p class="error form-msg">{{error}}</p>
+    {{/if}}
 
-          {{#if error}}
-            <p class="error form-msg">{{error}}</p>
-          {{/if}}
+    {{#if successMessage}}
+      <p class="success form-msg">{{successMessage}}</p>
+    {{/if}}
+    <p id="new-park-error" class="error form-msg"></p>
 
-          {{#if successMessage}}
-            <p class="success form-msg">{{successMessage}}</p>
-          {{/if}}
-          <p id="new-park-error" class="error form-msg"></p>
+    <div>
+      <label for="park_name">Park Name:</label>
+      <input
+        type="text"
+        id="park_name"
+        name="park_name"
+        required
+        value="{{park_name}}"
+      />
+    </div>
 
-        <div>
-          <label for="park_name">Park Name:</label>
-          <input
-            type="text"
-            id="park_name"
-            name="park_name"
-            required
-            value="{{park_name}}"
-          />
-        </div>
+    <div>
+      <label for="park_type">Park Type:</label>
+      <select id="park_type" name="park_type" required>
+        <option value="">-- Select Type --</option>
+        <option value="run">Run</option>
+        <option value="off-leash">Off-Leash</option>
+      </select>
+    </div>
 
-        <div>
-          <label for="park_type">Park Type:</label>
-          <select id="park_type" name="park_type" required>
-            <option value="">-- Select Type --</option>
-            <option value="run">Run</option>
-            <option value="off-leash">Off-Leash</option>
-          </select>
-        </div>
+    <h2>Address</h2>
 
-        <h2>Address</h2>
+    <div>
+      <label for="street_1">Street 1:</label>
+      <input
+        type="text"
+        id="street_1"
+        name="street_1"
+        required
+        value="{{street_1}}"
+      />
+    </div>
 
-        <div>
-          <label for="street_1">Street 1:</label>
-          <input
-            type="text"
-            id="street_1"
-            name="street_1"
-            required
-            value="{{street_1}}"
-          />
-        </div>
+    <div>
+      <label for="street_2">Street 2 (optional):</label>
+      <input
+        type="text"
+        id="street_2"
+        name="street_2"
+        value="{{street_2}}"
+      />
+    </div>
 
-        <div>
-          <label for="street_2">Street 2 (optional):</label>
-          <input
-            type="text"
-            id="street_2"
-            name="street_2"
-            value="{{street_2}}"
-          />
-        </div>
+    <div>
+      <label for="city">City:</label>
+      <input
+        type="text"
+        id="city"
+        name="city"
+        required
+        value="{{city}}"
+      />
+    </div>
 
-        <div>
-          <label for="city">City:</label>
-          <input
-            type="text"
-            id="city"
-            name="city"
-            required
-            value="{{city}}"
-          />
-        </div>
+    <div>
+      <label for="state">State:</label>
+      <select id="state" name="state" required>
+        <option value="">-- Select State --</option>
+        <option value="New York">New York</option>
+      </select>
+    </div>
 
-        <div>
-            <label for="State">State:</label>
-            <select id="state" name="state" required>
-                <option value="">-- Select State --</option>
-                <option value="New York">New York</option>
-            </select>
-        </div>
+    <div>
+      <label for="zip_code">Zip Code:</label>
+      <input
+        type="text"
+        id="zip_code"
+        name="zip_code"
+        required
+        value="{{zip_code}}"
+      />
+    </div>
 
-        <div>
-          <label for="zip_code">Zip Code:</label>
-          <input
-            type="text"
-            id="zip_code"
-            name="zip_code"
-            required
-            value="{{zip_code}}"
-          />
-        </div>
+    <button type="submit">Submit Park</button>
+  </form>
+</div>
 
-        <button type="submit">Submit Park</button>
-      </form>
-    </main>
-    <script src="/public/js/newPark.js"></script>
-  </body>
-</html>
+<script src="/public/js/newPark.js"></script>
