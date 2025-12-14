@@ -75,7 +75,6 @@ export const ratingsFunctions ={
 
         const insertInfo = await ratingCollection.insertOne(ratingObj);
         if (!insertInfo.acknowledged) throw "Could not add rating";
-        await biscuitsFunctions.autoAwardBiscuits(user_id); //autoaward biscuit will work once users are able to create ratings
         return await ratingCollection.findOne({ _id: insertInfo.insertedId });
     },
 
