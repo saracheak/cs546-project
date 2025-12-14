@@ -2,7 +2,8 @@ import {Router} from 'express';
 import {parksFunctions} from '../data/parks.js';
 import {usersFunctions} from '../data/users.js';
 //import {biscuitsFunctions} from '../data/biscuits.js';
-
+import { ObjectId } from "mongodb";
+import { users } from '../config/mongoCollections.js';
 import { checkString } from '../validation.js';
 import xss from 'xss';
 const router = Router();
@@ -43,6 +44,8 @@ router.route('/search').get(async (req, res) => {
     let parkQuery = xss(req.query.parkQuery || '');
     parkQuery = checkString(parkQuery, 'Park Query');
 
+    console.log("parkQuery:", req.query.parkQuery);
+
     if (!parkQuery) {
       return res.status(400).render('home', {searchQuery: '', parkFound: false, searchError: 'You must enter a park name to search.', bodyClass: "home-body"});
     }
@@ -53,50 +56,65 @@ router.route('/search').get(async (req, res) => {
 
     // If no park found, give user 'submit new park link' to form to submit a new park
     if (!matchedPark) return res.status(200).render('home', {searchQuery: parkQuery, parkFound: false, bodyClass: "home-body"});
+    console.log("found park:", matchedPark?._id, matchedPark?.park_name);
 
+//---------- After searching for an existing park on the homepage, this returns the peak time(s) from users 
+// who have this park stored as a favorited park. User's need to have favorite times and parks for this to give results.
+// This logic accounts for ties in peak times. Note: the favoritePark index does not correspond to the times index for a user. 
+// So this is more of an approximation of peak park times. ----------//
 
-//---------- TODO - figure out how to get peak time bc this isnt working. will have to likely seed times and parks to do this ----------//
-    // If park found find all users whose favorite_park include this park name 
-    // and then find peak time from users who like this park
-    // const usersCollection = await users(); 
-    // const userDocs = await usersCollection.find({ favorite_parks: matchedPark.park_name }).toArray();
-  
-    // //Count time intervals across those users
-    // const timeCounts = {};
-    // for (const u of userDocs) {
-    //   if (!Array.isArray(u.times)) continue;
+const usersCollection = await users(); //get all users
+let parkName = matchedPark.park_name.trim(); //favoriteParks stores the name of each park as a string
+const userDocs = await usersCollection
+  .find({ favoriteParks: parkName}) //find all users with the specific park that was searched for in their favoriteParks array
+  .project({ times: 1 }) // only pull the times array from those users
+  .toArray();
 
-    //   for (let t of u.times) {
-    //     if (!t) continue;
-    //     t = t.trim();
-    //     if (!t) continue;
+  console.log(userDocs);
+  let totalUsersWithThisFavPark = userDocs.length; //used to output how many users with this fav park were checked for peak times
 
-    //     timeCounts[t] = (timeCounts[t] || 0) + 1;
-    //   }
-    // }
-
-    // //Determine the single peak time (if any)
-    // let peakTime = null;
-    // let maxCount = 0;
-    // for (const [t, count] of Object.entries(timeCounts)) {
-    //   if (count > maxCount) {
-    //     maxCount = count;
-    //     peakTime = t;
-    //   }
-    // }
-
-    //Render home with search results
-    return res.status(200).render('home', {
-      searchQuery: parkQuery,
-      parkFound: true,
-      park: matchedPark,
-      parkLink: `/parks/${matchedPark._id}`,
-      bodyClass: "home-body"
-      //peakTime
-    });
-  } catch (e) {
-    return res.status(400).render('error', {message: e.toString(), bodyClass: "error-page"});
+// userDocs consists of the user id and times like [{_id:..., times: [9:00-10:00, 13:00-14:00]}, {_id:..., times: [2:00-4:00]}] etc. 
+// Count the number of times a specific time interval (like 9:00-10:00) is mentioned in the times in userDocs
+const timeCounts = {};
+for (const u of userDocs) { 
+  if (!Array.isArray(u.times)) continue; //extra safety guard. if user does not have any times program won't crash
+  for (let t of u.times) { //iterate through times to fill timeCounts with key = time and value = count
+    if (!t) continue; //if the specific times array is empty then check the next one
+    timeCounts[t] = (timeCounts[t] || 0) + 1; //add 1 to the count for a specific time
   }
+}
+console.log(timeCounts);
+
+// Determine busiest time(s) by updating these variables as we iterate through all of the timeCounts. 
+//the time(s) that are mentioned the most (maxCount) with be the peakTime(s) that we return to the user
+let peakTimes = [];
+let maxCount = 0;
+
+for (const [t, count] of Object.entries(timeCounts)) { //t is the time interval (i.e. 9:00-10:00), count is how many times it appeared in userDocs 
+  if (count > maxCount) {
+    maxCount = count;
+    peakTimes = [t];          //when new peak time is found (new max count found), replace the old list with the new peak time
+  } else if (count === maxCount) {
+    peakTimes.push(t);        // if there is a tie between max counts, then add the new time for that max count to the existing list
+  }
+}
+//sort times so output is pretty and in order
+peakTimes.sort();
+
+//Render home with search results
+return res.status(200).render('home', {
+  title: 'Home',
+  searchQuery: parkQuery,
+  parkFound: true,
+  park: matchedPark,
+  parkLink: `/parks/${matchedPark._id}`,
+  peakTimes,
+  peakTimeCount: totalUsersWithThisFavPark,
+  bodyClass: "home-body"
+});
+} catch (e) {
+return res.status(400).render('error', {message: e.toString()});
+}
 });
 
 export default router;
