@@ -7,7 +7,7 @@ import validator from 'validator';
 let usersCollection = await users();
 
 router.get("/", (req, res) => {
-    res.render("login", { root: "../views" });
+    res.render("login", {bodyClass: "login-body"});
 });
 
 router.post("/", async(req, res) => {
@@ -17,10 +17,10 @@ router.post("/", async(req, res) => {
         checkPassword(password);
 
         const user = await usersCollection.findOne({ email });
-        if (!user) return res.render("login", {error: "No account with that email found."});
+        if (!user) return res.render("login", {error: "No account with that email found.", bodyClass: "login-body"});
 
         const match = await bcrypt.compare(password, user.hashedPassword);
-        if (!match) return res.render("login", {error: "Incorrect email or password"});
+        if (!match) return res.render("login", {error: "Incorrect email or password", bodyClass: "login-body"});
 
         req.session.userId = user._id;
         req.session.humanFirstName = user.humanFirstName;
@@ -28,7 +28,7 @@ router.post("/", async(req, res) => {
         console.log(`user ${email} successfully logged in`);
         res.redirect("/profile");
     } catch (e) {
-        res.status(400).render('login', {error: e.message});    
+        res.status(400).render('login', {error: e.message, bodyClass: "login-body"});    
     }    
 });
 

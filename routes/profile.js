@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
     
     //TODO: get ratings
 
-    res.render("profile", { humanFirstName: user.humanFirstName, bio: user.bio, petFriends: user.petFriends, favParks: favoriteParks, times: user.times, parksVisited: parksVisited, userBiscuits: userBiscuits});
+    res.render("profile", { humanFirstName: user.humanFirstName, bio: user.bio, petFriends: user.petFriends, favParks: favoriteParks, times: user.times, parksVisited: parksVisited, userBiscuits: userBiscuits, bodyClass: "profile-body"});
 });
 
 const favoriteParksIdToName = async (favoriteParks) => {
