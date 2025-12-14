@@ -232,7 +232,7 @@ header h1 {
     margin-bottom: 30px;
     box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
 }
-.homepage-top-five-park-list{
+.homepage-top-ten-park-list{
     text-align: left;
     background: #fff5e6;
     padding: 35px 25px;
@@ -247,7 +247,7 @@ header h1 {
     box-shadow: 0 10px 20px rgba(128, 96, 60, 0.25);
 }
 
-.homepage-top-five-park-list h2{
+.homepage-top-ten-park-list h2{
     text-align: center;
 }
 
