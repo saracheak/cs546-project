@@ -19,7 +19,7 @@ router.get("/", async(req, res)=> {
         bodyClass: "biscuit-body"});
     } 
     catch(e){
-        return res.status(500).render("error", {message: e.toString() });
+        return res.status(500).render("error", {message: e.toString(), bodyClass: error-page});
     }
 });
 

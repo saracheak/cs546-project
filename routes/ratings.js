@@ -43,7 +43,7 @@ router.get('/:parkId/ratings', async (req, res) => {
     });
     }catch (e) {
     console.error(e);
-    return res.status(500).render('error', { error: e.toString() });
+    return res.status(500).render('error', { error: e.toString(), bodyClass: "error-page" });
   }
 });
 
@@ -53,14 +53,14 @@ router.post('/:parkId/ratings', async (req, res) => {
   try {
     parkId = checkIdInRatings(req.params.parkId, 'park id');
   } catch (e) {
-    return res.status(400).render('error', { error: e.toString() });
+    return res.status(400).render('error', { error: e.toString(), bodyClass: "error-page" });
   }
 
   const currentUserId = req.session.userId;   
   if (!currentUserId) {
     return res
       .status(401)
-      .render('error', { error: 'You must be logged in to leave a rating.' });
+      .render('error', { error: 'You must be logged in to leave a rating.', bodyClass: "error-page" });
   }
   try {
     const existing = await ratingsFunctions.getUserRatingForPark(parkId, req.session.userId);
@@ -151,7 +151,7 @@ router.get('/:parkId/ratings/new', async (req, res) => {
 
   const currentUserId = req.session.userId;
   if (!currentUserId) {
-    return res.status(401).render('error', { error: 'You must be logged in to leave a rating.' });
+    return res.status(401).render('error', { error: 'You must be logged in to leave a rating.', bodyClass: "error-page" });
   }
 
   const existing = await ratingsFunctions.getUserRatingForPark(parkId, req.session.userId);

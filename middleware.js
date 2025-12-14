@@ -42,7 +42,7 @@ export const attachUserToLocals = async (req, res, next) => {
 //this middleware will be used on every route in routes/admin.js 
 export const requireAdmin = (req, res, next) => {
     if (!res.locals.isLoggedIn || !res.locals.isAdmin) {
-      return res.status(400).render('error', {message: 'You must be an admin to view this page.' });
+      return res.status(400).render('error', {message: 'You must be an admin to view this page.', bodyClass: "error-page"});
     }
     return next();
   };
@@ -57,7 +57,7 @@ export const requireAdmin = (req, res, next) => {
 // //Refer to the top of route/admin.js to see how I imported and used the middleware there. 
 export const requireLogin = (req, res, next) => {
      if (!req.session.userId) {
-        return res.status(401).render("error", {error: "You must be logged in to access this page."});
+        return res.status(401).render("error", {error: "You must be logged in to access this page.", bodyClass: "error-page"});
      }
      next();
  };

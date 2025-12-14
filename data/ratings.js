@@ -47,7 +47,7 @@ export const ratingsFunctions ={
 
         for (const f of fields) {
             if (typeof f !== "number" || f < 0 || f > 5) {
-                throw "Each rating field must be a number between 0 and 5";
+                throw new Error("Each rating field must be a number between 0 and 5");
             }
         }
         
@@ -74,7 +74,7 @@ export const ratingsFunctions ={
         };
 
         const insertInfo = await ratingCollection.insertOne(ratingObj);
-        if (!insertInfo.acknowledged) throw "Could not add rating";
+        if (!insertInfo.acknowledged) throw new Error("Could not add rating");
         return await ratingCollection.findOne({ _id: insertInfo.insertedId });
     },
 
