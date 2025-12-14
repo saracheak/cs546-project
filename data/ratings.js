@@ -14,14 +14,14 @@ export const ratingsFunctions ={
 
         const {
             user_id,
-            park_id,
+            parkId,
             comment,
             dog_size,
         } = ratingData;
 
         
         const uid = checkIdInRatings(user_id, "user id");
-        const pid = checkIdInRatings(park_id, "park id");
+        const pid = checkIdInRatings(parkId, "park id");
             
         const s = ratingData.scores ?? ratingData;
         const {
@@ -56,7 +56,7 @@ export const ratingsFunctions ={
 
          const ratingObj = {
             user_id: new ObjectId(uid),
-            park_id: new ObjectId(pid),
+            parkId: new ObjectId(pid),
             scores:{
                 cleanliness,
                 dog_friendliness,
@@ -79,29 +79,29 @@ export const ratingsFunctions ={
         return await ratingCollection.findOne({ _id: insertInfo.insertedId });
     },
 
-    async getRatingsForPark(park_id){
+    async getRatingsForPark(parkId){
         const col = await ratings();
-        const pid = checkIdInRatings(park_id, "park id");
-            return col.find({ park_id: new ObjectId(pid) }).toArray();
+        const pid = checkIdInRatings(parkId, "park id");
+            return col.find({ parkId: new ObjectId(pid) }).toArray();
     },
     
-    async getUserRatingForPark(park_id, user_id) {
+    async getUserRatingForPark(parkId, user_id) {
         const col = await ratings();
-        const pid = checkIdInRatings(park_id, "park id");
+        const pid = checkIdInRatings(parkId, "park id");
         const uid = checkIdInRatings(user_id, "user id");
 
         return col.findOne({
-            park_id: new ObjectId(pid),
+            parkId: new ObjectId(pid),
             user_id: new ObjectId(uid)
         });
     },
 
-    async getAverageRatingsForPark(park_id) {
+    async getAverageRatingsForPark(parkId) {
         const ratingCollection = await ratings();
-        const pid = checkIdInRatings(park_id, "park id");
+        const pid = checkIdInRatings(parkId, "park id");
         
         const list = await ratingCollection
-            .find({ park_id: new ObjectId(pid)})
+            .find({ parkId: new ObjectId(pid)})
             .toArray();
 
         if (list.length === 0) {

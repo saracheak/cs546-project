@@ -270,12 +270,18 @@ export const parksFunctions = {
                 "average_overall"
             ];
 
-            const updateFields = {};
+            let updateFields = {};
+
+            const roundToThree = (num) => {
+                return Math.round(num * 1000) / 1000;
+            };
+
             for(const v of vars){
                 if(averages[v]=== undefined){
                     continue;
                 } 
-                updateFields[v] = checkRating(averages[v], v);
+                const validated = checkRating(averages[v], v);
+                updateFields[v] = roundToThree(validated);
             }
 
             if(Object.keys(updateFields).length === 0){
