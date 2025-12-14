@@ -9,6 +9,7 @@ import xss from "xss";
 import {users} from "../config/mongoCollections.js"
 import { ObjectId } from "mongodb";
 import { biscuitsFunctions } from "../data/biscuits.js";
+const usersCollection = await users();
 
 
 const router = Router();
@@ -294,6 +295,9 @@ router.get("/:parkId", async (req, res) => {
 router.post("/favorite-park", async (req, res) => {
     try {
         const userId = req.session.userId;
+        if(!userId){//user is not logged in
+            res.json({ success: true, message: "Log in to add/remove park to favorites" });
+        }
         const { parkId } = req.body;
         console.log("This park's id is", parkId);
         if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
@@ -314,6 +318,9 @@ router.post("/favorite-park", async (req, res) => {
 router.post("/unfavorite-park", async (req, res) => {
     try {
         const userId = req.session.userId;
+        if(!userId){//user is not logged in
+            res.json({ success: true, message: "Log in to add/remove park to favorites" });
+        }
         const { parkId } = req.body;
 
         if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
@@ -333,6 +340,9 @@ router.post("/unfavorite-park", async (req, res) => {
 router.post("/visited-park", async (req, res) => {
     try {
         const userId = req.session.userId;
+        if(!userId){//user is not logged in
+            res.json({ success: true, message: "Log in to to mark park as visited/unvisted."});
+        }
         const { parkId } = req.body;
         console.log("This park's id is", parkId);
         if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
@@ -353,6 +363,9 @@ router.post("/visited-park", async (req, res) => {
 router.post("/unvisited-park", async (req, res) => {
     try {
         const userId = req.session.userId;
+        if(!userId){//user is not logged in
+            res.json({ success: true, message: "Log in to to mark park as visited/unvisted." });
+        }
         const { parkId } = req.body;
 
         if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
