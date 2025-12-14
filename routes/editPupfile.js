@@ -4,6 +4,7 @@ import { usersFunctions } from '../data/users.js';
 import { parks, users } from '../config/mongoCollections.js';
 import { ObjectId } from 'mongodb';
 import validator from 'validator';
+import { biscuitsFunctions } from '../data/biscuits.js';
 
 const parksCollection = await parks();
 const usersCollection = await users();
@@ -22,7 +23,7 @@ router.post("/", async (req, res) => {
 
         await checkUpdateInfo(userId, updateInfo);
         await usersFunctions.updateUser(userId, updateInfo);
-
+        
         res.redirect("/profile");
     } catch (error) {
         const body = req.body;

@@ -9,6 +9,10 @@ export const biscuitsData = [
         description : "User left their first comment on a park!",
     },
     {
+        biscuit_name : "Certified Yipper",
+        description : "User left their third comment on a park!",
+    },
+    {
         biscuit_name : "You've got a friend in me",
         description : "User liked another pupfile!",
     },
@@ -22,7 +26,7 @@ export const biscuitsData = [
     },
     {
         biscuit_name : "🎶You're gunna be Paw-pular🎶",
-        description : "User's comment received 10 likes",
+        description : "User's comment received 1 like!",
     },
     {
         biscuit_name : "Not about that pug-life",
@@ -30,7 +34,7 @@ export const biscuitsData = [
     },
     {
         biscuit_name : "Ulti-mutt dog lover!",
-        description : "User's made more than 5 friends!",
+        description : "User's made 3 friends!",
     },
     {
         biscuit_name : "Park playtime added to profile",
