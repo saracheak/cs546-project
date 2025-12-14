@@ -39,12 +39,10 @@
             <h2>Comments</h2>
 
             {{#if comments.length}}
-                <ul class="comments-list">
+                <div class="comment-list" id="comment-list" data-park-id="{{park._id}}">
                     {{#each comments}}
-                        <li class="comment-item" data-comment-id="{{this._id}}">
-                            <p class="comment-text">
-                                {{this.comment}}
-                            </p>
+                        <div class="comment-item" data-comment-id="{{this._id}}">
+                            <p class="comment-text">{{this.comment}}</p>
 
                             <p class="comment-details">
                                 <span class="comment-author">
@@ -65,41 +63,21 @@
 
                             <div class="comment-interaction">
                                 {{#if ../isLoggedIn}}
-                                    <form 
-                                        method="POST"
-                                        action="/parks/comments/{{this._id}}/like"
-                                        class="inline-form"
-                                    >
-                                        <input type="hidden" name="parkId" value="{{../park._id}}">
-                                        <button
-                                            type="submit"
-                                            class="comment-like-button"
-                                        >
-                                        🦴 <span class="like-count">{{this.likes}}</span>
-                                        </button>
-                                    </form>
+                                    <button type="button" class="comment-like-button" data-comment-id="{{this._id}}">
+                                        🦴 
+                                        <span class="like-count">{{this.likes}}</span>
+                                    </button>
                                 {{/if}}
 
                                 {{#if this.canDelete}}
-                                    <form
-                                        method="POST"
-                                        action="/parks/comments/{{this._id}}/delete"
-                                        class="inline-form"
-                                    >
-                                        <input type="hidden" name="parkId" value="{{../park._id}}">
-                                        <button
-                                            type="submit"
-                                            class="comment-delete-button"
-                                            data-comment-id="{{this._id}}"
-                                        >
-                                            Delete 
-                                        </button>
-                                    </form>
+                                    <button type="button" class="comment-delete-button" data-comment-id="{{this._id}}">
+                                        Delete
+                                    </button>
                                 {{/if}} 
                             </div>
-                        </li>
+                        </div>
                     {{/each}}
-                </ul>
+                </div>
             {{else}}
                 <p> No comments yet. Be the first to comment!</p>
             {{/if}}
@@ -165,6 +143,6 @@
     </div>
 </section>
 
-<script src="/public/js/comments.js"></script>
+<script src="/js/comments.js"></script>
 
 <script src="/js/parks.js"></script>
