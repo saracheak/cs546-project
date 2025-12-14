@@ -83,6 +83,7 @@ const main = async () => {
             userId: user._id,
             parkId: park._id,
             scores:{
+            overall: s.overall,
             cleanliness: s.cleanliness,
             dog_friendliness: s.dog_friendliness,
             busyness: s.busyness,
@@ -93,11 +94,13 @@ const main = async () => {
             amenities: s.amenities,
             },
             comment: rating.comment,
-            dog_size: rating.dog_size,
+            dog_size: rating.dog_size.toLowerCase(),
             createdAt: new Date()
          };
 
         await ratingsCollection.insertOne(ratingDoc);
+        const averages = await ratingsFunctions.getAverageRatingsForPark(park._id.toString());
+        await parksFunctions.updateAverageRatings(park._id.toString(), averages);
         console.log(`Inserted rating for ${rating.userEmail} at ${rating.parkName}`);
     }
 

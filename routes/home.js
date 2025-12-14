@@ -11,7 +11,7 @@ router.route('/').get(async (req, res) => {
     //code here for GET will render the home handlebars file
     try {
       //get top parks for "top 10 parks" section
-      const topParks = await parksFunctions.getTopRatedParks(10);
+      const topParks = await parksFunctions.getTopRatedParks(5);
       topParks.forEach(p => {
         if (p.average_overall !== undefined && p.average_overall !== null) {
           p.average_overall = Number(p.average_overall).toFixed(2);
