@@ -38,49 +38,45 @@
         <section class="park-comments-section">
             <h2>Comments</h2>
 
-            {{#if comments.length}}
-                <div class="comment-list" id="comment-list" data-park-id="{{park._id}}">
-                    {{#each comments}}
-                        <div class="comment-item" data-comment-id="{{this._id}}">
-                            <p class="comment-text">{{this.comment}}</p>
+            <div class="comment-list" id="comment-list" data-park-id="{{park._id}}">
+                {{#each comments}}
+                    <div class="comment-item" data-comment-id="{{this._id}}">
+                        <p class="comment-text">{{this.comment}}</p>
 
-                            <p class="comment-details">
-                                <span class="comment-author">
-                                    {{#if this.authorName}}
-                                        {{this.authorName}}
-                                    {{else}}
-                                        Anonymous Pup
-                                    {{/if}}
-                                </span>
-                                <span class="comment-date">
-                                    {{#if this.timestamp}}
-                                        {{this.timestamp}}
-                                    {{else}}
-                                        (no timestamp)
-                                    {{/if}}
-                                </span>
-                            </p>
-
-                            <div class="comment-interaction">
-                                {{#if ../isLoggedIn}}
-                                    <button type="button" class="comment-like-button" data-comment-id="{{this._id}}">
-                                        🦴 
-                                        <span class="like-count">{{this.likes}}</span>
-                                    </button>
+                        <p class="comment-details">
+                            <span class="comment-author">
+                                {{#if this.authorName}}
+                                    {{this.authorName}}
+                                {{else}}
+                                    Anonymous Pup
                                 {{/if}}
+                            </span>
+                            <span class="comment-date">
+                                {{#if this.timestamp}}
+                                    {{this.timestamp}}
+                                {{else}}
+                                    (no timestamp)
+                                {{/if}}
+                            </span>
+                        </p>
 
-                                {{#if this.canDelete}}
-                                    <button type="button" class="comment-delete-button" data-comment-id="{{this._id}}">
-                                        Delete
-                                    </button>
-                                {{/if}} 
-                            </div>
+                        <div class="comment-interaction">
+                            {{#if ../isLoggedIn}}
+                                <button type="button" class="comment-like-button" data-comment-id="{{this._id}}">
+                                    🦴 
+                                    <span class="like-count">{{this.likes}}</span>
+                                </button>
+                            {{/if}}
+
+                            {{#if this.canDelete}}
+                                <button type="button" class="comment-delete-button" data-comment-id="{{this._id}}">
+                                    Delete
+                                </button>
+                            {{/if}} 
                         </div>
-                    {{/each}}
-                </div>
-            {{else}}
-                <p> No comments yet. Be the first to comment!</p>
-            {{/if}}
+                    </div>
+                {{/each}}
+            </div>
         </section>
 
         <hr />
