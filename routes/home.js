@@ -71,6 +71,7 @@ const userDocs = await usersCollection
   .toArray();
 
   console.log(userDocs);
+  let totalUsersWithThisFavPark = userDocs.length; //used to output how many users with this fav park were checked for peak times
 
 // userDocs consists of the user id and times like [{_id:..., times: [9:00-10:00, 13:00-14:00]}, {_id:..., times: [2:00-4:00]}] etc. 
 // Count the number of times a specific time interval (like 9:00-10:00) is mentioned in the times in userDocs
@@ -108,7 +109,7 @@ return res.status(200).render('home', {
   park: matchedPark,
   parkLink: `/parks/${matchedPark._id}`,
   peakTimes,
-  peakTimeCount: maxCount,
+  peakTimeCount: totalUsersWithThisFavPark,
   bodyClass: "home-body"
 });
 } catch (e) {
