@@ -1,14 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Error Page</title>
-    <link rel="stylesheet" href="/public/css/styles.css">
-</head>
-<body class="error-page">
-    <main class="error-container">
-        <h1 class="error-title">Oops! Looks like you've barked up the wrong tree 🐶🗣️🌲</h1>
-        <p class="error-message">{{message}}</p>
-        <a href="/" class="error-home-link">Go back home</a>
-    </main>
-</body>
-</html>
+<main class="error-container">
+    <h1 class="error-title">
+        Oops! Looks like you've barked up the wrong tree 🐶🗣️🌲
+    </h1>
+
+    <p class="error-message">
+        {{errorMessage}}
+    </p>
+
+    <a href="/home" class="error-home-link">
+        Go back home
+    </a>
+</main>

@@ -15,7 +15,8 @@ router.get("/", async(req, res)=> {
 
         res.render("biscuits", {allBiscuits: allBiscuits.map(b => ({...b, _id: b._id.toString()})), //loop through every biscuit and change the object id to a string
         earnedIds, 
-        isLoggedIn: !!req.session.userId }); //verifies if the user is logged in
+        isLoggedIn: !!req.session.userId, //verifies if the user is logged in
+        bodyClass: "biscuit-body"});
     } 
     catch(e){
         return res.status(500).render("error", {message: e.toString() });
