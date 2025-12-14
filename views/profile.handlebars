@@ -37,12 +37,12 @@
         <h2>Pet Friends:</h2>
         <div class="info-box">
             <ul>
-                {{#if petFriends.length}}
-                    {{#each petFriends}}
+                {{#if petFriends}}
+                    {{#each (firstThreeFriends petFriends)}} {{!-- uses helper to split the petFriends string into an array so the bullet points can be displayed --}}
                         <li>{{this}}</li>
                     {{/each}}
                 {{else}}
-                    <li>Search for friends to see their pupfile</li>
+                    <li>Write your friend's names (seperated by commas)!</li>
                 {{/if}}
             </ul>
         </div>

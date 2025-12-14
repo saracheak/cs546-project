@@ -46,6 +46,14 @@ const hbs = create({
     },
     selectIfEqual: (a, b) => {
     return a.toLowerCase() === b.toLowerCase() ? "selected" : "";
+    },
+    firstThreeFriends: (value) => { //takes comma seperated string from petFriends, and put each string in a bullet point. only for first 3 friends
+      if (typeof value !== "string") return [];
+      return value
+        .split(",")
+        .map(s => s.trim())
+        .filter(Boolean)
+        .slice(0, 3);
     }
 }});
 app.engine('handlebars', hbs.engine)
