@@ -6,6 +6,10 @@ import { requireLogin } from "../middleware.js";
 import { checkIdInRatings, checkString } from "../validation.js";
 import { usersFunctions } from "../data/users.js";
 import xss from "xss";
+import {users} from "../config/mongoCollections.js"
+import { ObjectId } from "mongodb";
+import { biscuitsFunctions } from "../data/biscuits.js";
+
 
 const router = Router();
 
@@ -60,6 +64,8 @@ router.post("/:parkId/comments", requireLogin, async (req, res) => {
             user_id: userId,
             comment: commentText,
         });
+
+        await biscuitsFunctions.autoAwardBiscuits(userId);//update biscuit
 
         const timestamp = new Date(newComment.timestamp).toLocaleString();
         const user = await usersFunctions.getUser(userId);
@@ -285,25 +291,81 @@ router.get("/:parkId", async (req, res) => {
   }
 });
 
-// router.get('/:id/ratings/new', requireLogin, async (req, res) => {
-//     const parkId = checkIdInRatings(req.params.id, 'parkId');
-//     const currentUserId = req.session.userId;
-//   // prevent multiple ratings
-//     const existing = await ratingsFunctions.getUserRatingForPark(parkId, currentUserId);
-//     if (existing) {
-//     return res.status(200).render('ratingForm', {
-//       title: 'Rating',
-//       parkId,
-//       cannotRate: true,
-//       existingRating: existing
-//     });
-//   }
+router.post("/favorite-park", async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const { parkId } = req.body;
+        console.log("This park's id is", parkId);
+        if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
 
-//     return res.status(200).render('ratingForm', {
-//     title: 'Rating',
-//     parkId,
-//     cannotRate: false
-//   });
-//});
+        await usersCollection.updateOne(
+            { _id: new ObjectId(userId), favoriteParks: { $ne: new ObjectId(parkId) } },
+            { $push: { favoriteParks: new ObjectId(parkId) } }
+        );
+
+        await biscuitsFunctions.autoAwardBiscuits(userId);//update biscuits
+
+        res.json({ success: true, message: "Park added to favorites" });
+    } catch (e) {
+        res.status(400).json({ success: false, error: e.message });
+    }
+});
+
+router.post("/unfavorite-park", async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const { parkId } = req.body;
+
+        if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
+
+        await usersCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $pull: { favoriteParks: new ObjectId(parkId) } }
+        );
+
+        res.json({ success: true, message: "Park removed from favorites" });
+    } catch (e) {
+        res.status(400).json({ success: false, error: e.message });
+    }
+});
+
+
+router.post("/visited-park", async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const { parkId } = req.body;
+        console.log("This park's id is", parkId);
+        if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
+
+        await usersCollection.updateOne(
+            { _id: new ObjectId(userId), parksVisited: { $ne: new ObjectId(parkId) } },
+            { $push: { parksVisited: new ObjectId(parkId) } }
+        );
+
+        await biscuitsFunctions.autoAwardBiscuits(userId);//update biscuit
+
+        res.json({ success: true, message: "Park added to visited parks" });
+    } catch (e) {
+        res.status(400).json({ success: false, error: e.message });
+    }
+});
+
+router.post("/unvisited-park", async (req, res) => {
+    try {
+        const userId = req.session.userId;
+        const { parkId } = req.body;
+
+        if (!ObjectId.isValid(parkId)) throw new Error("Invalid park ID");
+
+        await usersCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $pull: { parksVisited: new ObjectId(parkId) } }
+        );
+
+        res.json({ success: true, message: "Park removed from visited parks" });
+    } catch (e) {
+        res.status(400).json({ success: false, error: e.message });
+    }
+});
 
 export default router;

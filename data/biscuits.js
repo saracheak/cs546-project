@@ -156,7 +156,6 @@ export const biscuitsFunctions = {
         this function will push a biscuit to the user.biscuit array if it is not already there. If the user has already 
         earned this biscuit, the function will just return
         */
-
         async function giveNewBiscuit(biscuitId){
             let bID = new ObjectId(biscuitId); 
             if(earnedBiscuits.some(b=>b.toString() === bID.toString())) return;
@@ -192,7 +191,7 @@ export const biscuitsFunctions = {
             if(biscuitToGive){
                 await giveNewBiscuit(biscuitToGive._id); //send biscuit_Id to be added to user.biscuits array
             }        }
-        if(user.petFriends?.length>=5){ //? means if the field is undefined/null this will not crash
+        if(user.petFriends?.length>=3){ //? means if the field is undefined/null this will not crash
             let biscuitToGive = await biscuitsCollection.findOne({biscuit_name: 'Ulti-mutt dog lover!'}); //get the entire biscuit
             if(biscuitToGive){
                 await giveNewBiscuit(biscuitToGive._id); //send biscuit_Id to be added to user.biscuits array
@@ -219,18 +218,25 @@ export const biscuitsFunctions = {
             }        
         }
 
-        /*
-            TO-DO: these have to do with comments. need to figure out how to manipulate these once the comments data and seeding 
-                   is set up. 
+        if ((user.commentCount || 0) >= 1) {
+            const biscuitToGive = await biscuitsCollection.findOne({ biscuit_name: "First Woof" });
+            if (biscuitToGive) {
+              await giveNewBiscuit(biscuitToGive._id);
+            }
+          }     
         
-        if(user.times?.length===1){ //? means if the field is undefined/null this will not crash
-            let biscuitToGive = biscuitsCollection.findOne({biscuit_name: 'First Woof'}); //get the entire biscuit
-            giveNewBiscuit(biscuitToGive._id); //send biscuit_Id to be added to user.biscuits array
+        if ((user.commentCount || 0) >= 3) {
+        const biscuitToGive = await biscuitsCollection.findOne({biscuit_name: "Certified Yipper"});
+        if (biscuitToGive) {
+            await giveNewBiscuit(biscuitToGive._id);
         }
-        if(user.times?.length===1){ //? means if the field is undefined/null this will not crash
-            let biscuitToGive = biscuitsCollection.findOne({biscuit_name: '🎶You\'re gunna be Paw-pular🎶'}); //get the entire biscuit
-            giveNewBiscuit(biscuitToGive._id); //send biscuit_Id to be added to user.biscuits array
         }
-        */
+          
+        if ((user.commentLikesReceived || 0) >= 1) {
+        const biscuitToGive = await biscuitsCollection.findOne({biscuit_name: "🎶You're gunna be Paw-pular🎶"});
+        if (biscuitToGive) {
+            await giveNewBiscuit(biscuitToGive._id);
+        }
+        }
     }
 }

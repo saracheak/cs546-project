@@ -1,6 +1,9 @@
 import {biscuits, comments} from "../config/mongoCollections.js";
 import { ObjectId, ReturnDocument } from "mongodb";
 import {checkId} from  "../validation.js";
+import { biscuitsFunctions } from "./biscuits.js";
+import { users } from "../config/mongoCollections.js";
+const userCollection = await users();
 
 const commentsCollection = await comments();
 
@@ -122,6 +125,11 @@ export const commentsFunctions = {
                 throw new Error("Could not add comment");
             }
 
+            await userCollection.updateOne( //increment comment count so biscuits can detect it
+                { _id: new ObjectId(user_id) },
+                { $inc: { commentCount: 1 } }
+              );
+            await biscuitsFunctions.autoAwardBiscuits(user_id); //auto award biscuit based on comment number
             return prepComment(commentObject);
         }catch(e){
             throw new Error(e);
@@ -235,6 +243,19 @@ export const commentsFunctions = {
                 likes: newLikes,
                 likedBy: newLikedBy
             };
+
+            // If this request just added a like, award the AUTHOR of the comment a biscuit
+            if (!hasLiked) {
+                const authorId = existing.user_id?.toString();
+                if (authorId) {            
+                await userCollection.updateOne(
+                    { _id: new ObjectId(authorId) },
+                    { $inc: { commentLikesReceived: 1 } } //mongoDB will create this field since it does not exist
+                );
+            
+                await biscuitsFunctions.autoAwardBiscuits(authorId); //autoaward biscuit
+                }
+            }
 
             return prepComment(updatedComment);
         } catch(e){
