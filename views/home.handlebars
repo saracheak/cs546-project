@@ -52,6 +52,23 @@
             </p> 
         {{/if}}
 
+          <div class="homepage-top-ten-park-list">
+                {{#if topParks.length}}
+                    <ol>
+                        {{#each topParks}}
+                            <li>
+                            <a href="/parks/{{this._id}}">{{this.park_name}}</a>
+                            {{#if this.average_overall}}
+                                <span> ⭐ {{this.average_overall}}</span>
+                            {{/if}}
+                            </li>
+                        {{/each}}
+                    </ol>
+                {{else}}
+                    <p>No rated parks yet.</p>
+                {{/if}}
+        </div>
+
         {{!-- Park Search Bar --}} 
         <section class="park-search-bar">
             <form class="park-search-form" method="get" action="/home/search">
@@ -92,21 +109,5 @@
         </section>
         {{/if}}
  
-        <div class="homepage-top-ten-park-list">
-                {{#if topParks.length}}
-                    <ol>
-                        {{#each topParks}}
-                            <li>
-                            <a href="/parks/{{this._id}}">{{this.park_name}}</a>
-                            {{#if this.average_overall}}
-                                <span> ⭐ {{this.average_overall}}</span>
-                            {{/if}}
-                            </li>
-                        {{/each}}
-                    </ol>
-                {{else}}
-                    <p>No rated parks yet.</p>
-                {{/if}}
-        </div>
     </body>
 </html>
