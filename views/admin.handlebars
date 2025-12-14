@@ -15,66 +15,21 @@
 
     <section class="admin-section">
         <h3>Pending Parks</h3>
-
-        {{#if approveMessage}}
-            <p class="success">{{approveMessage}}</p>
-        {{/if}}
-        {{#if approveError}}
-            <p class="error">{{approveError}}</p>
-        {{/if}}
-
-        {{#if pendingParks.length}}
-            <ul>
-            {{#each pendingParks}}
-              <li>
-                <p>{{this.park_name}}</p>
-                <br>({{this.park_type}})
-                <br>{{this.address.street_1}}
-                {{#if this.address.street_2}}
-                <br>{{this.address.street_2}}
-                 {{/if}}
-                <br>{{this.address.state}}
-                <br>{{this.address.zip_code}}
-                <form method="post" action="/admin/parks/{{this._id}}/approve" style="display:inline;">
-                  <button type="submit">Approve</button>
-                </form>
-                <a href="/admin/parks/{{this._id}}/edit">
-                  <button type="button">Edit</button>
-                </a>
-                <form method="post" action="/admin/parks/{{this._id}}/deny" style="display:inline;">
-                  <button type="submit">Deny</button>
-                </form>
-              </li>
-            {{/each}}
-            </ul>
-        {{else}}
-            <p>No pending parks to approve.</p>
-        {{/if}}
+        <p>No pending parks to approve.</p>
     </section>
 
-    {{!-- Create Park --}}
     <section class="admin-section">
         <h3>Create New Park</h3>
-
-        {{#if createParkMessage}}
-            <p class="success">{{createParkMessage}}</p>
-        {{/if}}
-        {{#if createParkError}}
-            <p class="error">{{createParkError}}</p>
-        {{/if}}
-
         <p>
             Use this form to create a new park. The name and address must not exactly
             match an existing park.
         </p>
 
         <form method="post" action="/admin/parks/create" class="admin-form" id="create-park-form">
-
             <h4>Park Info</h4>
-
             <div>
                 <label for="park_name">Park Name:</label>
-                <input type="text" id="park_name" name="park_name" required value="{{park_name}}">
+                <input type="text" id="park_name" name="park_name" required value="">
             </div>
 
             <div>
@@ -87,20 +42,19 @@
             </div>
 
             <h4>Address</h4>
-
             <div>
                 <label for="street_1">Street 1:</label>
-                <input type="text" id="street_1" name="street_1" required value="{{street_1}}">
+                <input type="text" id="street_1" name="street_1" required value="">
             </div>
 
             <div>
                 <label for="street_2">Street 2 (optional):</label>
-                <input type="text" id="street_2" name="street_2" value="{{street_2}}">
+                <input type="text" id="street_2" name="street_2" value="">
             </div>
 
             <div>
                 <label for="city">City:</label>
-                <input type="text" id="city" name="city" required value="{{city}}">
+                <input type="text" id="city" name="city" required value="">
             </div>
 
             <div>
@@ -113,24 +67,15 @@
 
             <div>
                 <label for="zip_code">Zip Code:</label>
-                <input type="text" id="zip_code" name="zip_code" maxlength="5" required value="{{zip_code}}">
+                <input type="text" id="zip_code" name="zip_code" maxlength="5" required value="">
             </div>
 
             <button type="submit">Create Park</button>
         </form>
     </section>
 
-    {{!-- Delete Park --}}
     <section class="admin-section">
         <h3>Delete Park</h3>
-
-        {{#if deleteParkError}}
-            <p class="error">{{deleteParkError}}</p>
-        {{/if}}
-        {{#if deleteParkMessage}}
-            <p class="success">{{deleteParkMessage}}</p>
-        {{/if}}
-
         <form method="post" action="/admin/parks/delete" class="admin-form">
             <label for="delete_park_id">Park ID:</label>
             <input type="text" id="delete_park_id" name="parkId" required>
@@ -142,17 +87,8 @@
 <section>
     <h2 class="admin-title">Manage Biscuits</h2>
 
-    {{!-- Create Biscuit --}}
     <section class="admin-section">
         <h3>Create New Biscuit</h3>
-
-        {{#if createMessage}}
-            <p class="success">{{createMessage}}</p>
-        {{/if}}
-        {{#if createError}}
-            <p class="error">{{createError}}</p>
-        {{/if}}
-
         <form method="post" action="/admin/biscuits" class="admin-form">
             <label for="biscuit_name">Biscuit Name:</label>
             <input type="text" id="biscuit_name" name="biscuit_name" required>
@@ -164,17 +100,8 @@
         </form>
     </section>
 
-    {{!-- Update Biscuit --}}
     <section class="admin-section">
         <h3>Update Biscuit</h3>
-
-        {{#if updateMessage}}
-            <p class="success">{{updateMessage}}</p>
-        {{/if}}
-        {{#if updateError}}
-            <p class="error">{{updateError}}</p>
-        {{/if}}
-
         <form method="post" action="/admin/biscuits/update" class="admin-form">
             <label for="biscuit_id">Biscuit ID:</label>
             <input type="text" id="biscuit_id" name="biscuitId" required>
@@ -189,17 +116,8 @@
         </form>
     </section>
 
-    {{!-- Delete Biscuit --}}
     <section class="admin-section">
         <h3>Delete Biscuit</h3>
-
-        {{#if deleteMessage}}
-            <p class="success">{{deleteMessage}}</p>
-        {{/if}}
-        {{#if deleteError}}
-            <p class="error">{{deleteError}}</p>
-        {{/if}}
-
         <form method="post" action="/admin/biscuits/delete" class="admin-form">
             <label for="delete_biscuit_id">Biscuit ID:</label>
             <input type="text" id="delete_biscuit_id" name="biscuitId" required>
