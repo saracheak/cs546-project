@@ -41,18 +41,6 @@ export const biscuitsData = [
         description : "User updated their profile to show times they're at the park!",
     },
     {
-        biscuit_name : "First Rating",
-        description : "User made their first rating!",
-    },
-    {
-        biscuit_name : "Fifth Rating",
-        description : "User made their fifth rating!",
-    },
-    {
-        biscuit_name : "Tenth Rating",
-        description : "User made their tenth rating!",
-    },
-    {
         biscuit_name : "Unleash park funtime!",
         description : "User added their first favorite park!",
     }

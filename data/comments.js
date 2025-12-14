@@ -104,19 +104,18 @@ export const commentsFunctions = {
         }
     },
 
-    async addCommentToPark(park_Id, { user_id, comment, timestamp }){
+    async addCommentToPark(park_Id, { user_id, comment }){
         try{
             park_Id = validateId(park_Id);
             user_id = validateId(user_id);
             comment = checkString(comment, "comment");
-            const timeS = parseTime(timestamp);
 
             const commentObject = {
                 _id: new ObjectId(),
                 park_id: new ObjectId(park_Id),
                 user_id: new ObjectId(user_id),
                 comment: comment,
-                timestamp: timeS,
+                timestamp: new Date(),
                 likes: 0,
                 likedBy: []
             }

@@ -1,32 +1,25 @@
-{{!--List all biscuits possible for a user to earn--}}
+<header class="biscuit-header">
+    <h1>Biscuits To Earn</h1>
+</header>
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Biscuit Page</title>
-        <link rel="stylesheet" href="/css/styles.css">
-    </head>
-    
-    <body class="biscuit-body">
-        <header class="biscuit-header"><h1>Biscuits To Earn</h1></header>
-        <p class="biscuit-paragraph">
-            Here are all of the biscuit badges that exist and how you earn them. Earn them once, keep them forever!
-            {{#if isLoggedIn}}
-                The darker biscuits are the ones your doggy earned and drooled on.
-            {{else}}
-                Log in to see which biscuits your doggy has already earned!
-            {{/if}}
-        </p>
-        <div class="biscuit-container">
-            {{#each allBiscuits}}
-                <div class="biscuit-card {{#if (includes ../earnedIds this._id)}} earned {{else}} unearned {{/if}}">
-                <strong>{{this.biscuit_name}}</strong>
-                <span>{{this.description}}</span>
-                </div>
-            {{/each}}
+<p class="biscuit-paragraph">
+    Here are all of the biscuit badges that exist and how you earn them.
+    {{#if isLoggedIn}}
+        The darker biscuits are the ones your doggy earned and drooled on.
+    {{else}}
+        Log in to see which biscuits your doggy has already earned!
+    {{/if}}
+</p>
+
+<div class="biscuit-container">
+    {{#each allBiscuits}}
+        <div class="biscuit-card {{#if (includes ../earnedIds this._id)}}earned{{else}}unearned{{/if}}">
+            <strong>{{this.biscuit_name}}</strong>
+            <span>{{this.description}}</span>
         </div>
-        <div class="return-home">
-            <a href="/home">Back to Homepage</a>
-        </div>
-    </body>
-</html>
+    {{/each}}
+</div>
+
+<div class="return-home">
+    <a href="/home">Back to Homepage</a>
+</div>

@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
     console.log("/GET editpupfile");
     const userId = req.session.userId;
     let user = await usersFunctions.getUser(userId);
-    res.render("editPupfile", {user, selectedDogGender: user.dogGender, selectedHumanGender: user.humanGender, times: user.times || []});
+    res.render("editPupfile", {user, selectedDogGender: user.dogGender, selectedHumanGender: user.humanGender, times: user.times || [], bodyClass: "edit-pupfile-body"});
 });
 
 router.post("/", async (req, res) => {
@@ -33,7 +33,8 @@ router.post("/", async (req, res) => {
             formData: body,
             selectedDogGender: body.dogGender,
             selectedHumanGender: body.humanGender,
-            times: body.times || []
+            times: body.times || [],
+            bodyClass: "edit-pupfile-body"
         });
     }
 });

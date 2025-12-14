@@ -27,10 +27,10 @@ router.get('/', async (req, res) => {
     req.session.approveMessage = null;
     req.session.approveError = null;
 
-    return res.status(200).render('admin', {pendingParks, approveMessage, approveError});
+    return res.status(200).render('admin', {pendingParks, approveMessage, approveError, bodyClass: "admin-body"});
 
   } catch (e) {
-    return res.status(400).render('admin', {pendingParks: [], approveError: e.toString()});
+    return res.status(400).render('admin', {pendingParks: [], approveError: e.toString(), bodyClass: "admin-body"});
   }
 });
 
@@ -65,6 +65,62 @@ router.post('/parks/:parkId/deny', async (req, res) => {
   } catch (e) {
     req.session.approveError = e.toString();
     return res.redirect('/admin');
+  }
+});
+
+router.get("/parks/:parkId/edit", async (req, res) => {
+  try {
+    const parkId = checkString(req.params.parkId, "parkId");
+    const park = await parksFunctions.getParkById(parkId);
+
+    return res.status(200).render("editPark", { park });
+  } catch (e) {
+    return res.status(400).render("admin", {
+      approveError: `Could not load edit page: ${e.toString()}`,
+      pendingParks: []
+    });
+  }
+});
+
+router.post("/parks/:parkId/edit", async (req, res) => {
+  try {
+    const parkId = checkString(req.params.parkId, "parkId");
+
+    //validation
+    let park_name = checkString(xss(req.body.park_name), "park_name");
+    let park_type = checkString(xss(req.body.park_type), "park_type");
+    let street_1  = checkString(xss(req.body.street_1), "address.street_1");
+    let street_2  = xss(req.body.street_2 || "").trim();
+    let city      = checkString(xss(req.body.city), "address.city");
+    let state     = checkString(xss(req.body.state), "address.state");
+    let zip_code  = checkString(xss(req.body.zip_code), "address.zip_code");
+
+    if (park_type !== "run" && park_type !== "off-leash") {
+      throw "park_type must be 'run' or 'off-leash'.";
+    }
+
+    if (!/^[0-9]{5}$/.test(zip_code)) {
+      throw "zip_code must be a 5-digit number.";
+    }
+
+    const address = { street_1, city, state, zip_code };
+    if (street_2.length > 0) address.street_2 = street_2;
+    
+    //  update fields.
+    await parksFunctions.updatePark(parkId, { park_name, park_type, address });
+
+    // use session messaging like approve/deny so it survives redirect
+    req.session.approveMessage = "Park updated successfully!";
+    return res.redirect("/admin");
+  } catch (e) {
+    // If validation fails, re-render edit page with existing data + error
+    try {
+      const park = await parksFunctions.getParkById(req.params.parkId);
+      return res.status(400).render("editPark", { park, error: e.toString() });
+    } catch {
+      req.session.approveError = e.toString();
+      return res.redirect("/admin");
+    }
   }
 });
 
@@ -139,7 +195,8 @@ router.post("/parks/create", async (req, res) => {
       return res
         .status(400)
         .render("admin", {
-          createParkError: "A park with that name already exists"
+          createParkError: "A park with that name already exists",
+          bodyClass: "admin-body"
       });
     }
 
@@ -166,13 +223,15 @@ router.post("/parks/create", async (req, res) => {
     return res
       .status(200)
       .render("admin", {
-        createParkMessage: "Park created!"
+        createParkMessage: "Park created!",
+        bodyClass: "admin-body"
       });
   }catch(e){
     return res 
       .status(400)
       .render("admin", {
-        createParkError: e.toString()
+        createParkError: e.toString(),
+        bodyClass: "admin-body"
       });
   }
 });
@@ -191,13 +250,15 @@ router.post("/parks/delete", async (req, res)=>{
     return res
       .status(200)
       .render("admin", {
-        deleteParkMessage: "Park deleted successfully!"
+        deleteParkMessage: "Park deleted successfully!",
+        bodyClass: "admin-body"
       });
   }catch(e){
     return res  
       .status(400)
       .render("admin", {
-        deleteParkError: e.toString()
+        deleteParkError: e.toString(),
+        bodyClass: "admin-body"
       });
   }
 });
@@ -226,7 +287,8 @@ router.route('/biscuits').post(async (req,res) => {
             return (existingName === biscuit_name || existingDesc === description);
         })
         if(alreadyExists){// duplicate found → re-render admin with an error
-            return res.status(400).render('admin', {createError: 'A biscuit with the same name or description already exists.'
+            return res.status(400).render('admin', {createError: 'A biscuit with the same name or description already exists.',
+              bodyClass: "admin-body"
             });
         }
 
@@ -234,11 +296,9 @@ router.route('/biscuits').post(async (req,res) => {
         await biscuitsFunctions.createBiscuit(biscuit_name, description);
          console.log('Successfully created biscuit!');
 
-        return res.status(200).render('admin', {createMessage: 'Biscuit created successfully!'
-        });
+        return res.status(200).render('admin', {createMessage: 'Biscuit created successfully!', bodyClass: "admin-body"});
     } catch (e) {
-        return res.status(400).render('admin', {createError: e + ' biscuit_name and description are required to create a new biscuit.'
-        });
+        return res.status(400).render('admin', {createError: e + ' biscuit_name and description are required to create a new biscuit.', bodyClass: "admin-body"});
     }
 })
 
@@ -255,7 +315,7 @@ router.route('/biscuits/update').post(async(req, res)=>{
         //input validation check
         // Both fields are required; if either is missing, show an error
         if (!biscuit_name || !description) {
-            return res.status(400).render('admin', { updateError: 'You must provide biscuit_name and description to update.' });
+            return res.status(400).render('admin', {updateError: 'You must provide biscuit_name and description to update.', bodyClass: "admin-body"});
         }
 
         // Input validation
@@ -265,7 +325,7 @@ router.route('/biscuits/update').post(async(req, res)=>{
           await biscuitsFunctions.getBiscuitById(biscuitId);
         } catch (err) {
           // data function throws if not found
-          return res.status(400).render('admin', {updateError: 'That biscuit ID does not exist.'});
+          return res.status(400).render('admin', {updateError: 'That biscuit ID does not exist.', bodyClass: "admin-body"});
         }
 
         biscuit_name = checkString(biscuit_name, 'biscuit_name');
@@ -291,7 +351,7 @@ router.route('/biscuits/update').post(async(req, res)=>{
           });
 
           if (isDuplicate) {
-            return res.status(400).render('admin', {updateError: 'A biscuit with the same name or description already exists.'});
+            return res.status(400).render('admin', {updateError: 'A biscuit with the same name or description already exists.', bodyClass: "admin-body"});
           }
 
           // No duplicate name or description, so build updated biscuit object
@@ -303,10 +363,10 @@ router.route('/biscuits/update').post(async(req, res)=>{
 
           const updateSuccessful = await biscuitsFunctions.updateBiscuit(biscuitId, updateInfo);
           console.log('Biscuit updated successfully!');
-          return res.status(200).render('admin', { updateMessage: 'Biscuit updated successfully!' });
+          return res.status(200).render('admin', {updateMessage: 'Biscuit updated successfully!', bodyClass: "admin-body"});
         }
     catch (e){
-        return res.status(400).render('admin', {updateError: e});
+        return res.status(400).render('admin', {updateError: e, bodyClass: "admin-body"});
     }
 });
 
@@ -325,9 +385,9 @@ router.route('/biscuits/delete').post(async (req, res) => {
       console.log('Successfully deleted biscuit!');
   
       // Option 1: render admin page with a success message
-      return res.status(200).render('admin', {deleteMessage: 'Biscuit deleted successfully!'});
+      return res.status(200).render('admin', {deleteMessage: 'Biscuit deleted successfully!', bodyClass: "admin-body"});
     } catch (e) {
-      return res.status(400).render('admin', {deleteError: e});
+      return res.status(400).render('admin', {deleteError: e, bodyClass: "admin-body"});
     }
   });
 
