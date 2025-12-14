@@ -1,316 +1,161 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="/css/styles.css">
-  </head>
-  <body class="admin-body">
-    <header class="home-header">
-      <h1>Admin Dashboard</h1>
-    </header>
+<header class="home-header">
+    <h1>Admin Dashboard</h1>
+</header>
 
-    <nav class="home-nav">
-      <a href="/home">Home</a>
-      <a href="/parks">All Parks</a>
-      <a href="/editPupfile">Edit My PupFile</a>
-      <a href="/biscuits">All Biscuits</a>
-      <a href="/logout">Logout</a>
-    </nav>
+<nav class="home-nav">
+    <a href="/home">Home</a>
+    <a href="/parks">All Parks</a>
+    <a href="/profile">My PupFile</a>
+    <a href="/biscuits">All Biscuits</a>
+    <a href="/logout">Logout</a>
+</nav>
 
-    <main>
-      <section>
-        <h2 class="admin-title">Manage Parks</h2>
-        <section class="admin-section">
-          <h3>Pending Parks</h3>
+<section>
+    <h2 class="admin-title">Manage Parks</h2>
+    <div class="admin-section">
+      {{#if approveMessage}}
+        <p class="success">{{approveMessage}}</p>
+      {{/if}}
+      {{#if approveError}}
+        <p class="error">{{approveError}}</p>
+      {{/if}}
+      
+      {{#if pendingParks.length}}
+        <ul>
+        {{#each pendingParks}}
+          <li>
+            <p>{{this.park_name}}</p>
+            ({{this.park_type}})
+            <br>{{this.address.street_1}}
+            {{#if this.address.street_2}}
+            <br>{{this.address.street_2}}
+              {{/if}}
+            <br>{{this.address.state}}
+            <br>{{this.address.zip_code}}
+            <br>
+            <form method="post" action="/admin/parks/{{this._id}}/approve" class="admin-manage-parks-button">
+              <button type="submit">Approve</button>
+            </form>
+            <form method="get" action="/admin/parks/{{this._id}}/edit" class="admin-manage-parks-button">
+              <button type="submit">Edit</button>
+            </form>
+            <form method="post" action="/admin/parks/{{this._id}}/deny" class="admin-manage-parks-button">
+              <button type="submit">Deny</button>
+            </form>
+          </li>
+        {{/each}}
+        </ul>
+      {{else}}
+        <p>No pending parks to approve.</p>
+      {{/if}}
+    </div>
+    </section>
 
-          {{#if approveMessage}}
-            <p class="success">{{approveMessage}}</p>
-          {{/if}}
-          {{#if approveError}}
-            <p class="error">{{approveError}}</p>
-          {{/if}}
-          
-          {{#if pendingParks.length}}
-            <ul>
-            {{#each pendingParks}}
-              <li>
-                <p>{{this.park_name}}</p>
-                <br>({{this.park_type}})
-                <br>{{this.address.street_1}}
-                {{#if this.address.street_2}}
-                <br>{{this.address.street_2}}
-                 {{/if}}
-                <br>{{this.address.state}}
-                <br>{{this.address.zip_code}}
-                <form method="post" action="/admin/parks/{{this._id}}/approve" style="display:inline;">
-                  <button type="submit">Approve</button>
-                </form>
-                <a href="/admin/parks/{{this._id}}/edit">
-                  <button type="button">Edit</button>
-                </a>
-                <form method="post" action="/admin/parks/{{this._id}}/deny" style="display:inline;">
-                  <button type="submit">Deny</button>
-                </form>
-              </li>
-            {{/each}}
-            </ul>
-          {{else}}
-            <p>No pending parks to approve.</p>
-          {{/if}}
-        </section>
+    <section class="admin-section">
+        <h3>Create New Park</h3>
+        <p>
+            Use this form to create a new park. The name and address must not exactly
+            match an existing park.
+        </p>
 
-        {{!-- CREATE NEW PARK: POST /admin/parks/create --}}
-        <section class="admin-section">
-          <h3>Create New Park</h3>
-
-          {{#if createParkMessage}}
-            <p class="success">{{createParkMessage}}</p>
-          {{/if}}
-          {{#if createParkError}}
-            <p class="error">{{createParkError}}</p>
-          {{/if}}
-
-          <p id="creat-park-error" class="error"></p>
-
-          <p>
-            Use this form to create a new park. The name and address (street, city, state, zip)
-            must not exactly match an existing park.
-          </p>
-
-          <form 
-            method="post" 
-            action="/admin/parks/create" 
-            class="admin-form" 
-            id="create-park-form">
-
+        <form method="post" action="/admin/parks/create" class="admin-form" id="create-park-form">
             <h4>Park Info</h4>
-
             <div>
-              <label for="park_name">Park Name:</label>
-              <input
-                type="text"
-                id="park_name"
-                name="park_name"
-                required
-                value="{{park_name}}"
-              />
+                <label for="park_name">Park Name:</label>
+                <input type="text" id="park_name" name="park_name" required value="">
             </div>
 
             <div>
-              <label for="park_type">Park Type:</label>
-              <select id="park_type" name="park_type" required>
-                  <option value="">-- Select Type --</option>
-                  <option value="run">run</option>
-                  <option value="off-leash">off-leash</option>
-              </select>
+                <label for="park_type">Park Type:</label>
+                <select id="park_type" name="park_type" required>
+                    <option value="">-- Select Type --</option>
+                    <option value="run">run</option>
+                    <option value="off-leash">off-leash</option>
+                </select>
             </div>
 
             <h4>Address</h4>
-
             <div>
-              <label for="street_1">Street 1:</label>
-              <input
-                type="text"
-                id="street_1"
-                name="street_1"
-                required
-                value="{{street_1}}"
-              />
+                <label for="street_1">Street 1:</label>
+                <input type="text" id="street_1" name="street_1" required value="">
             </div>
 
             <div>
-              <label for="street_2">Street 2 (optional):</label>
-              <input
-                type="text"
-                id="street_2"
-                name="street_2"
-                value="{{street_2}}"
-              />
+                <label for="street_2">Street 2 (optional):</label>
+                <input type="text" id="street_2" name="street_2" value="">
             </div>
 
             <div>
-              <label for="city">City:</label>
-              <input
-                type="text"
-                id="city"
-                name="city"
-                required
-                value="{{city}}"
-              />
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" required value="">
             </div>
 
             <div>
-              <label for="state">State:</label>
-              <select id="state" name="state" required>
-                <option value="">-- Select State --</option>
-                <option value="NY">NY</option>
-              </select>
+                <label for="state">State:</label>
+                <select id="state" name="state" required>
+                    <option value="">-- Select State --</option>
+                    <option value="NY">NY</option>
+                </select>
             </div>
 
             <div>
-              <label for="zip_code">Zip Code:</label>
-              <input
-                type="text"
-                id="zip_code"
-                name="zip_code"
-                maxlength="5"
-                required
-                value="{{zip_code}}"
-              />
+                <label for="zip_code">Zip Code:</label>
+                <input type="text" id="zip_code" name="zip_code" maxlength="5" required value="">
             </div>
 
             <button type="submit">Create Park</button>
-          </form>
-        </section>
+        </form>
+    </section>
 
-        {{!-- DELETE PARK: POST /admin/parks/delete --}}
-        <section class="admin-section">
-          <h3>Delete Park</h3>
-
-
-          {{#if deleteParkError}}
-            <p class="error">{{deleteParkError}}</p>
-          {{else}}
-            <p class="error" id="delete-park-error"></p>
-          {{/if}}
-
-          {{#if deleteParkMessage}}
-            <p class="success">{{deleteParkMessage}}</p>
-          {{/if}}
-
-
-          <p>
-            Enter the <code>parkId</code> of the park you want to delete.
-            This will remove the park from the system.
-          </p>
-
-          <form method="post" action="/admin/parks/delete" class="admin-form" id="delete-park-form">
-            <div>
-              <label for="delete_park_id">Park ID:</label>
-              <input
-                type="text"
-                id="delete_park_id"
-                name="parkId"
-                required
-              />
-            </div>
+    <section class="admin-section">
+        <h3>Delete Park</h3>
+        <form method="post" action="/admin/parks/delete" class="admin-form">
+            <label for="delete_park_id">Park ID:</label>
+            <input type="text" id="delete_park_id" name="parkId" required>
             <button type="submit">Delete Park</button>
-          </form>
-        </section>
-      </section>
-      <section>
-        <h2 class="admin-title">Manage Biscuits</h2>
-        {{!-- CREATE biscuit: POST /admin/biscuits --}}
-        <section class="admin-section">
-          <h3>Create New Biscuit</h3>
+        </form>
+    </section>
 
-        {{#if createMessage}}
-          <p class="success">{{createMessage}}</p>
-        {{/if}}
-        {{#if createError}}
-          <p class="error">{{createError}}</p>
-        {{/if}}
+<section>
+    <h2 class="admin-title">Manage Biscuits</h2>
 
-          <p>Use this form to create a new biscuit. The name and/or description cannot be the same as an existing biscuit</p>
+    <section class="admin-section">
+        <h3>Create New Biscuit</h3>
+        <form method="post" action="/admin/biscuits" class="admin-form">
+            <label for="biscuit_name">Biscuit Name:</label>
+            <input type="text" id="biscuit_name" name="biscuit_name" required>
 
-          <form method="post" action="/admin/biscuits" class="admin-form">
-            <div>
-              <label for="biscuit_name">Biscuit Name:</label>
-              <input
-                type="text"
-                id="biscuit_name"
-                name="biscuit_name"
-                required
-              />
-            </div>
-
-            <div>
-              <label for="description">Description:</label>
-              <textarea
-                id="description"
-                name="description"
-                required
-              ></textarea>
-            </div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
 
             <button type="submit">Create Biscuit</button>
-          </form>
-        </section>
+        </form>
+    </section>
 
-        {{!-- UPDATE biscuit: POST /admin/biscuits/update --}}
-        <section class="admin-section">
-          <h3>Update Biscuit</h3>
+    <section class="admin-section">
+        <h3>Update Biscuit</h3>
+        <form method="post" action="/admin/biscuits/update" class="admin-form">
+            <label for="biscuit_id">Biscuit ID:</label>
+            <input type="text" id="biscuit_id" name="biscuitId" required>
 
-        {{#if updateMessage}}
-          <p class="success">{{updateMessage}}</p>
-        {{/if}}
-        {{#if updateError}}
-          <p class="error">{{updateError}}</p>
-        {{/if}}
+            <label for="new_name">New Name:</label>
+            <input type="text" id="new_name" name="biscuit_name">
 
-          <p>
-            Use this form to update an existing biscuit. <br><br> Enter the <code>biscuitId</code> of the biscuit you want to update.
-            Both fields are required. 
-            <br>If you only want to update one field, like the description, then you should enter the same 
-            biscuit name with a new description. 
-            <br> NOTE: If you update a biscuit name, it must be fix it in the data/biscuits.js logic. If you create a biscuit the autoaward 
-            logic also needs to be created before it will work. 
-          </p>
-
-          <form method="post" action="/admin/biscuits/update" class="admin-form">
-            <div>
-              <label for="biscuit_id">Biscuit ID:</label>
-              <input
-                type="text"
-                id="biscuit_id"
-                name="biscuitId"
-                required
-              />
-            </div>
-
-            <div>
-              <label for="new_name">New Name:</label>
-              <input type="text" name="biscuit_name" id="new_name" />
-            </div>
-
-            <div>
-              <label for="new_desc">New Description:</label>
-              <textarea name="description" id="new_desc"></textarea>
-            </div>
+            <label for="new_desc">New Description:</label>
+            <textarea id="new_desc" name="description"></textarea>
 
             <button type="submit">Update Biscuit</button>
-          </form>
-        </section>
+        </form>
+    </section>
 
-        {{!-- DELETE biscuit via POST /admin/biscuits/delete --}}
-        <section class="admin-section">
+    <section class="admin-section">
         <h3>Delete Biscuit</h3>
-
-        {{#if deleteMessage}}
-            <p class="success">{{deleteMessage}}</p>
-        {{/if}}
-
-        {{#if deleteError}}
-            <p class="error">{{deleteError}}</p>
-        {{/if}}
-
-        <p>Enter the biscuitId of the biscuit you want to delete.</p>
-
         <form method="post" action="/admin/biscuits/delete" class="admin-form">
-            <div>
             <label for="delete_biscuit_id">Biscuit ID:</label>
-            <input
-                type="text"
-                id="delete_biscuit_id"
-                name="biscuitId"
-                required
-            />
-            </div>
+            <input type="text" id="delete_biscuit_id" name="biscuitId" required>
             <button type="submit">Delete Biscuit</button>
         </form>
-        </section>
-      </section>
-    </main>
-    <script src="/public/js/adminParks.js"></script>
-  </body>
-</html>
+    </section>
+</section>
+
+<script src="/js/adminParks.js"></script>

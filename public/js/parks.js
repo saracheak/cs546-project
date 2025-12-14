@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await res.json();
 
         if (data.success) {
+          console.log("data was successful");
           btn.textContent = btn.dataset.action === "add" ? "Remove this Park from my Favorites" : "Add this park to my Favorites";
           btn.dataset.action = btn.dataset.action === "add" ? "remove" : "add";
           showMessageFavoriteParks(data.message);

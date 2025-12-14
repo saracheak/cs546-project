@@ -1,56 +1,67 @@
-{{!-- home page shows top 10 parks, overview of app and has links to login , sign up --}}
+<header class="home-header">
+    <h1>PupMap</h1>
+</header>
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Home Page</title>
-        <link rel="stylesheet" href="/css/styles.css">
-    </head>
-    
-    <body class="home-body">
-        <header class="home-header"><h1>PupMap</h1></header>
-
-        <nav class="home-nav">
-        {{#if isAdmin}}
-            {{!-- Admin nav --}}
-            <a href="/home">Home</a>
-            <a href="/parks">All Parks</a>
-            <a href="/biscuits">All Biscuits</a>
-            <a href="/profile">My PupFile</a>
-            <a href="/admin">Admin Dashboard</a>
-            <a href="/logout">Logout</a>
-        {{else}}
-            {{#if isLoggedIn}}
+<nav class="home-nav">
+    {{#if isAdmin}}
+        {{!-- Admin nav --}}
+        <a href="/home">Home</a>
+        <a href="/parks">All Parks</a>
+        <a href="/biscuits">All Biscuits</a>
+        <a href="/profile">My PupFile</a>
+        <a href="/admin">Admin Dashboard</a>
+        <a href="/logout">Logout</a>
+    {{else}}
+        {{#if isLoggedIn}}
             {{!-- Logged-in normal user nav --}}
             <a href="/home">Home</a>
             <a href="/parks">All Parks</a>
             <a href="/biscuits">All Biscuits</a>
             <a href="/profile">My PupFile</a>
             <a href="/logout">Logout</a>
-            {{else}}
+        {{else}}
             {{!-- Guest nav --}}
             <a href="/home">Home</a>
             <a href="/parks">All Parks</a>
             <a href="/biscuits">All Biscuits</a>
             <a href="/login">Login</a>
             <a href="/signup">Sign Up</a>
-            {{/if}}
         {{/if}}
-        </nav>
+    {{/if}}
+</nav>
 
-        {{#if isLoggedIn}}
-        <p class="home-paragraph">
-            Welcome to PupMap {{currentUser.human_first_name}}!! We love {{currentUser.dog_name}} just as much as you do! We want {{currentUser.dog_name}} to be able to go out and enjoy, which we 
-            know can be difficult given not everywhere is pet friendly. That's why we decided to come up with this website - to help
-            make it easier for you to find places to bring {{currentUser.dog_name}} that have the amentities you both desire. 
-        </p>
-        {{else}} {{!-- Guest paragraph --}}
-           <p class="home-paragraph">
-            Welcome to PupMap - we love your pup(s) just as much as you do! We want your pup(s) to be able to go out and enjoy, which we 
-            know can be difficult given not everywhere is pet friendly. That's why we decided to come up with this website - to help
-            make it easier for you to find places to bring your dog that have the amentities you desire. 
-            </p> 
-        {{/if}}
+{{#if isLoggedIn}}
+    <p class="home-paragraph">
+        Welcome to PupMap {{currentUser.humanFirstName}}!! We love {{currentUser.dogName}} just as much as you do! We want {{currentUser.dogName}} to be able to go out and enjoy, which we
+        know can be difficult given not everywhere is pet friendly. That's why we decided to come up with this website — to help
+        make it easier for you to find places to bring {{currentUser.dogName}} that have the amenities you both desire.
+    </p>
+{{else}}
+    {{!-- Guest paragraph --}}
+    <p class="home-paragraph">
+        Welcome to PupMap — we love your pup(s) just as much as you do! We want your pup(s) to be able to go out and enjoy, which we
+        know can be difficult given not everywhere is pet friendly. That's why we decided to come up with this website — to help
+        make it easier for you to find places to bring your dog that have the amenities you desire.
+    </p>
+{{/if}}
+    {{!-- Top 5 parks --}}
+          <div class="homepage-top-five-park-list">
+                <h2>Top 5 Parks by Overall Rating</h2>
+                {{#if topParks.length}}
+                    <ol>
+                        {{#each topParks}}
+                            <li>
+                            <a href="/parks/{{this._id}}">{{this.park_name}}</a>
+                            {{#if this.average_overall}}
+                                <span> ⭐ {{this.average_overall}}</span>
+                            {{/if}}
+                            </li>
+                        {{/each}}
+                    </ol>
+                {{else}}
+                    <p>No rated parks yet.</p>
+                {{/if}}
+        </div>
 
         {{!-- Park Search Bar --}} 
         <section class="park-search-bar">
@@ -67,11 +78,12 @@
             </form>
         </section>  
 
-        {{!-- Search results will show if user searched for a park --}}
-        {{#if searchQuery}}
-        <section class="park-search-results">
-            <h2>Search results for "{{searchQuery}}"</h2>
+{{!-- Search results --}}
+{{#if searchQuery}}
+<section class="park-search-results">
+    <h2>Search results for "{{searchQuery}}"</h2>
 
+<<<<<<< HEAD
             {{#if parkFound}}
             <p> We found <a href="{{parkLink}}">{{park.park_name}}</a>.</p>
                 {{#if peakTimes.length}}
@@ -90,26 +102,26 @@
             <p>
                 Would you like to submit a new park?
                 <a href="/parks/new">Click here to submit a park.</a>
+=======
+    {{#if parkFound}}
+        <p>
+            We found <a href="{{parkLink}}">{{park.park_name}}</a>.
+        </p>
+
+        {{#if peakTime}}
+            <p>The most popular time interval at this park is:
+                <strong>{{peakTime}}</strong>
+>>>>>>> origin
             </p>
-            {{/if}}
-        </section>
+        {{else}}
+            <p>We don’t have enough data yet to estimate a busy time.</p>
         {{/if}}
- 
-        <div class="homepage-top-ten-park-list">
-                {{#if topParks.length}}
-                    <ol>
-                        {{#each topParks}}
-                            <li>
-                            <a href="/parks/{{this._id}}">{{this.park_name}}</a>
-                            {{#if this.average_overall}}
-                                <span> ⭐ {{this.average_overall}}</span>
-                            {{/if}}
-                            </li>
-                        {{/each}}
-                    </ol>
-                {{else}}
-                    <p>No rated parks yet.</p>
-                {{/if}}
-        </div>
-    </body>
-</html>
+    {{else}}
+        <p>No park matched your search.</p>
+        <p>
+            Would you like to submit a new park?
+            <a href="/parks/new">Click here to submit a park.</a>
+        </p>
+    {{/if}}
+</section>
+{{/if}}

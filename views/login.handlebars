@@ -1,33 +1,32 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Login Page</title>
-        <link rel="stylesheet" href="/css/styles.css">
-    </head>
-    
-    <body class="login-body">
-        <div class="login-container">
-        <header>
-            <h1>Login Page</h1>
-        </header>
-        <h2>🐾 Welcome Back! 🐶</p>
-        <h3>Log in to see your pet's profile:</h3>
-        <div id="login-error" class="login-error">
-            {{#if error}}
-            <p>{{error}}</p>
-            {{/if}}
-        </div>
-        <form action="/login" method="POST" id="login-form">
-            <label for="email">Email</label><br>
-            <input type="text" name="email" id="email"><br><br>
-            
-            <label for="password">Password</label><br>
-            <input type="password" name="password" id="password"><br><br>
+<div class="login-container">
+    <header>
+        <h1>Login Page</h1>
+    </header>
 
-            <button type="submit">Login</button>
-        </form>
-        <p class="back-link"><a href="/home">Back to home</a></p>
-        <p class="back-link"><a href="/signup">Don't have an account? Sign up instead</a></p>
-        </div>
-    </body>
-</html>
+    <h2>🐾 Welcome Back! 🐶</h2>
+    <h3>Log in to see your pet's profile:</h3>
+
+    <div id="login-error" class="login-error">
+        {{#if error}}
+            <p>{{error}}</p>
+        {{/if}}
+    </div>
+
+    <form action="/login" method="POST" id="login-form">
+        <label for="email">Email</label><br>
+        <input type="text" name="email" id="email"><br><br>
+
+        <label for="password">Password</label><br>
+        <input type="password" name="password" id="password"><br><br>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p class="back-link">
+        <a href="/home">Back to home</a>
+    </p>
+
+    <p class="back-link">
+        <a href="/signup">Don't have an account? Sign up instead</a>
+    </p>
+</div>
