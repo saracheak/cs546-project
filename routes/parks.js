@@ -1,6 +1,7 @@
 import {Router} from "express";
 import { commentsFunctions } from "../data/comments.js";
 import {parksFunctions} from "../data/parks.js";
+import { ratingsFunctions } from "../data/ratings.js";
 import { requireLogin } from "../middleware.js";
 import { checkString } from "../validation.js";
 import { usersFunctions } from "../data/users.js";
@@ -228,51 +229,49 @@ router.get("/:parkId/comments", async (req, res)=>{
 
 
 router.get("/:parkId", async (req, res)=> {
-    try{
-        let {parkId} = req.params;
-        parkId = checkString(parkId, "parkId");
+    try {
+    let { parkId } = req.params;
+    parkId = checkString(parkId, "parkId");
 
-        const park = await parksFunctions.getParkById(parkId);
-        const comments = await commentsFunctions.getCommentsForPark(parkId);
+    // fetch once
+    const park = await parksFunctions.getParkById(parkId);
 
-        const currentUserId = req.session.userId;
-        const isAdmin = res.locals.isAdmin === true;
+    const comments = await commentsFunctions.getCommentsForPark(parkId);
+    const ratings = await ratingsFunctions.getRatingsForPark(parkId);
+    const ratingSummary = await ratingsFunctions.getAverageRatingsForPark(parkId);
 
-        for(let i = 0; i<comments.length; i++){
-            let canDelete = false;
+    const currentUserId = req.session.userId;
+    const isAdmin = res.locals.isAdmin === true;
 
-            if(currentUserId){
-                if(isAdmin || comments[i].user_id === currentUserId){
-                    canDelete = true;
-                }
-            }
-            comments[i].canDelete = canDelete;
-            comments[i].timestamp = new Date(comments[i].timestamp).toLocaleString();
+    for (const c of comments) {
+      c.canDelete =
+        !!currentUserId &&
+        (isAdmin || c.user_id?.toString() === currentUserId);
+        c.timestamp = new Date(c.timestamp).toLocaleString();
 
-            try{
-                const user = await usersFunctions.getUser(comments[i].user_id);
-
-                if(user && user.dog_name){
-                    comments[i].authorName = user.dog_name;
-                } else if(user && user.human_first_name){
-                    comments[i].authorName = user.human_first_name;
-                }else if(user && user.email){
-                    comments[i].authorName = user.email;
-                }else{
-                    comments[i].authorName = "Unknown pup";
-                }
-            }catch(e){
-                comments[i].authorName = "Unknown pup";
-            }
-        }
-         
-        return res.status(200).render("parkDetail", {
-            title: park.park_name,
-            park:park,
-            comments: comments
-        });
-    }catch(e){
-        return res.status(404).render("error", {message: e.toString(), bodyClass: "error-page"});
+      try {
+        const user = await usersFunctions.getUser(c.user_id.toString());
+        c.authorName =
+          user?.dog_name ||
+          user?.human_first_name ||
+          user?.email ||
+          "Unknown pup";
+      } catch (e) {
+        c.authorName = "Unknown pup";
+      }
     }
+
+    return res.status(200).render("parkDetail", {
+      title: park.park_name,
+      park,
+      comments,
+      ratings,
+      ratingSummary,
+      hasRatings: ratings.length > 0
+    });
+  } catch (e) {
+    console.error("ERROR in GET /parks/:parkId:", e);
+    return res.status(404).render("error", {error: e.toString(), bodyClass: "error-page"});
+  }
 });
 export default router;

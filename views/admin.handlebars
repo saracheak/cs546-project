@@ -25,26 +25,27 @@
 
         {{#if pendingParks.length}}
             <ul>
-                {{#each pendingParks}}
-                    <li>
-                        <p>{{this.park_name}}</p>
-                        ({{this.park_type}})<br>
-                        {{this.address.street_1}}<br>
-                        {{#if this.address.street_2}}
-                            {{this.address.street_2}}<br>
-                        {{/if}}
-                        {{this.address.state}}<br>
-                        {{this.address.zip_code}}
-
-                        <form method="post" action="/admin/parks/{{this._id}}/approve" style="display:inline;">
-                            <button type="submit">Approve</button>
-                        </form>
-
-                        <form method="post" action="/admin/parks/{{this._id}}/deny" style="display:inline;">
-                            <button type="submit">Deny</button>
-                        </form>
-                    </li>
-                {{/each}}
+            {{#each pendingParks}}
+              <li>
+                <p>{{this.park_name}}</p>
+                <br>({{this.park_type}})
+                <br>{{this.address.street_1}}
+                {{#if this.address.street_2}}
+                <br>{{this.address.street_2}}
+                 {{/if}}
+                <br>{{this.address.state}}
+                <br>{{this.address.zip_code}}
+                <form method="post" action="/admin/parks/{{this._id}}/approve" style="display:inline;">
+                  <button type="submit">Approve</button>
+                </form>
+                <a href="/admin/parks/{{this._id}}/edit">
+                  <button type="button">Edit</button>
+                </a>
+                <form method="post" action="/admin/parks/{{this._id}}/deny" style="display:inline;">
+                  <button type="submit">Deny</button>
+                </form>
+              </li>
+            {{/each}}
             </ul>
         {{else}}
             <p>No pending parks to approve.</p>
