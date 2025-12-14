@@ -4,6 +4,7 @@ import { checkId } from "../validation.js"
 import { parksFunctions } from "./parks.js";
 import bcrypt from 'bcryptjs';
 import validator from "validator";
+import { biscuitsFunctions } from "./biscuits.js";
 
 const usersCollection = await users();
 
@@ -109,6 +110,7 @@ export const usersFunctions = {
             {returnNewDocument : true});
             
             if(!updatedUser) throw new Error("Ran into error while updating user with that userId");
+            await biscuitsFunctions.autoAwardBiscuits(userId); //autoupdate pet friends + times biscuits
             return updatedUser;
         } catch (e) {
             throw new Error(e);

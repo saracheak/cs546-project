@@ -59,10 +59,7 @@ router.route('/search').get(async (req, res) => {
     // If park found find all users whose favorite_park include this park name 
     // and then find peak time from users who like this park
     // const usersCollection = await users(); 
-    // const userDocs = await usersCollection
-    //   .find({ favorite_parks: matchedPark.park_name })
-    //   .toArray();
-
+    // const userDocs = await usersCollection.find({ favorite_parks: matchedPark.park_name }).toArray();
   
     // //Count time intervals across those users
     // const timeCounts = {};
