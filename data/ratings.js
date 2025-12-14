@@ -148,7 +148,6 @@ export const ratingsFunctions ={
         };
 
         await parksFunctions.updateAverageRatings(pid, averages);
-        console.log("DEBUG list length in getAverageRatingsForPark =", list.length);
         return averages; 
     },
 

@@ -228,8 +228,8 @@ router.get("/:parkId/comments", async (req, res)=>{
 });
 
 
-router.get("/:parkId", async (req, res)=> {
-    try {
+router.get("/:parkId", async (req, res) => {
+  try {
     let { parkId } = req.params;
     parkId = checkString(parkId, "parkId");
 
