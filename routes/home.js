@@ -74,7 +74,7 @@ router.route('/search').get(async (req, res) => {
 const usersCollection = await users(); //get all users
 let parkName = matchedPark.park_name.trim(); //favoriteParks stores the name of each park as a string
 const userDocs = await usersCollection
-  .find({ favoriteParks: parkName}) //find all users with the specific park that was searched for in their favoriteParks array
+  .find({ favoriteParks: new ObjectId(matchedPark._id)}) //find all users with the specific park that was searched for in their favoriteParks array
   .project({ times: 1 }) // only pull the times array from those users
   .toArray();
 
