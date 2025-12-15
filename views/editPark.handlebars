@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Edit Park</title>
-    <link rel="stylesheet" href="/css/styles.css">
-  </head>
 
-  <body class="home-body">
     <header class="home-header">
       <h1>Edit Park</h1>
     </header>
@@ -16,7 +9,7 @@
       <a href="/logout">Logout</a>
     </nav>
 
-    <main class="new-park-main">
+    <section class="new-park-main">
       {{#if error}}
         <p class="error form-msg">{{error}}</p>
       {{/if}}
@@ -76,8 +69,5 @@
 
         <button type="submit">Save Changes</button>
       </form>
-    </main>
-
     <script src="/public/js/editPark.js"></script>
-  </body>
-</html>
+  </section>
