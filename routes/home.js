@@ -44,6 +44,14 @@ router.route('/search').get(async (req, res) => {
     let parkQuery = xss(req.query.parkQuery || '');
     parkQuery = checkString(parkQuery, 'Park Query');
 
+    //get top parks for "top 10 parks" section
+    const topParks = await parksFunctions.getTopRatedParks(5);
+    topParks.forEach(p => {
+      if (p.average_overall !== undefined && p.average_overall !== null) {
+        p.average_overall = Number(p.average_overall).toFixed(2);
+      }
+    });
+
     console.log("parkQuery:", req.query.parkQuery);
 
     if (!parkQuery) {
@@ -105,6 +113,7 @@ peakTimes.sort();
 return res.status(200).render('home', {
   title: 'Home',
   searchQuery: parkQuery,
+  topParks,
   parkFound: true,
   park: matchedPark,
   parkLink: `/parks/${matchedPark._id}`,
