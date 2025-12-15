@@ -33,7 +33,7 @@ router.route('/').get(async (req, res) => {
         bodyClass: "home-body"
       });
     } catch (e) {
-      res.status(404).render("error", {message: "Bad Request", bodyClass: "error-page"});
+      res.status(404).render("error", {error: "Bad Request", bodyClass: "error-page"});
     }
   });
 
@@ -113,7 +113,7 @@ return res.status(200).render('home', {
   bodyClass: "home-body"
 });
 } catch (e) {
-return res.status(400).render('error', {message: e.toString()});
+return res.status(400).render('error', {error: e.toString()});
 }
 });
 

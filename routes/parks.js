@@ -35,7 +35,7 @@ router.get("/", async(req, res)=> {
             parks: allParks
         });
     }catch(e){
-        return res.status(500).render("error", {message: e.toString(), bodyClass: "error-page"});
+        return res.status(500).render("error", {error: e.toString(), bodyClass: "error-page"});
     }
 });
 
@@ -139,7 +139,7 @@ router.get("/new", async (req, res)=> {
     try{
         res.status(200).render('newPark', {bodyClass: "home-body"});
     }catch(e){
-        return res.status(404).render("error", {message: e.toString(), bodyClass: "error-page"});
+        return res.status(404).render("error", {error: e.toString(), bodyClass: "error-page"});
     }
 });
 
