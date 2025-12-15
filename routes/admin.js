@@ -73,7 +73,7 @@ router.get("/parks/:parkId/edit", async (req, res) => {
     const parkId = checkString(req.params.parkId, "parkId");
     const park = await parksFunctions.getParkById(parkId);
 
-    return res.status(200).render("editPark", { park });
+    return res.status(200).render("editPark", {park, bodyClass: 'home-body'});
   } catch (e) {
     return res.status(400).render("admin", {
       approveError: `Could not load edit page: ${e.toString()}`,
@@ -116,7 +116,7 @@ router.post("/parks/:parkId/edit", async (req, res) => {
     // If validation fails, re-render edit page with existing data + error
     try {
       const park = await parksFunctions.getParkById(req.params.parkId);
-      return res.status(400).render("editPark", { park, error: e.toString() });
+      return res.status(400).render("editPark", { park, error: e.toString()});
     } catch {
       req.session.approveError = e.toString();
       return res.redirect("/admin");
